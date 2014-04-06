@@ -65,6 +65,9 @@ public class TETelepad extends TileEntity{
 		System.out.println("read");
 	}
 
+	
+	private boolean guiOpen;
+	
 	@Override
 	public void updateEntity() {
 
@@ -85,9 +88,10 @@ public class TETelepad extends TileEntity{
 
 				if(counter >=0)counter --;
 			}
-			if(counter < 0){
+			if(counter < 0 && !guiOpen){
 				if(p != null){
 					markDirty();
+					guiOpen = true;
 					p.openGui(Telepads.instance, TelePadGuiHandler.TELEPORT, worldObj, xCoord, yCoord, zCoord);
 				}
 			}
@@ -116,6 +120,7 @@ public class TETelepad extends TileEntity{
 		isStandingOnPlatform = false;
 		markDirty();
 		TelepadWorldData.get(worldObj).markDirty();
+		guiOpen = false;
 	}
 
 	/**Sets isStandingOnPlatform, and reset's TE if false*/

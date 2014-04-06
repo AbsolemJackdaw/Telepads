@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 
+import java.awt.TextField;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class GuiTeleport extends GuiScreen{
 		int posY = (this.height) / 2;
 		this.buttonList.clear();
 
-		System.out.println("The channel for this telepad is : " + te.TELEPORTCHANNEL);
+		System.out.println("The channel for this telepad is : " + channelName);
 
 		channelField = new GuiTextField(fontRendererObj, posX- 50 , posY- 130, 150, 20);
 
@@ -66,7 +67,7 @@ public class GuiTeleport extends GuiScreen{
 			channelField.setMaxStringLength(50);
 		}
 
-		ArrayList<int[]>allCoords = TelepadWorldData.get(thePlayer.worldObj).getCoordsForChannel(te.TELEPORTCHANNEL);
+		ArrayList<int[]>allCoords = TelepadWorldData.get(thePlayer.worldObj).getCoordsForChannel(channelName);
 		int c = allCoords.size();
 
 		if(c < 1){
@@ -80,7 +81,6 @@ public class GuiTeleport extends GuiScreen{
 		}
 
 		this.buttonList.add(new GuiButton(EXIT_BUTTON, posX-200, posY - 120, 20, 20,"X")); 
-
 	}
 
 
@@ -115,6 +115,11 @@ public class GuiTeleport extends GuiScreen{
 			channelName = channelField.getText();
 		}
 
+		if(i == Keyboard.KEY_RETURN){
+			System.out.println(channelName);
+			channelName= channelField.getText();
+			initGui();
+		}
 		if(i == Keyboard.KEY_ESCAPE){
 			te.resetTE();
 			mc.thePlayer.closeScreen();
@@ -192,7 +197,7 @@ public class GuiTeleport extends GuiScreen{
 			out.writeInt(id);
 
 			if(id < EXIT_BUTTON){
-				ArrayList<int[]>a = TelepadWorldData.get(thePlayer.worldObj).getCoordsForChannel(te.TELEPORTCHANNEL);
+				ArrayList<int[]>a = TelepadWorldData.get(thePlayer.worldObj).getCoordsForChannel(channelName);
 				int x = a.get(button.id)[0];
 				int y = a.get(button.id)[1];
 				int z = a.get(button.id)[2];
