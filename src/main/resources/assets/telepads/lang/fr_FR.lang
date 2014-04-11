@@ -1,4 +1,3 @@
-
 #item
 tile.telepad.name=TelePad
 
@@ -12,10 +11,10 @@ name.your.telepad=Nommer votre TelePad
 
 #item text
 info.1 =/*======= Comment Utiliser =======*/
-info.2 =1.Teleporter : Se mettre sur le TelePad et attendre 3-5 secondes.
-info.3 =2.Enlever un TelePad : Click Droit sur le TelePad.
-info.4 =3.Permettre vos amis a enregistrer un de vos TelePads :
-info.5 =3.a : Click Droit en mode furtif pour changer l'état du TelePad.
-info.6 =3.b : Laissez vos amis faire un clic droit sur le pad avec leur registre.
-info.7 =Pour des raisons de sécurité, vous ne pouvez pas supprimer des TelePads en mode Universel
-info.8 =Si personne ne s'est registré sur votre TelePad Universel, vous pouvez le remmettre en état normal avec un clic droit en mod furtif.
+info.2 =1. Teleporter: Se mettre sur le TelePad et attendre 3-5 secondes.
+info.3 =2. Enlever un TelePad: Click Droit sur le TelePad.
+info.4 =3. Permettre vos amis a enregistrer un de vos TelePads:
+info.5 =3a. Click Droit en mode furtif pour changer l'ï¿½tat du TelePad.
+info.6 =3b. Laissez vos amis faire un clic droit sur le pad avec leur registre.
+info.7 =Pour des raisons de sï¿½curitï¿½, vous ne pouvez pas supprimer des TelePads en mode Universel
+info.8 =Si personne ne s'est registrï¿½ sur votre TelePad Universel, vous pouvez le remmettre en ï¿½tat normal avec un clic droit en mod furtif.
