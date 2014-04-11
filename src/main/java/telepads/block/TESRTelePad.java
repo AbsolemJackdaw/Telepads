@@ -21,8 +21,8 @@ public class TESRTelePad extends TileEntitySpecialRenderer {
 
 	telepad pad = new telepad();
 	//	ResourceLocation loc = new ResourceLocation("subaraki:pad/padRaw.png");
-	private static ResourceLocation loc = new ResourceLocation("subaraki:pad/telepad.png");
-	private static ResourceLocation locUniversal = new ResourceLocation("subaraki:pad/padUniversal.png");
+	private static ResourceLocation loc = new ResourceLocation("telepads:textures/telepad.png");
+	private static ResourceLocation locUniversal = new ResourceLocation("telepads:textures/padUniversal.png");
 
 	// copied from RenderEndPortal.java
 	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");

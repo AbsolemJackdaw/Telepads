@@ -1,9 +1,10 @@
-package telepads;
+package telepads.packets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
+import telepads.Telepads;
 import telepads.block.TETelepad;
 import telepads.util.PlayerPadData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

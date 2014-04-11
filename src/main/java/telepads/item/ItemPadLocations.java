@@ -1,4 +1,4 @@
-package telepads;
+package telepads.item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import telepads.util.PlayerPadData;
 import cpw.mods.fml.relauncher.Side;
@@ -60,20 +61,29 @@ public class ItemPadLocations extends Item {
 	public ItemStack onItemRightClick(ItemStack is, World par2World,
 			EntityPlayer par3EntityPlayer) {
 
+		String a = StatCollector.translateToLocal("info.1");
+		String b = StatCollector.translateToLocal("info.2");
+		String c = StatCollector.translateToLocal("info.3");
+		String d = StatCollector.translateToLocal("info.4");
+		String e = StatCollector.translateToLocal("info.5");
+		String f = StatCollector.translateToLocal("info.6");
+		String g = StatCollector.translateToLocal("info.7");
+		String h = StatCollector.translateToLocal("info.8");
+		
 		if(!par2World.isRemote){
-			addInfo(par3EntityPlayer, "/*======= How To Use =======*/");
-			addInfo(par3EntityPlayer, "1.Teleporting : stand on pad and wait 3-5 Seconds.");
-			addInfo(par3EntityPlayer, "2.Removing TelePad : Right Click on TelePad");
-			addInfo(par3EntityPlayer, "3.Allowing Friends to use your pad : ");
-			addInfo(par3EntityPlayer, "3.a : Sneak-right click your pad." );
-			addInfo(par3EntityPlayer, "3.b : let friends rightclick pad with register");
-			addInfo(par3EntityPlayer, "For security reasons, you can not remove pads that have been registered to friends.");
-			addInfo(par3EntityPlayer, "If noone registered, you can set it back to normal by sneak-right clicking it again");
+			addInfo(par3EntityPlayer, a);
+			addInfo(par3EntityPlayer, b);
+			addInfo(par3EntityPlayer, c);
+			addInfo(par3EntityPlayer, d);
+			addInfo(par3EntityPlayer, e);
+			addInfo(par3EntityPlayer, f);
+			addInfo(par3EntityPlayer, g);
+			addInfo(par3EntityPlayer, h);
 
 		}
-		System.out.println(PlayerPadData.get(par3EntityPlayer).getAllCoords() +
-				"\n" + PlayerPadData.get(par3EntityPlayer).getAllDims()+
-				"\n" + PlayerPadData.get(par3EntityPlayer).getAllNames());
+//		System.out.println(PlayerPadData.get(par3EntityPlayer).getAllCoords() +
+//				"\n" + PlayerPadData.get(par3EntityPlayer).getAllDims()+
+//				"\n" + PlayerPadData.get(par3EntityPlayer).getAllNames());
 
 		return super.onItemRightClick(is, par2World, par3EntityPlayer);
 	}

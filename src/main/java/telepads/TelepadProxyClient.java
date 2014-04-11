@@ -2,17 +2,17 @@ package telepads;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
+import telepads.block.RenderItemBlock;
 import telepads.block.TESRTelePad;
 import telepads.block.TETelepad;
-import telepads.util.sndmngr;
+import telepads.packets.Clientpacket;
 import cpw.mods.fml.client.registry.ClientRegistry;
 
-public class CLProxy extends SProxy{
+public class TelepadProxyClient extends TelepadProxyServer{
 
 	@Override
 	public void registerItemRenderer(){
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Telepads.telepad), new ItemPadRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Telepads.telepad), new RenderItemBlock());
 	}
 
 	@Override
@@ -22,7 +22,6 @@ public class CLProxy extends SProxy{
 	@Override
 	public void registerSound(){
 
-		MinecraftForge.EVENT_BUS.register(new sndmngr());
 	}
 
 	@Override

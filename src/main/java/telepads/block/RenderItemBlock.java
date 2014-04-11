@@ -1,17 +1,16 @@
-package telepads;
+package telepads.block;
 
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-import telepads.block.TETelepad;
 import telepads.model.telepad;
 
-public class ItemPadRenderer implements IItemRenderer {
+public class RenderItemBlock implements IItemRenderer {
 	private telepad pad;
 
-	private static ResourceLocation loc = new ResourceLocation("subaraki:pad/telepad.png");
-	public ItemPadRenderer() {
+	private static ResourceLocation loc = new ResourceLocation("telepads:textures/telepad.png");
+	public RenderItemBlock() {
 		pad = new telepad();
 	}
 

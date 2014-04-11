@@ -12,9 +12,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import telepads.Serverpacket;
 import telepads.Telepads;
 import telepads.block.TETelepad;
+import telepads.packets.Serverpacket;
 import telepads.util.PlayerPadData;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
@@ -104,9 +104,9 @@ public class GuiTeleport extends GuiScreen{
 
 
 		int c = PlayerPadData.get(player).getAllCoords().size() ;
-		System.out.println(PlayerPadData.get(player).getAllCoords() +
-				"\n" + PlayerPadData.get(player).getAllDims() +
-				"\n" + PlayerPadData.get(player).getAllNames());
+//		System.out.println(PlayerPadData.get(player).getAllCoords() +
+//				"\n" + PlayerPadData.get(player).getAllDims() +
+//				"\n" + PlayerPadData.get(player).getAllNames());
 		if(c < 1)
 			return;
 

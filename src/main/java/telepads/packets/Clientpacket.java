@@ -1,4 +1,4 @@
-package telepads;
+package telepads.packets;
 
 import io.netty.buffer.ByteBufInputStream;
 import net.minecraft.client.Minecraft;

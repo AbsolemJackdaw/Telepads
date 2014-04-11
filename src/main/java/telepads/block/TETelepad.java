@@ -1,21 +1,9 @@
 package telepads.block;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.ByteBufUtil;
-import io.netty.buffer.Unpooled;
-
 import java.util.List;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-
-import net.minecraft.block.BlockBeacon;
-import net.minecraft.block.BlockBed;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -24,10 +12,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
-import telepads.ItemPadLocations;
-import telepads.Serverpacket;
 import telepads.Telepads;
-import telepads.util.PlayerPadData;
 import telepads.util.TelePadGuiHandler;
 
 public class TETelepad extends TileEntity{
@@ -50,8 +35,23 @@ public class TETelepad extends TileEntity{
 	private boolean guiOpen;
 
 	public boolean isUniversal;
-	
+
 	public boolean lockedUniversal;
+
+	public void addRegister(){
+
+		EntityPlayer p = worldObj.getPlayerEntityByName(ownerName);
+		//if player hasnt got one
+		if(!p.inventory.hasItem(Telepads.register)){
+
+			ItemStack stack = new ItemStack(Telepads.register);
+
+			EntityItem ei = new EntityItem(worldObj, xCoord, yCoord, zCoord, stack);
+			if(!worldObj.isRemote)
+				worldObj.spawnEntityInWorld(ei);
+
+		}
+	}
 
 	@Override
 	public boolean canUpdate() {
@@ -80,19 +80,6 @@ public class TETelepad extends TileEntity{
 		this.readFromNBT(pkt.func_148857_g());  //packet.data
 		System.out.println("onDataPacket");
 
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound par1nbtTagCompound) {
-
-		par1nbtTagCompound.setString("name", telepadname);
-		par1nbtTagCompound.setString("owner", ownerName);
-		par1nbtTagCompound.setInteger("dimension", dimension);
-		par1nbtTagCompound.setBoolean("isUniversal", isUniversal);
-		par1nbtTagCompound.setBoolean("lockedUniversal", lockedUniversal);
-
-		super.writeToNBT(par1nbtTagCompound);
-		System.out.println("write");
 	}
 
 	@Override
@@ -127,7 +114,7 @@ public class TETelepad extends TileEntity{
 	@Override
 	public void updateEntity() {
 
-			
+
 		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+0.5, yCoord+0.5, zCoord+0.5);
 
 		List<EntityPlayer> playerInAabb = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
@@ -167,18 +154,16 @@ public class TETelepad extends TileEntity{
 		}
 	}
 
-	public void addRegister(){
+	@Override
+	public void writeToNBT(NBTTagCompound par1nbtTagCompound) {
 
-		EntityPlayer p = worldObj.getPlayerEntityByName(ownerName);
-		//if player hasnt got one
-		if(!p.inventory.hasItem(Telepads.register)){
+		par1nbtTagCompound.setString("name", telepadname);
+		par1nbtTagCompound.setString("owner", ownerName);
+		par1nbtTagCompound.setInteger("dimension", dimension);
+		par1nbtTagCompound.setBoolean("isUniversal", isUniversal);
+		par1nbtTagCompound.setBoolean("lockedUniversal", lockedUniversal);
 
-			ItemStack stack = new ItemStack(Telepads.register);
-
-			EntityItem ei = new EntityItem(worldObj, xCoord, yCoord, zCoord, stack);
-			if(!worldObj.isRemote)
-				worldObj.spawnEntityInWorld(ei);
-
-		} 
+		super.writeToNBT(par1nbtTagCompound);
+		System.out.println("write");
 	}
 }

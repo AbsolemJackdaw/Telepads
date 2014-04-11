@@ -1,11 +1,9 @@
-package telepads;
+package telepads.util;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import telepads.util.PlayerPadData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PadEvents {
@@ -26,20 +24,18 @@ public class PadEvents {
 	}
 
 	@SubscribeEvent
-	public void onLivingDeathEvent(LivingDeathEvent event)
+	public void onEntityJoinWorld(EntityJoinWorldEvent event)
 	{
-		// we only want to save data for players (most likely, anyway)
-		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer){
-			PlayerPadData.saveProxyData((EntityPlayer) event.entity);
-		}
+		if (!event.entity.worldObj.isRemote && (event.entity instanceof EntityPlayer))
+			PlayerPadData.loadProxyData((EntityPlayer) event.entity);
 	}
 
 	@SubscribeEvent
-	public void onEntityJoinWorld(EntityJoinWorldEvent event)
+	public void onLivingDeathEvent(LivingDeathEvent event)
 	{
-		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer){
-			PlayerPadData.loadProxyData((EntityPlayer) event.entity);
-		}
+		// we only want to save data for players (most likely, anyway)
+		if (!event.entity.worldObj.isRemote && (event.entity instanceof EntityPlayer))
+			PlayerPadData.saveProxyData((EntityPlayer) event.entity);
 	}
 
 

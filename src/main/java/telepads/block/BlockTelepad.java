@@ -94,10 +94,8 @@ public class BlockTelepad extends BlockContainer{
 				}else
 					if(par1World.isRemote)
 						par5EntityPlayer.addChatComponentMessage(new ChatComponentText("I havent got my register with me ... "));
-			}else{
-				if(par1World.isRemote)
-					par5EntityPlayer.addChatComponentMessage(new ChatComponentText("This Universal Pad got locked because other players registered to it."));
-			}
+			} else if(par1World.isRemote)
+				par5EntityPlayer.addChatComponentMessage(new ChatComponentText("This Universal Pad got locked because other players registered to it."));
 		} else if(te.ownerName.equals(par5EntityPlayer.getDisplayName())){
 			if(!te.isUniversal){
 				if(!par1World.isRemote){
@@ -138,7 +136,7 @@ public class BlockTelepad extends BlockContainer{
 							return false;
 						}
 					} else
-						for(int i = 0;i < par5EntityPlayer.inventory.mainInventory.length;i ++){
+						for(int i = 0;i < par5EntityPlayer.inventory.mainInventory.length;i ++)
 							if(par5EntityPlayer.inventory.getStackInSlot(i) != null){
 								ItemStack is = par5EntityPlayer.inventory.getStackInSlot(i);
 
@@ -152,7 +150,6 @@ public class BlockTelepad extends BlockContainer{
 										te.lockedUniversal = true;
 								}
 							}
-						}
 			}
 		}
 		return false;
@@ -164,12 +161,12 @@ public class BlockTelepad extends BlockContainer{
 
 
 		if(par1World.provider.dimensionId == 1){
-			par1World.newExplosion((Entity)null, (double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), 5.0F, true, true);
+			par1World.newExplosion((Entity)null, x + 0.5F, y + 0.5F, z + 0.5F, 5.0F, true, true);
 			par1World.setBlockToAir(x, y, z);
 			par1World.removeTileEntity(x, y, z);
 			return;
 		}
-		
+
 		TETelepad te = new TETelepad();
 
 		int c = 0;

@@ -7,12 +7,15 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 
-import telepads.Serverpacket;
+import com.sun.org.apache.xml.internal.security.utils.I18n;
+
 import telepads.Telepads;
 import telepads.block.TETelepad;
+import telepads.packets.Serverpacket;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class GuiNameTelepad extends GuiScreen{
@@ -43,16 +46,20 @@ public class GuiNameTelepad extends GuiScreen{
 		int posX = (this.width ) / 2;
 		int posY = (this.height ) / 2;
 		try{
-			fontRendererObj.drawSplitString("Press Enter to confirm", (posX+1) -75, posY-1, 180 ,0x000000);
-			fontRendererObj.drawSplitString("Press Enter to confirm", posX -75, posY, 180 ,0xffffff);
+			
+			String p = StatCollector.translateToLocal("enter.to.confirm");
+			
+			fontRendererObj.drawSplitString(p, (posX+1) -75, posY-1, 180 ,0x000000);
+			fontRendererObj.drawSplitString(p, posX -75, posY, 180 ,0xffffff);
 
-			fontRendererObj.drawSplitString("Name Your TelePad : "+padNameField.getText(), (posX+1) -75 -100, posY-1-20, 180 ,0x000000);
-			fontRendererObj.drawSplitString("Name Your TelePad : "+padNameField.getText(), posX   -75 -100, posY  -20, 180 ,0xff0000);
+			String q = StatCollector.translateToLocal("name.your.telepad");
+			
+			fontRendererObj.drawSplitString(q + " : "+padNameField.getText(), (posX+1) -75, posY-1-20, 180 ,0x000000);
+			fontRendererObj.drawSplitString(q + " : "+padNameField.getText(), posX   -75, posY  -20, 180 ,0xff0000);
 
 		}finally{
 			if(padNameField != null) padNameField.drawTextBox();
 		}
-
 	}
 
 	@Override
@@ -62,7 +69,7 @@ public class GuiNameTelepad extends GuiScreen{
 		int posY = (this.height ) / 2;
 		this.buttonList.clear();
 
-		padNameField = new GuiTextField(fontRendererObj, posX-(150/2)    -100 , posY-50, 150, 20);
+		padNameField = new GuiTextField(fontRendererObj, posX-(150/2) , posY-50, 150, 20);
 
 		String padName = te.telepadname.equals("TelePad") ? te.getWorldObj().getBiomeGenForCoords(te.xCoord, te.zCoord).biomeName : te.telepadname;
 
@@ -70,7 +77,6 @@ public class GuiNameTelepad extends GuiScreen{
 			padNameField.setText(padName);
 			padNameField.setMaxStringLength(50);
 		}
-
 	}
 
 	@Override

@@ -12,10 +12,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
-import telepads.SProxy;
-import telepads.Serverpacket;
+import telepads.TelepadProxyServer;
 import telepads.Telepads;
 import telepads.block.TETelepad;
+import telepads.packets.Serverpacket;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
@@ -28,13 +28,37 @@ public class PlayerPadData implements IExtendedEntityProperties{
 	}
 
 
+	private static String getSaveKey(EntityPlayer player) {
+		return player.getDisplayName() + ":" + EXT_PROP_NAME;
+	}
+	/**
+	 * This cleans up the onEntityJoinWorld event by replacing most of the code
+	 * with a single line: ExtendedPlayer.loadProxyData((EntityPlayer) event.entity));
+	 */
+	public static void loadProxyData(EntityPlayer player) {
+		PlayerPadData playerData = PlayerPadData.get(player);
+		NBTTagCompound savedData = TelepadProxyServer.getEntityData(getSaveKey(player));
+
+		if(savedData != null)
+		 playerData.loadNBTData(savedData);
+	}
 	public static final void register(EntityPlayer player) {
 		if (player != null) {
 			player.registerExtendedProperties(EXT_PROP_NAME, new PlayerPadData(player));
 			FMLLog.getLogger().info("Player properties registered for Telepads");
 		}
 	}
+
+	public static void saveProxyData(EntityPlayer player) {
+		PlayerPadData playerData = PlayerPadData.get(player);
+		NBTTagCompound savedData = new NBTTagCompound();
+
+		playerData.saveNBTData(savedData);
+		TelepadProxyServer.storeEntityData(getSaveKey(player), savedData);
+	}
+
 	public EntityPlayer player;
+
 	private ArrayList<int[]> allCoords = new ArrayList<int[]>();
 
 	private ArrayList<Integer> allDims = new ArrayList<Integer>();
@@ -84,6 +108,7 @@ public class PlayerPadData implements IExtendedEntityProperties{
 		trim();
 	}
 
+
 	public void removePad(TETelepad pad){
 
 		int a = pad.xCoord;
@@ -100,6 +125,7 @@ public class PlayerPadData implements IExtendedEntityProperties{
 					}
 		trim();
 	}
+
 
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
@@ -118,41 +144,6 @@ public class PlayerPadData implements IExtendedEntityProperties{
 
 	}
 
-	private void trim(){
-		allCoords.trimToSize();
-		allDims.trimToSize();
-		allNames.trimToSize();
-	}
-
-
-	private static String getSaveKey(EntityPlayer player) {
-		return player.getDisplayName() + ":" + EXT_PROP_NAME;
-	}
-
-
-	public static void saveProxyData(EntityPlayer player) {
-		PlayerPadData playerData = PlayerPadData.get(player);
-		NBTTagCompound savedData = new NBTTagCompound();
-
-		playerData.saveNBTData(savedData);
-		SProxy.storeEntityData(getSaveKey(player), savedData);
-	}
-
-	/**
-	 * This cleans up the onEntityJoinWorld event by replacing most of the code
-	 * with a single line: ExtendedPlayer.loadProxyData((EntityPlayer) event.entity));
-	 */
-	public static void loadProxyData(EntityPlayer player) {
-		PlayerPadData playerData = PlayerPadData.get(player);
-		NBTTagCompound savedData = SProxy.getEntityData(getSaveKey(player));
-
-		if(savedData != null) {
-			playerData.loadNBTData(savedData);
-		}
-//		playerData.syncClient(player);
-	}
-	
-	
 	private void syncClient(EntityPlayer p){
 		ByteBuf buf = Unpooled.buffer();
 		ByteBufOutputStream out = new ByteBufOutputStream(buf);
@@ -184,5 +175,12 @@ public class PlayerPadData implements IExtendedEntityProperties{
 			out.close();
 		} catch (Exception e) {
 		}
+	}
+
+
+	private void trim(){
+		allCoords.trimToSize();
+		allDims.trimToSize();
+		allNames.trimToSize();
 	}
 }

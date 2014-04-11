@@ -8,6 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import telepads.block.BlockTelepad;
 import telepads.block.TETelepad;
+import telepads.item.ItemPadLocations;
+import telepads.util.DataTracker;
+import telepads.util.PadEvents;
 import telepads.util.TelePadGuiHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -29,8 +32,8 @@ public class Telepads {
 	public static BlockTelepad telepad;
 	public static ItemPadLocations register;
 
-	@SidedProxy(serverSide = "telepads.SProxy", clientSide = "telepads.CLProxy")
-	public static SProxy proxy;
+	@SidedProxy(serverSide = "telepads.TelepadProxyServer", clientSide = "telepads.TelepadProxyClient")
+	public static TelepadProxyServer proxy;
 	public static Telepads instance;
 
 	public static FMLEventChannel Channel;
@@ -61,7 +64,7 @@ public class Telepads {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e){
 
-		register = new ItemPadLocations();
+		register = (ItemPadLocations) new ItemPadLocations().setUnlocalizedName("register");
 		GameRegistry.registerItem(register, "ItemPadLocations");
 
 		telepad = (BlockTelepad) new BlockTelepad(Material.wood).setBlockName("telepad").setLightLevel(0.2f).setCreativeTab(CreativeTabs.tabTransport).setBlockUnbreakable().setBlockTextureName("wool_colored_pink");

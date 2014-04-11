@@ -1,11 +1,12 @@
-package telepads;
+package telepads.util;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import telepads.util.PlayerPadData;
+import telepads.Telepads;
+import telepads.packets.Serverpacket;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -30,8 +31,6 @@ public class DataTracker {
 
 	@SubscribeEvent
 	public void onPlayerLogout(PlayerLoggedOutEvent e) {
-		//		PlayerPadData.get(e.player);
-		//		syncClient(e.player);
 	}
 
 	@SubscribeEvent
