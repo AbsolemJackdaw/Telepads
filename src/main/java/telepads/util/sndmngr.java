@@ -4,11 +4,11 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class sndmngr {
-	
+
 	@SubscribeEvent
 	public void onSound(SoundLoadEvent event)
 	{
-		try 
+		try
 		{
 //			event.manager.addSound("subaraki:telepadShort.ogg");
 //			event.manager.addSound("subaraki:telepadLong.ogg");
