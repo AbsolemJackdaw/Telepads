@@ -3,19 +3,19 @@
 tile.telepad.name=TelePad
 
 #block
-item.register.name=TelePad Register
+item.register.name=Registre de TelePad
 
 
 #gui text
-enter.to.confirm=Press Enter to confirm
-name.your.telepad=Name your TelePad
+enter.to.confirm=Appuyez sur Entrer pour confirmer
+name.your.telepad=Nommer votre TelePad
 
 #item text
-info.1 =/*======= How To Use =======*/
-info.2 =1.Teleporting : stand on pad and wait 3-5 Seconds.
-info.3 =2.Removing TelePad : Right Click on TelePad
-info.4 =3.Allowing Friends to use your pad :
-info.5 =3.a : Sneak-right click your pad.
-info.6 =3.b : let friends rightclick pad with register
-info.7 =For security reasons, you can not remove pads that have been registered to friends.
-info.8 =If noone registered, you can set it back to normal by sneak-right clicking it again.
+info.1 =/*======= Comment Utiliser =======*/
+info.2 =1.Teleporter : Se mettre sur le TelePad et attendre 3-5 secondes.
+info.3 =2.Enlever un TelePad : Click Droit sur le TelePad.
+info.4 =3.Permettre vos amis a enregistrer un de vos TelePads :
+info.5 =3.a : Click Droit en mode furtif pour changer l'état du TelePad.
+info.6 =3.b : Laissez vos amis faire un clic droit sur le pad avec leur registre.
+info.7 =Pour des raisons de sécurité, vous ne pouvez pas supprimer des TelePads en mode Universel
+info.8 =Si personne ne s'est registré sur votre TelePad Universel, vous pouvez le remmettre en état normal avec un clic droit en mod furtif.
