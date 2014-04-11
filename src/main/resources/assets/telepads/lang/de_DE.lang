@@ -1,21 +1,20 @@
-
 #item
-tile.telepad.name=TelePad
+tile.telepad.name=Teleplatte
 
 #block
-item.register.name=TelePad Register
+item.register.name=Teleplatten-Registrierer
 
 
 #gui text
-enter.to.confirm=Press Enter to confirm
-name.your.telepad=Name your TelePad
+enter.to.confirm=Drücke Enter um zu bestätigen
+name.your.telepad=Gib deiner Teleplatte einen Namen
 
 #item text
-info.1 =/*======= How To Use =======*/
-info.2 =1.Teleporting : stand on pad and wait 3-5 Seconds.
-info.3 =2.Removing TelePad : Right Click on TelePad
-info.4 =3.Allowing Friends to use your pad :
-info.5 =3.a : Sneak-right click your pad.
-info.6 =3.b : let friends rightclick pad with register
-info.7 =For security reasons, you can not remove pads that have been registered to friends.
-info.8 =If noone registered, you can set it back to normal by sneak-right clicking it again.
+info.1 =/*======= Bedienungsanleitung =======*/
+info.2 =1. Teleportieren: Stell dich auf die Platte udn warte 3-5 Sekunden. 
+info.3 =2. Entfernen der Teleplatte: Rechtsklicke die Teleplatte.
+info.4 =3. So können auch deine Freunde deine Teleplatten benutzen:
+info.5 =3a. Shift-Rechtsklicke die Teleplatte.
+info.6 =3b. Lass deine Freunde die Platte mit dem Teleplatten-Registrierer rechtsklicken.
+info.7 =Zur Sicherheit kannst du keine Platten entfernen, welche von anderen erstellt wurden.
+info.8 =Wenn keiner die Teleplatte registriert hat, kannst du sie mit Shift-Rechtsklick zurücksetzen.
