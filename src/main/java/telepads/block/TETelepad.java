@@ -31,7 +31,6 @@ public class TETelepad extends TileEntity{
 	/**Set when player walks on a pad*/
 	public EntityPlayer playerStandingOnPad = null;
 
-	private int previousSize = 0;
 	private boolean guiOpen;
 
 	public boolean isUniversal;
@@ -47,8 +46,9 @@ public class TETelepad extends TileEntity{
 			ItemStack stack = new ItemStack(Telepads.register);
 
 			EntityItem ei = new EntityItem(worldObj, xCoord, yCoord, zCoord, stack);
-			if(!worldObj.isRemote)
+			if(!worldObj.isRemote) {
 				worldObj.spawnEntityInWorld(ei);
+			}
 
 		}
 	}
@@ -97,8 +97,9 @@ public class TETelepad extends TileEntity{
 
 	/**Resets the TelePad and notifies the player of it : aka, send chat mesage*/
 	public void ResetAndNotify(String message, EntityPlayer p){
-		if(!worldObj.isRemote)
+		if(!worldObj.isRemote) {
 			p.addChatComponentMessage(new ChatComponentText(message));
+		}
 		resetTE();
 	}
 
@@ -119,31 +120,46 @@ public class TETelepad extends TileEntity{
 
 		List<EntityPlayer> playerInAabb = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
 
-		if(isStandingOnPlatform)
-			if(playerInAabb.isEmpty() || !playerInAabb.contains(playerStandingOnPad))
+		if(isStandingOnPlatform) {
+			if(playerInAabb.isEmpty() || !playerInAabb.contains(playerStandingOnPad)) {
 				changePlatformState(false);
+			}
+		}
 
 		for(EntityPlayer p : playerInAabb){
 
 			if(p!=null){
-				if(isStandingOnPlatform == false)//check to prevent packet from spamming
+				if(isStandingOnPlatform == false) {
 					changePlatformState(true);
+				}
 
-				if(counter >=0)counter --;
+				if(counter >=0) {
+					counter --;
+				}
 			}
 
-			if((counter < 0) && !guiOpen)
-				if(p != null)
+			if((counter < 0) && !guiOpen) {
+				if(p != null) {
 					if(!p.inventory.hasItem(Telepads.register)){
-						p.addChatMessage(new ChatComponentText("I forgot my register !"));
-						p.addChatMessage(new ChatComponentText("(You got a new register from the Telepad"));
+						if(!worldObj.isRemote) {
+							p.addChatMessage(new ChatComponentText("I forgot my register !"));
+						}
+
 						ItemStack is = new ItemStack(Telepads.register);
-						if(p.inventory.addItemStackToInventory(is))
+						if(p.inventory.addItemStackToInventory(is)){
 							p.inventory.addItemStackToInventory(is);
+
+							if(!worldObj.isRemote) {
+								p.addChatMessage(new ChatComponentText("You got a new register from the Telepad"));
+							}
+
+						}
 						else{
 							EntityItem ei = new EntityItem(worldObj, xCoord, yCoord, zCoord, is);
-							if(!worldObj.isRemote)
+							if(!worldObj.isRemote) {
 								worldObj.spawnEntityInWorld(ei);
+							}
+
 						}
 						resetTE();
 					}else{
@@ -151,6 +167,8 @@ public class TETelepad extends TileEntity{
 						guiOpen = true;
 						p.openGui(Telepads.instance, TelePadGuiHandler.TELEPORT, worldObj, xCoord, yCoord, zCoord);
 					}
+				}
+			}
 		}
 	}
 

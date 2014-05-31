@@ -45,10 +45,10 @@ public class Clientpacket extends Serverpacket {
 					int dim = dis.readInt();
 					String name = dis.readUTF();
 
-//					if (dat.getAllCoords().get(i) == null){
-						dat.getAllCoords().add(a);
-						dat.getAllDims().add(dim);
-						dat.getAllNames().add(name);
+					//					if (dat.getAllCoords().get(i) == null){
+					dat.getAllCoords().add(a);
+					dat.getAllDims().add(dim);
+					dat.getAllNames().add(name);
 				}
 
 

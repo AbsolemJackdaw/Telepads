@@ -1,32 +1,22 @@
 package telepads.util;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
-
 import java.util.ArrayList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import telepads.TelepadProxyServer;
-import telepads.Telepads;
 import telepads.block.TETelepad;
-import telepads.packets.Serverpacket;
 import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class PlayerPadData implements IExtendedEntityProperties{
 
 	public final static String EXT_PROP_NAME = "PlayerPadData";
-	private static final String tagName = "PlayerPadData";
 	public static final PlayerPadData get(EntityPlayer p) {
 		return (PlayerPadData) p.getExtendedProperties(EXT_PROP_NAME);
 	}
-
 
 	private static String getSaveKey(EntityPlayer player) {
 		return player.getDisplayName() + ":" + EXT_PROP_NAME;
@@ -39,8 +29,9 @@ public class PlayerPadData implements IExtendedEntityProperties{
 		PlayerPadData playerData = PlayerPadData.get(player);
 		NBTTagCompound savedData = TelepadProxyServer.getEntityData(getSaveKey(player));
 
-		if(savedData != null)
-		 playerData.loadNBTData(savedData);
+		if(savedData != null) {
+			playerData.loadNBTData(savedData);
+		}
 	}
 	public static final void register(EntityPlayer player) {
 		if (player != null) {
@@ -66,8 +57,9 @@ public class PlayerPadData implements IExtendedEntityProperties{
 	private ArrayList<String> allNames = new ArrayList<String>();
 
 	public PlayerPadData(EntityPlayer p) {
-		if (p != null)
+		if (p != null) {
 			player = p;
+		}
 	}
 
 	public ArrayList<int[]> getAllCoords() {
@@ -115,14 +107,17 @@ public class PlayerPadData implements IExtendedEntityProperties{
 		int b = pad.yCoord;
 		int c = pad.zCoord;
 
-		for(int i = 0; i < allCoords.size(); i++)
-			if(allCoords.get(i)[0] == a)
-				if(allCoords.get(i)[1] == b)
+		for(int i = 0; i < allCoords.size(); i++) {
+			if(allCoords.get(i)[0] == a) {
+				if(allCoords.get(i)[1] == b) {
 					if(allCoords.get(i)[2] == c){
 						allCoords.remove(i);
 						allNames.remove(i);
 						allDims.remove(i);
 					}
+				}
+			}
+		}
 		trim();
 	}
 
@@ -131,52 +126,21 @@ public class PlayerPadData implements IExtendedEntityProperties{
 	public void saveNBTData(NBTTagCompound compound) {
 		compound.setInteger("Size", allCoords.size());
 
-		for(int i = 0; i < allCoords.size(); i++)
+		for(int i = 0; i < allCoords.size(); i++) {
 			compound.setIntArray("allCoords_"+i, allCoords.get(i));
+		}
 
-		for(int i = 0; i < allDims.size(); i++)
+		for(int i = 0; i < allDims.size(); i++) {
 			compound.setInteger("allDims_"+i, allDims.get(i));
+		}
 
-		for(int i = 0; i < allNames.size(); i++)
+		for(int i = 0; i < allNames.size(); i++) {
 			compound.setString("allNames_"+i, allNames.get(i));
+		}
 
 		trim();
 
 	}
-
-	private void syncClient(EntityPlayer p){
-		ByteBuf buf = Unpooled.buffer();
-		ByteBufOutputStream out = new ByteBufOutputStream(buf);
-
-		try {
-
-			out.writeInt(Serverpacket.SYNC);
-
-			out.writeInt(0);
-			out.writeInt(0);
-			out.writeInt(0);
-
-			out.writeInt(PlayerPadData.get(p).getAllCoords().size());
-
-			for(int i = 0; i < PlayerPadData.get(p).getAllCoords().size(); i++){
-				out.writeInt(PlayerPadData.get(p).getAllCoords().get(i)[0]);
-				out.writeInt(PlayerPadData.get(p).getAllCoords().get(i)[1]);
-				out.writeInt(PlayerPadData.get(p).getAllCoords().get(i)[2]);
-
-				out.writeInt(PlayerPadData.get(p).getAllDims().get(i));
-				out.writeUTF(PlayerPadData.get(p).getAllNames().get(i));
-
-			}
-
-			if(!p.worldObj.isRemote){
-				Telepads.Channel.sendTo(new FMLProxyPacket(buf, Telepads.packetChannel), (EntityPlayerMP) p);
-			System.out.println("packet send");
-			}
-			out.close();
-		} catch (Exception e) {
-		}
-	}
-
 
 	private void trim(){
 		allCoords.trimToSize();

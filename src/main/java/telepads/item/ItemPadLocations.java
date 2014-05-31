@@ -39,9 +39,10 @@ public class ItemPadLocations extends Item {
 			ArrayList<Integer> b = PlayerPadData.get(par2EntityPlayer).getAllDims();
 			ArrayList<String> c = PlayerPadData.get(par2EntityPlayer).getAllNames();
 
-			for(int i = 0; i < a.size(); i++)
+			for(int i = 0; i < a.size(); i++) {
 				par3List.add("x"+a.get(i)[0]+ " y"+a.get(i)[1]+ " z"+a.get(i)[2]+
 						" " + c.get(i) +" Dim:" + b.get(i));
+			}
 		}
 	}
 
@@ -69,7 +70,7 @@ public class ItemPadLocations extends Item {
 		String f = StatCollector.translateToLocal("info.6");
 		String g = StatCollector.translateToLocal("info.7");
 		String h = StatCollector.translateToLocal("info.8");
-		
+
 		if(!par2World.isRemote){
 			addInfo(par3EntityPlayer, a);
 			addInfo(par3EntityPlayer, b);
@@ -81,9 +82,6 @@ public class ItemPadLocations extends Item {
 			addInfo(par3EntityPlayer, h);
 
 		}
-//		System.out.println(PlayerPadData.get(par3EntityPlayer).getAllCoords() +
-//				"\n" + PlayerPadData.get(par3EntityPlayer).getAllDims()+
-//				"\n" + PlayerPadData.get(par3EntityPlayer).getAllNames());
 
 		return super.onItemRightClick(is, par2World, par3EntityPlayer);
 	}

@@ -53,8 +53,8 @@ public class Telepads {
 		GameRegistry.registerTileEntity(TETelepad.class, "TETelepad");
 		proxy.registerItemRenderer();
 
-    	Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(packetChannel);
-    	proxy.registerPacketHandlers();
+		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(packetChannel);
+		proxy.registerPacketHandlers();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new TelePadGuiHandler());
 		FMLCommonHandler.instance().bus().register(new DataTracker());

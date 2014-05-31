@@ -92,23 +92,18 @@ public class GuiTeleport extends GuiScreen{
 	@Override
 	public void initGui() {
 
-		//used to offset buttons
-		int offSetX = 150;
-		int offSetY = 250;
-
-		int posX = (this.width) / 2;
-		int posY = (this.height) / 2;
 		this.buttonList.clear();
 
 		this.buttonList.add(new GuiButton(EXIT_BUTTON, 5, 5, 20, 20, "X"));
 
 
 		int c = PlayerPadData.get(player).getAllCoords().size() ;
-//		System.out.println(PlayerPadData.get(player).getAllCoords() +
-//				"\n" + PlayerPadData.get(player).getAllDims() +
-//				"\n" + PlayerPadData.get(player).getAllNames());
-		if(c < 1)
+		//		System.out.println(PlayerPadData.get(player).getAllCoords() +
+		//				"\n" + PlayerPadData.get(player).getAllDims() +
+		//				"\n" + PlayerPadData.get(player).getAllNames());
+		if(c < 1) {
 			return;
+		}
 
 		for(int i = 0; i < c; i++){
 			String name = PlayerPadData.get(player).getAllNames().get(i);

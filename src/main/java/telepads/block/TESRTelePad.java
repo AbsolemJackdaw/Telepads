@@ -150,8 +150,9 @@ public class TESRTelePad extends TileEntitySpecialRenderer {
 			double d2, float f) {
 		TETelepad te = null;
 
-		if(tileentity instanceof TETelepad)
+		if(tileentity instanceof TETelepad) {
 			te = (TETelepad)tileentity;
+		}
 
 		GL11.glPushMatrix();
 		renderEndPortalSurface(d, d1, d2, f);
@@ -161,13 +162,15 @@ public class TESRTelePad extends TileEntitySpecialRenderer {
 		GL11.glTranslatef((float)d + 0.5F, (float)d1 + 2.25F, (float)d2 + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
 
-		if(te != null)
-			if(!te.isUniversal)
+		if(te != null) {
+			if(!te.isUniversal) {
 				bindTexture(loc);
-			else
+			} else {
 				bindTexture(locUniversal);
-		else
+			}
+		} else {
 			bindTexture(loc);
+		}
 
 		float f2 = 1.5f;
 		GL11.glScalef(f2,f2,f2);

@@ -66,7 +66,7 @@ public class DataTracker {
 
 			if(!p.worldObj.isRemote){
 				Telepads.Channel.sendTo(new FMLProxyPacket(buf, Telepads.packetChannel), (EntityPlayerMP) p);
-			System.out.println("packet send");
+				System.out.println("packet send");
 			}
 			out.close();
 		} catch (Exception e) {

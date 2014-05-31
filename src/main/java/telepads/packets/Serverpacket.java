@@ -69,15 +69,16 @@ public class Serverpacket {
 				int otherZ = dis.readInt();
 
 				if(dimID != player.worldObj.provider.dimensionId){
-					if(player.worldObj.provider.dimensionId == 1)
+					if(player.worldObj.provider.dimensionId == 1) {
 						player.travelToDimension(1);
-					else{
+					} else{
 						player.travelToDimension(dimID);
 						player.setPositionAndUpdate(otherX+2, otherY+0.5d, otherZ);
 					}
 
-				} else
+				} else {
 					player.setPositionAndUpdate(otherX+2, otherY+0.5d, otherZ);
+				}
 
 				break;
 

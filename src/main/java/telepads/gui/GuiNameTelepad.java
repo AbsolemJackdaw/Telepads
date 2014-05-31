@@ -11,8 +11,6 @@ import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 
-import com.sun.org.apache.xml.internal.security.utils.I18n;
-
 import telepads.Telepads;
 import telepads.block.TETelepad;
 import telepads.packets.Serverpacket;
@@ -46,19 +44,21 @@ public class GuiNameTelepad extends GuiScreen{
 		int posX = (this.width ) / 2;
 		int posY = (this.height ) / 2;
 		try{
-			
+
 			String p = StatCollector.translateToLocal("enter.to.confirm");
-			
+
 			fontRendererObj.drawSplitString(p, (posX+1) -75, posY-1, 180 ,0x000000);
 			fontRendererObj.drawSplitString(p, posX -75, posY, 180 ,0xffffff);
 
 			String q = StatCollector.translateToLocal("name.your.telepad");
-			
+
 			fontRendererObj.drawSplitString(q + " : "+padNameField.getText(), (posX+1) -75, posY-1-20, 180 ,0x000000);
 			fontRendererObj.drawSplitString(q + " : "+padNameField.getText(), posX   -75, posY  -20, 180 ,0xff0000);
 
 		}finally{
-			if(padNameField != null) padNameField.drawTextBox();
+			if(padNameField != null) {
+				padNameField.drawTextBox();
+			}
 		}
 	}
 
@@ -83,11 +83,13 @@ public class GuiNameTelepad extends GuiScreen{
 	protected void keyTyped(char c, int i)
 	{
 		super.keyTyped(c, i);
-		if(i == Keyboard.KEY_RETURN)
+		if(i == Keyboard.KEY_RETURN) {
 			sendPacket(padNameField.getText());
+		}
 
-		if(padNameField != null)
+		if(padNameField != null) {
 			padNameField.textboxKeyTyped(c, i);
+		}
 	}
 
 
@@ -95,8 +97,9 @@ public class GuiNameTelepad extends GuiScreen{
 	protected void mouseClicked(int i, int j, int k)
 	{
 		super.mouseClicked(i, j, k);
-		if(padNameField != null)
+		if(padNameField != null) {
 			padNameField.mouseClicked(i, j, k);
+		}
 	}
 
 	public void sendPacket(String padName){

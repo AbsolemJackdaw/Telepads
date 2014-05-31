@@ -73,86 +73,118 @@ public class BlockTelepad extends BlockContainer{
 
 		TETelepad te = (TETelepad)par1World.getTileEntity(x, y, z);
 
-		if(!par5EntityPlayer.isSneaking()){
-			if(!te.lockedUniversal){
-				if(par5EntityPlayer.inventory.hasItem(Telepads.register)){
-					if(te.ownerName.equals(par5EntityPlayer.getDisplayName())){
+		if(te.ownerName.equals(par5EntityPlayer.getDisplayName())){
+			if(!par5EntityPlayer.isSneaking()){
+				if(!te.lockedUniversal){
+					if(par5EntityPlayer.inventory.hasItem(Telepads.register)){
 						par1World.setBlockToAir(x, y, z);
 						par1World.removeTileEntity(x, y, z);
 
 						ItemStack stack = new ItemStack(Telepads.telepad);
 						EntityItem ei = new EntityItem(par1World, x, y, z, stack);
-						if(!par1World.isRemote)
+						if(!par1World.isRemote) {
 							par1World.spawnEntityInWorld(ei);
+						}
 
 						PlayerPadData.get(par5EntityPlayer).removePad(te);
 
 						removePadFromRegister(par5EntityPlayer, te);
 					}else
-						if(par1World.isRemote)
-							par5EntityPlayer.addChatComponentMessage(new ChatComponentText("This is not mine. I should not do this !"));
-				}else
-					if(par1World.isRemote)
-						par5EntityPlayer.addChatComponentMessage(new ChatComponentText("I havent got my register with me ... "));
-			} else if(par1World.isRemote)
-				par5EntityPlayer.addChatComponentMessage(new ChatComponentText("This Universal Pad got locked because other players registered to it."));
-		} else if(te.ownerName.equals(par5EntityPlayer.getDisplayName())){
-			if(!te.isUniversal){
-				if(!par1World.isRemote){
-					par5EntityPlayer.addChatComponentMessage(
-							new ChatComponentText("Your portal got opened to Universal Acces"));
-					par5EntityPlayer.addChatComponentMessage(
-							new ChatComponentText("Your Friends can now add your pad to their coordinates."));
-					par5EntityPlayer.addChatComponentMessage(
-							new ChatComponentText("Pad will be locked to Universal if other players register"));
+						if(par1World.isRemote) {
+							par5EntityPlayer.addChatComponentMessage(new ChatComponentText("I havent got my register with me ... "));
+						}
+				} else if(par1World.isRemote) {
+					par5EntityPlayer.addChatComponentMessage(new ChatComponentText("This Universal Pad got locked and can not be removed because other players registered to it."));
 				}
-				te.isUniversal = true;
-				par1World.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+			}
+			else{
+				if(!te.isUniversal){
+					if(!par1World.isRemote){
+						par5EntityPlayer.addChatComponentMessage(
+								new ChatComponentText("Your portal got opened to Universal Acces"));
+						par5EntityPlayer.addChatComponentMessage(
+								new ChatComponentText("Your Friends can now add your pad to their coordinates."));
+						par5EntityPlayer.addChatComponentMessage(
+								new ChatComponentText("Pad will be locked to Universal if other players register"));
+					}
+					te.isUniversal = true;
+					par1World.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 
-			}else{
-				if(!par1World.isRemote)
-					par5EntityPlayer.addChatComponentMessage(
-							new ChatComponentText("Your portal got Closed"));
-				te.isUniversal = false;
-				par1World.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+				}else{
+					if(!par1World.isRemote) {
+						par5EntityPlayer.addChatComponentMessage(
+								new ChatComponentText("Your portal got Closed"));
+					}
+					te.isUniversal = false;
+					par1World.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
+				}
 			}
 
 		}else{
 			//If the player clicking the pad is not the owner
-			if(!te.isUniversal)return false;
+			if(!te.isUniversal) {
+				return true;
+			}
 
 			if(!par5EntityPlayer.inventory.hasItem(Telepads.register)){
 				if(!par1World.isRemote){
 					par5EntityPlayer.addChatComponentMessage(
 							new ChatComponentText("I need my register for this ... "));
-					return false;
 				}
+				return true;
+			}
+			if(par5EntityPlayer.getCurrentEquippedItem() == null){
+				if(!par1World.isRemote){
+					par5EntityPlayer.addChatComponentMessage(
+							new ChatComponentText("I need to use my register on the pad !"));
+					return true;
+				}
+			}
 
-				if(par5EntityPlayer.getCurrentEquippedItem() != null)
-					if(!par5EntityPlayer.getCurrentEquippedItem().equals(Telepads.register)){
-						if(!par1World.isRemote){
-							par5EntityPlayer.addChatComponentMessage(
-									new ChatComponentText("I need to use my register on the pad !"));
-							return false;
-						}
-					} else
-						for(int i = 0;i < par5EntityPlayer.inventory.mainInventory.length;i ++)
-							if(par5EntityPlayer.inventory.getStackInSlot(i) != null){
-								ItemStack is = par5EntityPlayer.inventory.getStackInSlot(i);
+			if(par5EntityPlayer.getCurrentEquippedItem() != null){
+				if(!par5EntityPlayer.getCurrentEquippedItem().getItem().equals(Telepads.register)){
+					if(!par1World.isRemote){
+						par5EntityPlayer.addChatComponentMessage(
+								new ChatComponentText("I need to use my register on the pad !"));
+					}
+					return true;
+				} else{
+					PlayerPadData data = PlayerPadData.get(par5EntityPlayer);
+					for(int i = 0;i < par5EntityPlayer.inventory.mainInventory.length;i ++){
+						if(par5EntityPlayer.inventory.getStackInSlot(i) != null){
+							ItemStack is = par5EntityPlayer.inventory.getStackInSlot(i);
 
-								if(is.getItem().equals(Telepads.register)){
-									int[] a = new int[3]; a[0] = te.xCoord; a[1] = te.yCoord; a[2] = te.zCoord;
+							if(is.getItem().equals(Telepads.register)){
 
-									PlayerPadData.get(par5EntityPlayer).getAllCoords().add(a);
-									PlayerPadData.get(par5EntityPlayer).getAllNames().add(te.telepadname);
-									PlayerPadData.get(par5EntityPlayer).getAllDims().add(te.dimension);
-									if(!te.lockedUniversal)
-										te.lockedUniversal = true;
+								int[] a = new int[3]; a[0] = te.xCoord; a[1] = te.yCoord; a[2] = te.zCoord;
+
+								for(int[] coords : data.getAllCoords()){
+									if((coords[0] == a[0]) && (coords[1] == a[1]) && (coords[2] == a[2])){
+										if(!par1World.isRemote) {
+											par5EntityPlayer.addChatComponentMessage(
+													new ChatComponentText("I already registered this pad"));
+										}
+										return true;
+									}
+								}
+								data.getAllCoords().add(a);
+								data.getAllNames().add(te.telepadname);
+								data.getAllDims().add(te.dimension);
+
+								if(!te.lockedUniversal) {
+									te.lockedUniversal = true;
 								}
 							}
+						}
+					}
+					if(!par1World.isRemote) {
+						par5EntityPlayer.addChatComponentMessage(
+								new ChatComponentText("Register Universal Pad to Register"));
+					}
+				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
@@ -169,7 +201,6 @@ public class BlockTelepad extends BlockContainer{
 
 		TETelepad te = new TETelepad();
 
-		int c = 0;
 		if(par5EntityLivingBase instanceof EntityPlayer){
 			EntityPlayer p = (EntityPlayer)par5EntityLivingBase;
 
@@ -198,13 +229,12 @@ public class BlockTelepad extends BlockContainer{
 	{
 		TETelepad te = (TETelepad)par1World.getTileEntity(x, y, z);
 
-		if(te.isStandingOnPlatform)
+		if(te.isStandingOnPlatform) {
 			//	par1World.playSound((double)x , (double)y, (double)z, "subaraki:telepadLong", 0.7F, par5Random.nextFloat() * 0.4F + 0.4F, false);
 			for (int l = 0; l < 100; ++l)
 			{
-				double d0 = x + par5Random.nextFloat();
 				double d1 = y + (par5Random.nextFloat()*1.5f);
-				d0 = z + par5Random.nextFloat();
+				double d0 = x + par5Random.nextFloat();
 				double d2 = 0.0D;
 				double d3 = 0.0D;
 				double d4 = 0.0D;
@@ -213,22 +243,19 @@ public class BlockTelepad extends BlockContainer{
 				d2 = (par5Random.nextFloat() - 0.5D) * 0.125D;
 				d3 = (par5Random.nextFloat() - 0.5D) * 0.125D;
 				d4 = (par5Random.nextFloat() - 0.5D) * 0.125D;
-				double d5 = z + 0.5D + (0.25D * j1);
 				d4 = par5Random.nextFloat() * 1.0F * j1;
-				double d6 = x + 0.5D + (0.25D * i1);
 				d2 = par5Random.nextFloat() * 1.0F * i1;
 				par1World.spawnParticle("portal", x+0.5, d1, z+0.5, d2, d3, d4);
 			}
-		else{
+		} else{
 			if (par5Random.nextInt(50) == 0)
 			{
 				//par1World.playSound((double)x , (double)y, (double)z, "subaraki:telepadShort", 1.0F, par5Random.nextFloat() * 0.4F + 0.8F, false);
 			}
 			for (int l = 0; l < 5; ++l)
 			{
-				double d0 = x + par5Random.nextFloat();
 				double d1 = y + (par5Random.nextFloat()*1.5f);
-				d0 = z + par5Random.nextFloat();
+				double d0 = z + par5Random.nextFloat();
 				double d2 = 0.0D;
 				double d3 = 0.0D;
 				double d4 = 0.0D;
@@ -237,9 +264,7 @@ public class BlockTelepad extends BlockContainer{
 				d2 = (par5Random.nextFloat() - 0.5D) * 0.125D;
 				d3 = (par5Random.nextFloat() - 0.5D) * 0.125D;
 				d4 = (par5Random.nextFloat() - 0.5D) * 0.125D;
-				double d5 = z + 0.5D + (0.25D * j1);
 				d4 = par5Random.nextFloat() * 1.0F * j1;
-				double d6 = x + 0.5D + (0.25D * i1);
 				d2 = par5Random.nextFloat() * 1.0F * i1;
 				par1World.spawnParticle("portal", x+0.5, d1, z+0.5, d2, d3, d4);
 			}
@@ -248,8 +273,9 @@ public class BlockTelepad extends BlockContainer{
 
 	private void removePadFromRegister(EntityPlayer p, TETelepad pad) {
 
-		if(!p.worldObj.isRemote)
+		if(!p.worldObj.isRemote) {
 			PlayerPadData.get(p).removePad(pad);
+		}
 	}
 
 	@Override
