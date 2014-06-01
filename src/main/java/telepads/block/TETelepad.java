@@ -69,7 +69,6 @@ public class TETelepad extends TileEntity{
 
 	@Override
 	public Packet getDescriptionPacket() {
-		System.out.println("getDescriptionPacket");
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
@@ -78,8 +77,6 @@ public class TETelepad extends TileEntity{
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		this.readFromNBT(pkt.func_148857_g());  //packet.data
-		System.out.println("onDataPacket");
-
 	}
 
 	@Override
@@ -92,7 +89,6 @@ public class TETelepad extends TileEntity{
 		lockedUniversal = par1nbtTagCompound.getBoolean("lockedUniversal");
 
 		super.readFromNBT(par1nbtTagCompound);
-		System.out.println("read");
 	}
 
 	/**Resets the TelePad and notifies the player of it : aka, send chat mesage*/
@@ -182,6 +178,5 @@ public class TETelepad extends TileEntity{
 		par1nbtTagCompound.setBoolean("lockedUniversal", lockedUniversal);
 
 		super.writeToNBT(par1nbtTagCompound);
-		System.out.println("write");
 	}
 }

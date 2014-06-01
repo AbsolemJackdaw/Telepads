@@ -282,4 +282,14 @@ public class BlockTelepad extends BlockContainer{
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
+	
+	@Override
+	public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ) {
+		return getExplosionResistance(par1Entity);
+	}
+
+	@Override
+	public float getExplosionResistance(Entity par1Entity) {
+		return 18000000F;
+	}
 }
