@@ -3,6 +3,7 @@ tile.telepad.name=TelePad
 
 #block
 item.register.name=Registre de TelePad
+item.Crowbar.name=Levier D'Archimède
 
 
 #gui text

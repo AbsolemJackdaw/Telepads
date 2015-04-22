@@ -46,7 +46,7 @@ public class DataTracker {
 
 		try {
 
-			out.writeInt(Serverpacket.SYNC);
+			out.writeInt(Serverpacket.SYNCHRONIZE_DATA_OVER_CHANGE);
 
 			out.writeInt(0);
 			out.writeInt(0);
@@ -69,6 +69,7 @@ public class DataTracker {
 			}
 			out.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -1,21 +1,30 @@
 package telepads.block;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
+
 import java.util.List;
 
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
 import telepads.Telepads;
+import telepads.packets.Serverpacket;
 import telepads.util.TelePadGuiHandler;
+import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class TETelepad extends TileEntity{
+
+
+	//TE is "server side only" reflection
+	//timer doesnt get updated client side, and can therefor not influence particles directly
 
 	public String telepadname = "TelePad";
 
@@ -25,33 +34,15 @@ public class TETelepad extends TileEntity{
 
 	public boolean isStandingOnPlatform = false;
 
-	public static final int def_count = 5*20;
+	public static final int def_count = 3*20;
 	public int counter = def_count;
 
-	/**Set when player walks on a pad*/
-	public EntityPlayer playerStandingOnPad = null;
-
+	/**checks if the teleport gui is already open to prevent it from openeing every tick*/
 	private boolean guiOpen;
 
 	public boolean isUniversal;
 
 	public boolean lockedUniversal;
-
-	public void addRegister(){
-
-		EntityPlayer p = worldObj.getPlayerEntityByName(ownerName);
-		//if player hasnt got one
-		if(!p.inventory.hasItem(Telepads.register)){
-
-			ItemStack stack = new ItemStack(Telepads.register);
-
-			EntityItem ei = new EntityItem(worldObj, xCoord, yCoord, zCoord, stack);
-			if(!worldObj.isRemote) {
-				worldObj.spawnEntityInWorld(ei);
-			}
-
-		}
-	}
 
 	@Override
 	public boolean canUpdate() {
@@ -61,10 +52,9 @@ public class TETelepad extends TileEntity{
 	/**Sets isStandingOnPlatform, and reset's TE if false*/
 	public void changePlatformState(boolean b){
 		isStandingOnPlatform = b;
-		if(!b){
+		syncStandingOnPlatform();
+		if(!b)
 			resetTE();
-			playerStandingOnPad = null;
-		}
 	}
 
 	@Override
@@ -91,14 +81,6 @@ public class TETelepad extends TileEntity{
 		super.readFromNBT(par1nbtTagCompound);
 	}
 
-	/**Resets the TelePad and notifies the player of it : aka, send chat mesage*/
-	public void ResetAndNotify(String message, EntityPlayer p){
-		if(!worldObj.isRemote) {
-			p.addChatComponentMessage(new ChatComponentText(message));
-		}
-		resetTE();
-	}
-
 	public void resetTE(){
 		counter = def_count;
 		isStandingOnPlatform = false;
@@ -111,59 +93,26 @@ public class TETelepad extends TileEntity{
 	@Override
 	public void updateEntity() {
 
+		if(!worldObj.isRemote){
+			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+0.5, yCoord+0.5, zCoord+0.5);
 
-		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+0.5, yCoord+0.5, zCoord+0.5);
+			List<EntityPlayer> playerInAabb = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
 
-		List<EntityPlayer> playerInAabb = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+			if(isStandingOnPlatform) {
 
-		if(isStandingOnPlatform) {
-			if(playerInAabb.isEmpty() || !playerInAabb.contains(playerStandingOnPad)) {
-				changePlatformState(false);
-			}
-		}
-
-		for(EntityPlayer p : playerInAabb){
-
-			if(p!=null){
-				if(isStandingOnPlatform == false) {
-					changePlatformState(true);
+				if(playerInAabb.isEmpty()) {
+					changePlatformState(false);
+					return;
 				}
 
-				if(counter >=0) {
+				if(counter >=0)
 					counter --;
-				}
-			}
-
-			if((counter < 0) && !guiOpen) {
-				if(p != null) {
-					if(!p.inventory.hasItem(Telepads.register)){
-						if(!worldObj.isRemote) {
-							p.addChatMessage(new ChatComponentText("I forgot my register !"));
-						}
-
-						ItemStack is = new ItemStack(Telepads.register);
-						if(p.inventory.addItemStackToInventory(is)){
-							p.inventory.addItemStackToInventory(is);
-
-							if(!worldObj.isRemote) {
-								p.addChatMessage(new ChatComponentText("You got a new register from the Telepad"));
-							}
-
-						}
-						else{
-							EntityItem ei = new EntityItem(worldObj, xCoord, yCoord, zCoord, is);
-							if(!worldObj.isRemote) {
-								worldObj.spawnEntityInWorld(ei);
-							}
-
-						}
-						resetTE();
-					}else{
-						markDirty();
-						guiOpen = true;
-						p.openGui(Telepads.instance, TelePadGuiHandler.TELEPORT, worldObj, xCoord, yCoord, zCoord);
-					}
-				}
+				
+				updatePlatformLogic(playerInAabb);
+				
+			}else{
+				if(!playerInAabb.isEmpty()&& !isStandingOnPlatform)
+					changePlatformState(true);
 			}
 		}
 	}
@@ -178,5 +127,43 @@ public class TETelepad extends TileEntity{
 		par1nbtTagCompound.setBoolean("lockedUniversal", lockedUniversal);
 
 		super.writeToNBT(par1nbtTagCompound);
+	}
+
+	private void updatePlatformLogic(List<EntityPlayer> playerInAabb){
+		//player should not be null, as list given is passed trough an empty check first
+		for(EntityPlayer p : playerInAabb){
+
+			if((counter < 0) && !guiOpen && !(p.openContainer instanceof ContainerTelePad)) {
+				/**No need for a register ...*/
+
+				markDirty();
+				guiOpen = true;
+				p.openGui(Telepads.instance, TelePadGuiHandler.TELEPORT, worldObj, xCoord, yCoord, zCoord);
+			}
+		}
+	}
+	private void syncStandingOnPlatform() {
+		ByteBuf buf = Unpooled.buffer();
+		ByteBufOutputStream out = new ByteBufOutputStream(buf);
+				
+		try {
+
+			out.writeInt(Serverpacket.PLATFORM);
+			out.writeInt(xCoord);
+			out.writeInt(yCoord);
+			out.writeInt(zCoord);
+			out.writeBoolean(isStandingOnPlatform);
+
+			Telepads.Channel.sendToServer(new FMLProxyPacket(buf, Telepads.packetChannel));
+
+			out.close();
+		} catch (Exception e) {
+		}
+	}
+
+
+	/**called by ClientPacket to synch boolean to the client for particle updates-use*/
+	public void setStandingOnPlatform(boolean b){
+		isStandingOnPlatform = b;
 	}
 }

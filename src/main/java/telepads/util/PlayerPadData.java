@@ -121,7 +121,6 @@ public class PlayerPadData implements IExtendedEntityProperties{
 		trim();
 	}
 
-
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
 		compound.setInteger("Size", allCoords.size());

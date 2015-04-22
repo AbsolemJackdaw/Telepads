@@ -14,12 +14,12 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import telepads.model.telepad;
+import telepads.model.TelePadModel;
 
 
 public class TESRTelePad extends TileEntitySpecialRenderer {
 
-	telepad pad = new telepad();
+	TelePadModel padModel = new TelePadModel();
 	//	ResourceLocation loc = new ResourceLocation("subaraki:pad/padRaw.png");
 	private static ResourceLocation loc = new ResourceLocation("telepads:textures/telepad.png");
 	private static ResourceLocation locUniversal = new ResourceLocation("telepads:textures/padUniversal.png");
@@ -174,7 +174,7 @@ public class TESRTelePad extends TileEntitySpecialRenderer {
 
 		float f2 = 1.5f;
 		GL11.glScalef(f2,f2,f2);
-		pad.render(0.0625f);
+		padModel.render(0.0625f);
 
 		GL11.glPopMatrix();
 	}

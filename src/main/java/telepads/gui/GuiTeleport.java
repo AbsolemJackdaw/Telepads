@@ -20,6 +20,8 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class GuiTeleport extends GuiScreen{
 
+	//	private int prevSetting;
+
 	public EntityPlayer player;
 	public TETelepad te;
 
@@ -34,11 +36,9 @@ public class GuiTeleport extends GuiScreen{
 	float sd = 0;
 
 	public GuiTeleport(EntityPlayer player, TETelepad te){
-		Minecraft.getMinecraft().gameSettings.guiScale = 2;
 
 		this.te = te;
 		this.player = player;
-
 	}
 
 	@Override
@@ -96,14 +96,9 @@ public class GuiTeleport extends GuiScreen{
 
 		this.buttonList.add(new GuiButton(EXIT_BUTTON, 5, 5, 20, 20, "X"));
 
-
 		int c = PlayerPadData.get(player).getAllCoords().size() ;
-		//		System.out.println(PlayerPadData.get(player).getAllCoords() +
-		//				"\n" + PlayerPadData.get(player).getAllDims() +
-		//				"\n" + PlayerPadData.get(player).getAllNames());
-		if(c < 1) {
+		if(c < 1) 
 			return;
-		}
 
 		for(int i = 0; i < c; i++){
 			String name = PlayerPadData.get(player).getAllNames().get(i);
@@ -137,7 +132,7 @@ public class GuiTeleport extends GuiScreen{
 
 		try {
 
-			out.writeInt(Serverpacket.TELEPORT); //TODO a packet int here
+			out.writeInt(Serverpacket.TELEPORT);
 			out.writeInt(te.xCoord);
 			out.writeInt(te.yCoord);
 			out.writeInt(te.zCoord);

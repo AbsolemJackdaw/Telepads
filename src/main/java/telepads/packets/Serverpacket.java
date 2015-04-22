@@ -1,12 +1,17 @@
 package telepads.packets;
 
+import com.sun.corba.se.impl.ior.ByteBuffer;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import telepads.Telepads;
 import telepads.block.TETelepad;
 import telepads.util.PlayerPadData;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
@@ -14,10 +19,10 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 public class Serverpacket {
 
 
-	public static final int SYNC_REGISTER = 5100;
-	public static final int TELEPORT = 5200;
-	public static final int SYNC = 5400;
-	public static final int REGISTER = 5500;
+	public static final int ADD_TELEPAD_FOR_PLAYER = 51;
+	public static final int TELEPORT = 52;
+	public static final int SYNCHRONIZE_DATA_OVER_CHANGE = 54;
+	public static final int PLATFORM = 55;
 
 	@SubscribeEvent
 	public void onServerPacket(ServerCustomPacketEvent event) {
@@ -25,8 +30,6 @@ public class Serverpacket {
 		EntityPlayerMP player = ((NetHandlerPlayServer)event.handler).playerEntity;
 		ByteBufInputStream dis = new ByteBufInputStream(event.packet.payload());
 		ByteBuf buf = event.packet.payload();
-
-		System.out.println("read packet");
 
 		try {
 
@@ -40,25 +43,45 @@ public class Serverpacket {
 
 			switch (guiId) {
 
-
-
-			case SYNC_REGISTER:
+			case ADD_TELEPAD_FOR_PLAYER:
 
 				String name = dis.readUTF();
 
 				pad.telepadname = name;
-				pad.addRegister();
+				pad.ownerName = player.getGameProfile().getName();
+				pad.dimension = player.worldObj.provider.dimensionId;
 
-				int[] a = new int[3]; a[0] = pad.xCoord; a[1] = pad.yCoord; a[2] = pad.zCoord;
+				int[] coords = new int[]{pad.xCoord, pad.yCoord, pad.zCoord};
 
-				PlayerPadData.get(player).getAllCoords().add(a);
+				PlayerPadData.get(player).getAllCoords().add(coords);
 				PlayerPadData.get(player).getAllNames().add(name);
 				PlayerPadData.get(player).getAllDims().add(pad.dimension);
 
-				Telepads.Channel.sendTo(new FMLProxyPacket(buf, Telepads.packetChannel), player);
-
 				player.worldObj.markBlockForUpdate(pad.xCoord, pad.yCoord, pad.zCoord);
 
+				try {
+					/**Dont be stupid and do this EVER again you kunt ... 
+					 * > forgot to change buf into buffer for output...*/
+//					ByteBufOutputStream out = new ByteBufOutputStream(buf);
+//					ByteBuf buffer = Unpooled.buffer();
+					
+					ByteBuf buffer = Unpooled.buffer();
+					ByteBufOutputStream out = new ByteBufOutputStream(buffer);
+					
+					out.writeInt(Serverpacket.ADD_TELEPAD_FOR_PLAYER);
+					out.writeInt(pad.xCoord);
+					out.writeInt(pad.yCoord);
+					out.writeInt(pad.zCoord);
+					out.writeUTF(pad.telepadname);
+
+					Telepads.Channel.sendTo(new FMLProxyPacket(buffer, Telepads.packetChannel), player);
+
+					out.close();
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+				
+				FMLLog.getLogger().info("Server Packet " + ADD_TELEPAD_FOR_PLAYER + " processed");
 				break;
 
 			case TELEPORT:
@@ -71,7 +94,7 @@ public class Serverpacket {
 				if(dimID != player.worldObj.provider.dimensionId){
 					if(player.worldObj.provider.dimensionId == 1) {
 						player.travelToDimension(1);
-					} else{
+					}else{
 						player.travelToDimension(dimID);
 						player.setPositionAndUpdate(otherX+2, otherY+0.5d, otherZ);
 					}
@@ -79,7 +102,32 @@ public class Serverpacket {
 				} else {
 					player.setPositionAndUpdate(otherX+2, otherY+0.5d, otherZ);
 				}
+				FMLLog.getLogger().info("Client Packet " + TELEPORT + " processed");
+				break;
 
+			case PLATFORM:
+
+				boolean b = dis.readBoolean();
+				
+				if(pad == null)
+					break;
+				
+				try {
+					ByteBuf buffer = Unpooled.buffer();
+					ByteBufOutputStream out = new ByteBufOutputStream(buffer);
+
+					out.writeInt(PLATFORM);
+					out.writeInt(pad.xCoord);
+					out.writeInt(pad.yCoord);
+					out.writeInt(pad.zCoord);
+					out.writeBoolean(b);
+
+					Telepads.Channel.sendTo(new FMLProxyPacket(buffer, Telepads.packetChannel), player);
+
+					out.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			default:

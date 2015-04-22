@@ -4,14 +4,14 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-import telepads.model.telepad;
+import telepads.model.TelePadModel;
 
 public class RenderItemBlock implements IItemRenderer {
-	private telepad pad;
+	private TelePadModel pad;
 
 	private static ResourceLocation loc = new ResourceLocation("telepads:textures/telepad.png");
 	public RenderItemBlock() {
-		pad = new telepad();
+		pad = new TelePadModel();
 	}
 
 	@Override

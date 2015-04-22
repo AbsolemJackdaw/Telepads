@@ -19,10 +19,6 @@ public class TelepadProxyClient extends TelepadProxyServer{
 	public void registerPacketHandlers() {
 		Telepads.Channel.register(new Clientpacket());
 	}
-	@Override
-	public void registerSound(){
-
-	}
 
 	@Override
 	public void registerTileEntity() {

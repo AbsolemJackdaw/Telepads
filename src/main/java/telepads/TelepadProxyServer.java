@@ -27,15 +27,11 @@ public class TelepadProxyServer {
 		extendedEntityData.put(name, compound);
 	}
 
-
 	public void registerItemRenderer() {
 	}
 
 	public void registerPacketHandlers() {
 		Telepads.Channel.register(new Serverpacket());
-	}
-
-	public void registerSound() {
 	}
 
 	public void registerTileEntity(){

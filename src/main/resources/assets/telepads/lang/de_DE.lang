@@ -3,7 +3,7 @@ tile.telepad.name=Teleplatte
 
 #block
 item.register.name=Teleplatten-Registrierer
-
+item.Crowbar.name=Archimedes' Hebel
 
 #gui text
 enter.to.confirm=Drücke Enter um zu bestätigen

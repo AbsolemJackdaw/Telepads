@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import telepads.block.TETelepad;
 import telepads.util.PlayerPadData;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 
@@ -14,7 +15,6 @@ public class Clientpacket extends Serverpacket {
 	public void onClientPacket(ClientCustomPacketEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		ByteBufInputStream dis = new ByteBufInputStream(event.packet.payload());
-
 
 		try {
 
@@ -28,8 +28,7 @@ public class Clientpacket extends Serverpacket {
 
 			switch (guiId){
 
-
-			case SYNC :
+			case SYNCHRONIZE_DATA_OVER_CHANGE :
 
 				int size = dis.readInt();
 
@@ -39,26 +38,25 @@ public class Clientpacket extends Serverpacket {
 					int y2 = dis.readInt();
 					int z2 = dis.readInt();
 
-					int[] a = new int[3];
-					a[0]=x2; a[1]=y2; a[2]=z2;
+					int[] coords = new int[]{x2, y2,z2};
 
 					int dim = dis.readInt();
 					String name = dis.readUTF();
 
-					//					if (dat.getAllCoords().get(i) == null){
-					dat.getAllCoords().add(a);
+					dat.getAllCoords().add(coords);
 					dat.getAllDims().add(dim);
 					dat.getAllNames().add(name);
 				}
-
-
+				FMLLog.getLogger().info("Client Packet " + SYNCHRONIZE_DATA_OVER_CHANGE + " processed");
 				break;
 
-			case SYNC_REGISTER:
+			case ADD_TELEPAD_FOR_PLAYER:
 
 				String name = dis.readUTF();
 
 				pad.telepadname = name;
+				pad.ownerName = player.getGameProfile().getName();
+				pad.dimension = player.worldObj.provider.dimensionId;
 
 				int[] a = new int[3]; a[0] = pad.xCoord; a[1] = pad.yCoord; a[2] = pad.zCoord;
 
@@ -66,6 +64,17 @@ public class Clientpacket extends Serverpacket {
 				PlayerPadData.get(player).getAllNames().add(name);
 				PlayerPadData.get(player).getAllDims().add(pad.dimension);
 
+				player.worldObj.markBlockForUpdate(pad.xCoord,pad.yCoord,pad.zCoord);
+
+				FMLLog.getLogger().info("Client Packet " + ADD_TELEPAD_FOR_PLAYER + " processed");
+
+				break;
+
+			case PLATFORM:
+				if(pad == null)
+					break;
+				pad.setStandingOnPlatform(dis.readBoolean());
+				
 				break;
 
 			default:
@@ -74,6 +83,7 @@ public class Clientpacket extends Serverpacket {
 
 			dis.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

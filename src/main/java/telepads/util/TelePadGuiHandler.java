@@ -2,6 +2,7 @@ package telepads.util;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import telepads.block.ContainerTelePad;
 import telepads.block.TETelepad;
 import telepads.gui.GuiNameTelepad;
 import telepads.gui.GuiTeleport;
@@ -31,6 +32,10 @@ public class TelePadGuiHandler implements IGuiHandler{
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
 			int x, int y, int z) {
+		switch (ID) {
+		case 0:
+			return new ContainerTelePad();
+		}
 		return null;
 	}
 

@@ -1,8 +1,10 @@
 package telepads.gui;
 
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -14,12 +16,13 @@ import org.lwjgl.input.Keyboard;
 import telepads.Telepads;
 import telepads.block.TETelepad;
 import telepads.packets.Serverpacket;
+import telepads.util.PlayerPadData;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class GuiNameTelepad extends GuiScreen{
-
+	
 	private GuiTextField padNameField;
-
+	
 	public EntityPlayer thePlayer;
 	public TETelepad te;
 
@@ -70,6 +73,7 @@ public class GuiNameTelepad extends GuiScreen{
 		this.buttonList.clear();
 
 		padNameField = new GuiTextField(fontRendererObj, posX-(150/2) , posY-50, 150, 20);
+		padNameField.setFocused(true);
 
 		String padName = te.telepadname.equals("TelePad") ? te.getWorldObj().getBiomeGenForCoords(te.xCoord, te.zCoord).biomeName : te.telepadname;
 
@@ -83,10 +87,11 @@ public class GuiNameTelepad extends GuiScreen{
 	protected void keyTyped(char c, int i)
 	{
 		super.keyTyped(c, i);
-		if(i == Keyboard.KEY_RETURN) {
+		
+		if(i == Keyboard.KEY_RETURN || i == Keyboard.KEY_ESCAPE) {
 			sendPacket(padNameField.getText());
 		}
-
+		
 		if(padNameField != null) {
 			padNameField.textboxKeyTyped(c, i);
 		}
@@ -108,7 +113,7 @@ public class GuiNameTelepad extends GuiScreen{
 		ByteBufOutputStream out = new ByteBufOutputStream(buf);
 
 		try {
-			out.writeInt(Serverpacket.SYNC_REGISTER);
+			out.writeInt(Serverpacket.ADD_TELEPAD_FOR_PLAYER);
 
 			out.writeInt(te.xCoord);
 			out.writeInt(te.yCoord);
@@ -117,10 +122,14 @@ public class GuiNameTelepad extends GuiScreen{
 			out.writeUTF(padName);
 
 			Telepads.Channel.sendToServer(new FMLProxyPacket(buf, Telepads.packetChannel));
+
 			out.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
+		
 		this.mc.thePlayer.closeScreen();
+
 	}
+
 }

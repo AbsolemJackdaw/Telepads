@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class telepad extends ModelBase
+public class TelePadModel extends ModelBase
 {
 	//fields
 	ModelRenderer Shape1;
@@ -18,7 +18,7 @@ public class telepad extends ModelBase
 	ModelRenderer Shape9;
 	ModelRenderer Shape10;
 
-	public telepad()
+	public TelePadModel()
 	{
 		textureWidth = 64;
 		textureHeight = 32;
