@@ -1,24 +1,19 @@
 package telepads.block;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
-
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import telepads.Telepads;
-import telepads.packets.Serverpacket;
+import telepads.packets.PacketSetOnPlatform_Client;
 import telepads.util.TelePadGuiHandler;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TETelepad extends TileEntity{
 
@@ -52,7 +47,7 @@ public class TETelepad extends TileEntity{
 	/**Sets isStandingOnPlatform, and reset's TE if false*/
 	public void changePlatformState(boolean b){
 		isStandingOnPlatform = b;
-		syncStandingOnPlatform();
+		syncStandingOnPlatform(b);
 		if(!b)
 			resetTE();
 	}
@@ -97,22 +92,27 @@ public class TETelepad extends TileEntity{
 			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+0.5, yCoord+0.5, zCoord+0.5);
 
 			List<EntityPlayer> playerInAabb = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
-
+			
 			if(isStandingOnPlatform) {
 
 				if(playerInAabb.isEmpty()) {
 					changePlatformState(false);
+					TargetPoint point = new TargetPoint(dimension, xCoord, yCoord, zCoord, 60.0d);
+					Telepads.SNW.sendToAllAround(new PacketSetOnPlatform_Client(xCoord,  yCoord, zCoord, false), point);
 					return;
 				}
 
 				if(counter >=0)
 					counter --;
-				
+
 				updatePlatformLogic(playerInAabb);
-				
+
 			}else{
-				if(!playerInAabb.isEmpty()&& !isStandingOnPlatform)
+				if(!playerInAabb.isEmpty()&& !isStandingOnPlatform){
 					changePlatformState(true);
+					TargetPoint point = new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 60.0d);
+					Telepads.SNW.sendToAllAround(new PacketSetOnPlatform_Client(xCoord,  yCoord, zCoord, true), point);
+				}
 			}
 		}
 	}
@@ -142,23 +142,10 @@ public class TETelepad extends TileEntity{
 			}
 		}
 	}
-	private void syncStandingOnPlatform() {
-		ByteBuf buf = Unpooled.buffer();
-		ByteBufOutputStream out = new ByteBufOutputStream(buf);
-				
-		try {
+	private void syncStandingOnPlatform(boolean b) {
 
-			out.writeInt(Serverpacket.PLATFORM);
-			out.writeInt(xCoord);
-			out.writeInt(yCoord);
-			out.writeInt(zCoord);
-			out.writeBoolean(isStandingOnPlatform);
+		//		Telepads.SNW.sendToServer(new PacketSetOnPlatform_Server(xCoord, yCoord, zCoord, b));
 
-			Telepads.Channel.sendToServer(new FMLProxyPacket(buf, Telepads.packetChannel));
-
-			out.close();
-		} catch (Exception e) {
-		}
 	}
 
 

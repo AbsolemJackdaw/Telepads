@@ -1,18 +1,14 @@
 package telepads.util;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import telepads.Telepads;
-import telepads.packets.Serverpacket;
+import telepads.packets.PacketDataOverDimensions;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class DataTracker {
 
@@ -41,35 +37,20 @@ public class DataTracker {
 
 
 	private void syncClient(EntityPlayer p){
-		ByteBuf buf = Unpooled.buffer();
-		ByteBufOutputStream out = new ByteBufOutputStream(buf);
+		if(p.worldObj.isRemote)
+			return;
 
-		try {
+		for(int i = 0; i < PlayerPadData.get(p).getAllCoords().size(); i++){
 
-			out.writeInt(Serverpacket.SYNCHRONIZE_DATA_OVER_CHANGE);
-
-			out.writeInt(0);
-			out.writeInt(0);
-			out.writeInt(0);
-
-			out.writeInt(PlayerPadData.get(p).getAllCoords().size());
-
-			for(int i = 0; i < PlayerPadData.get(p).getAllCoords().size(); i++){
-				out.writeInt(PlayerPadData.get(p).getAllCoords().get(i)[0]);
-				out.writeInt(PlayerPadData.get(p).getAllCoords().get(i)[1]);
-				out.writeInt(PlayerPadData.get(p).getAllCoords().get(i)[2]);
-
-				out.writeInt(PlayerPadData.get(p).getAllDims().get(i));
-				out.writeUTF(PlayerPadData.get(p).getAllNames().get(i));
-
-			}
-
-			if(!p.worldObj.isRemote){
-				Telepads.Channel.sendTo(new FMLProxyPacket(buf, Telepads.packetChannel), (EntityPlayerMP) p);
-			}
-			out.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+			if(!p.worldObj.isRemote)
+				Telepads.SNW.sendTo(
+						new PacketDataOverDimensions(
+								PlayerPadData.get(p).getAllCoords().get(i)[0],
+								PlayerPadData.get(p).getAllCoords().get(i)[1],
+								PlayerPadData.get(p).getAllCoords().get(i)[2],
+								PlayerPadData.get(p).getAllDims().get(i),
+								PlayerPadData.get(p).getAllNames().get(i)), 
+								(EntityPlayerMP) p);
 		}
 	}
 }

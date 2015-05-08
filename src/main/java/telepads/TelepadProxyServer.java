@@ -3,8 +3,8 @@ package telepads;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import telepads.packets.Serverpacket;
 
 public class TelepadProxyServer {
 
@@ -31,9 +31,13 @@ public class TelepadProxyServer {
 	}
 
 	public void registerPacketHandlers() {
-		Telepads.Channel.register(new Serverpacket());
+//		Telepads.Channel.register(new Serverpacket());
 	}
 
 	public void registerTileEntity(){
+	}
+	
+	public EntityPlayer getClientPlayer(){
+		return null;
 	}
 }

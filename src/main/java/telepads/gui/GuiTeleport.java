@@ -1,8 +1,5 @@
 package telepads.gui;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,9 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 import telepads.Telepads;
 import telepads.block.TETelepad;
-import telepads.packets.Serverpacket;
+import telepads.packets.PacketTeleport;
 import telepads.util.PlayerPadData;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class GuiTeleport extends GuiScreen{
 
@@ -47,11 +43,10 @@ public class GuiTeleport extends GuiScreen{
 		if(player != null){
 			int id = button.id;
 			if(id == EXIT_BUTTON ){
-				sendPacket(EXIT_BUTTON, button);
 				this.mc.thePlayer.closeScreen(); //closes the screen
 
 			}else{
-				sendPacket(id, button);
+				sendPacket(id);
 				this.mc.thePlayer.closeScreen(); //closes the screen
 			}
 		}
@@ -126,29 +121,12 @@ public class GuiTeleport extends GuiScreen{
 	}
 
 
-	public void sendPacket(int id, GuiButton button){
-		ByteBuf buf = Unpooled.buffer();
-		ByteBufOutputStream out = new ByteBufOutputStream(buf);
+	public void sendPacket(int id){
+		int x = PlayerPadData.get(player).getAllCoords().get(id)[0]; 
+		int y = PlayerPadData.get(player).getAllCoords().get(id)[1];
+		int z = PlayerPadData.get(player).getAllCoords().get(id)[2];
+		int dim = PlayerPadData.get(player).getAllDims().get(id);
 
-		try {
-
-			out.writeInt(Serverpacket.TELEPORT);
-			out.writeInt(te.xCoord);
-			out.writeInt(te.yCoord);
-			out.writeInt(te.zCoord);
-
-			if(button.id < EXIT_BUTTON){
-				out.writeInt(PlayerPadData.get(player).getAllDims().get(button.id)); //other pad dimension
-
-				out.writeInt(PlayerPadData.get(player).getAllCoords().get(button.id)[0]); //other pad x
-				out.writeInt(PlayerPadData.get(player).getAllCoords().get(button.id)[1]); //other pad y
-				out.writeInt(PlayerPadData.get(player).getAllCoords().get(button.id)[2]); //other pad z
-				Telepads.Channel.sendToServer(new FMLProxyPacket(buf, Telepads.packetChannel));
-			}
-
-			out.close();
-		} catch (Exception e) {
-		}
-
+		Telepads.SNW.sendToServer(new PacketTeleport(x, y, z, dim));
 	}
 }
