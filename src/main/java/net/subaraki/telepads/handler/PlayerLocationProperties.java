@@ -3,16 +3,18 @@ package net.subaraki.telepads.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.subaraki.telepads.Telepads;
+import net.subaraki.telepads.common.network.PacketSyncPositions;
 
 public class PlayerLocationProperties implements IExtendedEntityProperties {
     
@@ -45,9 +47,10 @@ public class PlayerLocationProperties implements IExtendedEntityProperties {
         NBTTagList positionList = compound.getTagList("positions", 10);
         
         for (int tagPos = 0; tagPos < positionList.tagCount(); tagPos++)
-            positions.add(new Position(positionList.getCompoundTagAt(0)));
+            positions.add(new Position(positionList.getCompoundTagAt(tagPos)));
             
         this.positions = positions;
+        sync();
     }
     
     @Override
@@ -110,6 +113,31 @@ public class PlayerLocationProperties implements IExtendedEntityProperties {
      */
     public List<Position> getPositions () {
         
+        if (this.positions == null)
+            this.positions = new ArrayList<Position>();
+            
         return this.positions;
+    }
+    
+    /**
+     * Sets the list of positions linked to the player, to a new list.
+     * 
+     * @param positions: The list of new positions to se to the player data.
+     */
+    public void setPositions (List<Position> positions) {
+        
+        this.positions = positions;
+    }
+    
+    /**
+     * Synchronizes the players PlayerLocationProperties from the server to the client. This
+     * will take all of the data from the server side, and ensure that the client side data
+     * reflects it. This method should only be called from a server side thread. Client sided
+     * calls are automatically ignored.
+     */
+    public void sync () {
+        
+        if (FMLCommonHandler.instance().getSide().equals(Side.SERVER))
+            Telepads.instance.network.sendTo(new PacketSyncPositions(player.getUniqueID(), this.positions), (EntityPlayerMP) player);
     }
 }
