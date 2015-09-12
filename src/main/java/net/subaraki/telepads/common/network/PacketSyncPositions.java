@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import net.darkhax.bookshelf.util.Position;
 import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.entity.player.EntityPlayer;
-import net.subaraki.telepads.handler.PlayerLocationProperties;
+import net.subaraki.telepads.handler.PlayerLocations;
 
 public class PacketSyncPositions implements IMessage {
     
@@ -61,7 +61,7 @@ public class PacketSyncPositions implements IMessage {
         public IMessage onMessage (PacketSyncPositions packet, MessageContext ctx) {
             
             EntityPlayer player = Utilities.getPlayerFromUUID(Utilities.thePlayer().worldObj, packet.playerUUID);
-            PlayerLocationProperties.getProperties(player).setPositions(packet.positions);
+            PlayerLocations.getProperties(player).setPositions(packet.positions);
             return null;
         }
     }

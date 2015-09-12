@@ -16,14 +16,14 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.common.network.PacketSyncPositions;
 
-public class PlayerLocationProperties implements IExtendedEntityProperties {
+public class PlayerLocations implements IExtendedEntityProperties {
     
     public static final String PROP_NAME = "TeleporterPositions";
     
     private EntityPlayer player;
     private List<Position> positions;
     
-    public PlayerLocationProperties(EntityPlayer player) {
+    public PlayerLocations(EntityPlayer player) {
         
         this.player = player;
         this.positions = new ArrayList<Position>();
@@ -59,32 +59,31 @@ public class PlayerLocationProperties implements IExtendedEntityProperties {
     }
     
     /**
-     * Retrieves an instance of PlayerLocationProperties from an instance of EnityPlayer.
+     * Retrieves an instance of PlayerLocations from an instance of EnityPlayer.
      * 
      * @param player: An instance of the player to retrieve the properties from.
-     * @return PlayerLocationProperties: The found instance of PlayerLocationProperties. This
-     *         will be null if none is found.
+     * @return PlayerLocations: The found instance of PlayerLocations. This will be null if
+     *         none is found.
      */
-    public static PlayerLocationProperties getProperties (EntityPlayer player) {
+    public static PlayerLocations getProperties (EntityPlayer player) {
         
-        return (PlayerLocationProperties) player.getExtendedProperties(PROP_NAME);
+        return (PlayerLocations) player.getExtendedProperties(PROP_NAME);
     }
     
     /**
-     * Sets a player up with a new instance of PlayerLocationProperties.
+     * Sets a player up with a new instance of PlayerLocations.
      * 
      * @param player: An instance of the player to set properties to.
-     * @return PlayerLocationProperties: An instance of the PlayerLocationProperties set to the
-     *         player.
+     * @return PlayerLocations: An instance of the PlayerLocations set to the player.
      */
-    public static PlayerLocationProperties setProperties (EntityPlayer player) {
+    public static PlayerLocations setProperties (EntityPlayer player) {
         
-        player.registerExtendedProperties(PROP_NAME, new PlayerLocationProperties(player));
+        player.registerExtendedProperties(PROP_NAME, new PlayerLocations(player));
         return getProperties(player);
     }
     
     /**
-     * Checks to see if a player has a valid PlayerLocationProperties instance.
+     * Checks to see if a player has a valid PlayerLocations instance.
      * 
      * @param player: The instance of the player to check.
      * @return boolean: If the player has a valid instance true will be returned, otherwise
@@ -97,11 +96,11 @@ public class PlayerLocationProperties implements IExtendedEntityProperties {
     
     /**
      * Sets all of the stored properties, to reflect those of another instance of
-     * PlayerLocationProperties.
+     * PlayerLocations.
      * 
-     * @param properties: The instance of PlayerLocationProperties to pull everything from.
+     * @param properties: The instance of PlayerLocations to pull everything from.
      */
-    public void copy (PlayerLocationProperties properties) {
+    public void copy (PlayerLocations properties) {
         
         this.positions = properties.positions;
     }
@@ -130,10 +129,10 @@ public class PlayerLocationProperties implements IExtendedEntityProperties {
     }
     
     /**
-     * Synchronizes the players PlayerLocationProperties from the server to the client. This
-     * will take all of the data from the server side, and ensure that the client side data
-     * reflects it. This method should only be called from a server side thread. Client sided
-     * calls are automatically ignored.
+     * Synchronizes the players PlayerLocations from the server to the client. This will take
+     * all of the data from the server side, and ensure that the client side data reflects it.
+     * This method should only be called from a server side thread. Client sided calls are
+     * automatically ignored.
      */
     public void sync () {
         

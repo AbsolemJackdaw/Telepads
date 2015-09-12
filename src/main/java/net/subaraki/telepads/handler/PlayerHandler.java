@@ -17,27 +17,27 @@ public class PlayerHandler {
     @SubscribeEvent
     public void onPlayerClone (PlayerEvent.Clone event) {
         
-        PlayerLocationProperties.getProperties(event.entityPlayer).copy(PlayerLocationProperties.getProperties(event.original));
+        PlayerLocations.getProperties(event.entityPlayer).copy(PlayerLocations.getProperties(event.original));
     }
     
     @SubscribeEvent
     public void onEntityConstructing (EntityConstructing event) {
         
-        if (event.entity instanceof EntityPlayer && !PlayerLocationProperties.hasProperties((EntityPlayer) event.entity))
-            PlayerLocationProperties.setProperties((EntityPlayer) event.entity);
+        if (event.entity instanceof EntityPlayer && !PlayerLocations.hasProperties((EntityPlayer) event.entity))
+            PlayerLocations.setProperties((EntityPlayer) event.entity);
     }
     
     @SubscribeEvent
     public void onEntityJoinWorld (EntityJoinWorldEvent event) {
         
-        if (event.entity instanceof EntityPlayer && PlayerLocationProperties.hasProperties((EntityPlayer) event.entity))
-            PlayerLocationProperties.getProperties((EntityPlayer) event.entity).sync();
+        if (event.entity instanceof EntityPlayer && PlayerLocations.hasProperties((EntityPlayer) event.entity))
+            PlayerLocations.getProperties((EntityPlayer) event.entity).sync();
     }
     
     @SubscribeEvent
     public void testEvent (PlayerInteractEvent event) {
         
-        List<Position> positions = PlayerLocationProperties.getProperties(event.entityPlayer).getPositions();
+        List<Position> positions = PlayerLocations.getProperties(event.entityPlayer).getPositions();
         
         if (event.action == Action.RIGHT_CLICK_BLOCK) {
             
