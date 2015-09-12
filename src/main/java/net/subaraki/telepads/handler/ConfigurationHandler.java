@@ -10,7 +10,12 @@ import net.subaraki.telepads.util.Constants;
 
 public class ConfigurationHandler {
     
+    /**
+     * Local instance of the Configuration.
+     */
     public static Configuration config;
+    
+    public static boolean isFluxCapacitorEnabled = false;
     
     /**
      * Constructs the ConfigurationHandler. Only one ConfigurationHandler instance should ever
@@ -36,6 +41,8 @@ public class ConfigurationHandler {
      * When called, all configurable fields will be reinitialized. For internal use only.
      */
     private void syncConfigData () {
+        
+        isFluxCapacitorEnabled = config.getBoolean("isFluxEnabled", "secrets", isFluxCapacitorEnabled, "Turns on the flux capacitor. With this, the Telepads can not only transfer through space, but also through time!!!");
         
         if (config.hasChanged())
             config.save();
