@@ -9,25 +9,22 @@ import telepads.block.TESRTelePad;
 import telepads.block.TETelepad;
 import cpw.mods.fml.client.registry.ClientRegistry;
 
-public class TelepadProxyClient extends TelepadProxyServer{
+public class TelepadProxyClient extends TelepadProxyServer {
 
 	@Override
-	public void registerItemRenderer(){
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Telepads.telepad), new RenderItemBlock());
-	}
-
-	@Override
-	public void registerPacketHandlers() {
-//		Telepads.Channel.register(new Clientpacket());
+	public void registerItemRenderer() {
+		MinecraftForgeClient.registerItemRenderer(
+				Item.getItemFromBlock(Telepads.telepad), new RenderItemBlock());
 	}
 
 	@Override
 	public void registerTileEntity() {
-		ClientRegistry.bindTileEntitySpecialRenderer(TETelepad.class, new TESRTelePad());
+		ClientRegistry.bindTileEntitySpecialRenderer(TETelepad.class,
+				new TESRTelePad());
 	}
 
 	@Override
-	public EntityPlayer getClientPlayer(){
+	public EntityPlayer getClientPlayer() {
 		return Minecraft.getMinecraft().thePlayer;
 	}
 }

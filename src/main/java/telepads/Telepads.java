@@ -49,53 +49,68 @@ public class Telepads {
 	public static TelepadProxyServer proxy;
 	public static Telepads instance;
 
-	//	public static FMLEventChannel Channel;
-	//	public static final String packetChannel = "TelepadPackets";
+	// public static FMLEventChannel Channel;
+	// public static final String packetChannel = "TelepadPackets";
 
-	public static final SimpleNetworkWrapper SNW = NetworkRegistry.INSTANCE.newSimpleChannel("TelepadPackets");
+	public static final SimpleNetworkWrapper SNW = NetworkRegistry.INSTANCE
+			.newSimpleChannel("TelepadPackets");
 
 	@EventHandler
-	public void load(FMLInitializationEvent evt){
+	public void load(FMLInitializationEvent evt) {
 
 		instance = this;
 
-		GameRegistry.addRecipe(new ItemStack(telepad,1),new Object[] {"GGG", "RER", "RIR",
-			'G', Blocks.glass, 'R', Items.redstone, 'E', Items.ender_pearl, 'I', Blocks.iron_block});
+		GameRegistry.addRecipe(new ItemStack(telepad, 1), new Object[] { "GGG",
+				"RER", "RIR", 'G', Blocks.glass, 'R', Items.redstone, 'E',
+				Items.ender_pearl, 'I', Blocks.iron_block });
 
-		GameRegistry.addRecipe(new ItemStack(crowbar,1),new Object[] {"  I"," S ","I  ",'I',Items.iron_ingot,'S',Items.stick}) ;
+		GameRegistry.addRecipe(new ItemStack(crowbar, 1), new Object[] { "  I",
+				" S ", "I  ", 'I', Items.iron_ingot, 'S', Items.stick });
 
-		GameRegistry.addShapelessRecipe(new ItemStack(register,1), Items.paper,Items.paper, Items.feather, new ItemStack(Items.dye,1,0));
+		GameRegistry.addShapelessRecipe(new ItemStack(register, 1),
+				Items.paper, Items.paper, Items.feather, new ItemStack(
+						Items.dye, 1, 0));
 
 		proxy.registerTileEntity();
 		GameRegistry.registerTileEntity(TETelepad.class, "TETelepad");
 		proxy.registerItemRenderer();
 
-		proxy.registerPacketHandlers();
-
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new TelePadGuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(this,
+				new TelePadGuiHandler());
 		FMLCommonHandler.instance().bus().register(new DataTracker());
 		MinecraftForge.EVENT_BUS.register(new PadEvents());
 	}
 
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent e){
+	public void preInit(FMLPreInitializationEvent e) {
 
-		register = (ItemPadLocations) new ItemPadLocations().setUnlocalizedName("register");
+		register = (ItemPadLocations) new ItemPadLocations()
+				.setUnlocalizedName("register");
 		GameRegistry.registerItem(register, "ItemPadLocations");
 
-		crowbar = (ItemArchimedesLever) new ItemArchimedesLever().setUnlocalizedName("Crowbar");
-		GameRegistry.registerItem(crowbar ,"Archimede's Lever" );
+		crowbar = (ItemArchimedesLever) new ItemArchimedesLever()
+				.setUnlocalizedName("Crowbar");
+		GameRegistry.registerItem(crowbar, "Archimede's Lever");
 
-		telepad = (BlockTelepad) new BlockTelepad(Material.wood).setBlockName("telepad").setLightLevel(0.2f).setCreativeTab(CreativeTabs.tabTransport).setBlockUnbreakable().setBlockTextureName("wool_colored_pink");
+		telepad = (BlockTelepad) new BlockTelepad(Material.wood)
+				.setBlockName("telepad").setLightLevel(0.2f)
+				.setCreativeTab(CreativeTabs.tabTransport)
+				.setBlockUnbreakable().setBlockTextureName("wool_colored_pink");
 		GameRegistry.registerBlock(telepad, "TelePad");
-		
-		SNW.registerMessage(HandlerPacketAddTelepadForPlayer.class, PacketAddTelepadForPlayer.class, 1, Side.SERVER);
-//		SNW.registerMessage(HandlerPacketSetOnPlatform_Server.class, PacketSetOnPlatform_Server.class, 2, Side.SERVER);
-		SNW.registerMessage(HandlerPacketTeleport.class, PacketTeleport.class, 3, Side.SERVER);
-		
-		SNW.registerMessage(HandlerPacketDataOverDimensions.class, PacketDataOverDimensions.class, 4, Side.CLIENT);
-		SNW.registerMessage(HandlerPacketAddTelepadForPlayer_Client.class, PacketAddTelepadForPlayer_Client.class, 5, Side.CLIENT);
-		SNW.registerMessage(HandlerPacketSetOnPlatform_Client.class, PacketSetOnPlatform_Client.class, 6, Side.CLIENT);
+
+		SNW.registerMessage(HandlerPacketAddTelepadForPlayer.class,
+				PacketAddTelepadForPlayer.class, 1, Side.SERVER);
+		// SNW.registerMessage(HandlerPacketSetOnPlatform_Server.class,
+		// PacketSetOnPlatform_Server.class, 2, Side.SERVER);
+		SNW.registerMessage(HandlerPacketTeleport.class, PacketTeleport.class,
+				3, Side.SERVER);
+
+		SNW.registerMessage(HandlerPacketDataOverDimensions.class,
+				PacketDataOverDimensions.class, 4, Side.CLIENT);
+		SNW.registerMessage(HandlerPacketAddTelepadForPlayer_Client.class,
+				PacketAddTelepadForPlayer_Client.class, 5, Side.CLIENT);
+		SNW.registerMessage(HandlerPacketSetOnPlatform_Client.class,
+				PacketSetOnPlatform_Client.class, 6, Side.CLIENT);
 
 	}
 }

@@ -24,24 +24,27 @@ public class ItemPadLocations extends Item {
 		setCreativeTab(CreativeTabs.tabTransport);
 	}
 
-	private void addInfo(EntityPlayer p, String s){
+	private void addInfo(EntityPlayer p, String s) {
 		p.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_AQUA + s));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack is,
-			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack is, EntityPlayer par2EntityPlayer,
+			List par3List, boolean par4) {
 
-		if(par2EntityPlayer != null){
+		if (par2EntityPlayer != null) {
 
-			ArrayList<int[]> a = PlayerPadData.get(par2EntityPlayer).getAllCoords();
-			ArrayList<Integer> b = PlayerPadData.get(par2EntityPlayer).getAllDims();
-			ArrayList<String> c = PlayerPadData.get(par2EntityPlayer).getAllNames();
+			ArrayList<int[]> a = PlayerPadData.get(par2EntityPlayer)
+					.getAllCoords();
+			ArrayList<Integer> b = PlayerPadData.get(par2EntityPlayer)
+					.getAllDims();
+			ArrayList<String> c = PlayerPadData.get(par2EntityPlayer)
+					.getAllNames();
 
-			for(int i = 0; i < a.size(); i++) {
-				par3List.add("x"+a.get(i)[0]+ " y"+a.get(i)[1]+ " z"+a.get(i)[2]+
-						" " + c.get(i) +" Dim:" + b.get(i));
+			for (int i = 0; i < a.size(); i++) {
+				par3List.add("x" + a.get(i)[0] + " y" + a.get(i)[1] + " z"
+						+ a.get(i)[2] + " " + c.get(i) + " Dim:" + b.get(i));
 			}
 		}
 	}
@@ -71,7 +74,7 @@ public class ItemPadLocations extends Item {
 		String g = StatCollector.translateToLocal("info.7");
 		String h = StatCollector.translateToLocal("info.8");
 
-		if(!par2World.isRemote){
+		if (!par2World.isRemote) {
 			addInfo(par3EntityPlayer, a);
 			addInfo(par3EntityPlayer, b);
 			addInfo(par3EntityPlayer, c);
@@ -80,15 +83,14 @@ public class ItemPadLocations extends Item {
 			addInfo(par3EntityPlayer, f);
 			addInfo(par3EntityPlayer, g);
 			addInfo(par3EntityPlayer, h);
-
 		}
 
 		return super.onItemRightClick(is, par2World, par3EntityPlayer);
 	}
 
 	@Override
-	public void onUpdate(ItemStack is, World par2World,
-			Entity ent, int par4, boolean par5) {
+	public void onUpdate(ItemStack is, World par2World, Entity ent, int par4,
+			boolean par5) {
 
 		super.onUpdate(is, par2World, ent, par4, par5);
 

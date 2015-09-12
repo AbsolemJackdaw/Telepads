@@ -3,6 +3,7 @@ package telepads.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -14,24 +15,28 @@ import telepads.block.TETelepad;
 import telepads.packets.PacketTeleport;
 import telepads.util.PlayerPadData;
 
-public class GuiTeleport extends GuiScreen{
+public class GuiTeleport extends GuiScreen {
 
-	//	private int prevSetting;
+	// private int prevSetting;
 
 	public EntityPlayer player;
 	public TETelepad te;
 
 	public static final int EXIT_BUTTON = 10000;
 
-	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
+	private TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
 
-	private static final ResourceLocation endPortalTextures = new ResourceLocation("textures/entity/end_portal.png");
+	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation(
+			"textures/environment/end_sky.png");
+
+	private static final ResourceLocation endPortalTextures = new ResourceLocation(
+			"textures/entity/end_portal.png");
 
 	float c = 0;
 
 	float sd = 0;
 
-	public GuiTeleport(EntityPlayer player, TETelepad te){
+	public GuiTeleport(EntityPlayer player, TETelepad te) {
 
 		this.te = te;
 		this.player = player;
@@ -40,19 +45,20 @@ public class GuiTeleport extends GuiScreen{
 	@Override
 	public void actionPerformed(GuiButton button) {
 
-		if(player != null){
+		if (player != null) {
 			int id = button.id;
-			if(id == EXIT_BUTTON ){
-				this.mc.thePlayer.closeScreen(); //closes the screen
+			if (id == EXIT_BUTTON) {
+				this.mc.thePlayer.closeScreen(); // closes the screen
 
-			}else{
+			} else {
 				sendPacket(id);
-				this.mc.thePlayer.closeScreen(); //closes the screen
+				this.mc.thePlayer.closeScreen();
 			}
 		}
 
 		te.resetTE();
 	}
+
 	@Override
 	public boolean doesGuiPauseGame() {
 		return false;
@@ -61,22 +67,23 @@ public class GuiTeleport extends GuiScreen{
 	@Override
 	public void drawBackground(int par1) {
 		c += 1f;
-		sd +=0.01f;
-		float k = c+2;
+		sd += 0.01f;
+		float k = c + 2;
 
 		GL11.glPushMatrix();
 		GL11.glColor4f(0.2f, 0.6f, 1f, sd < 0.7f ? sd : 0.7f);
-		Minecraft.getMinecraft().renderEngine.bindTexture(enderPortalEndSkyTextures);
-		drawTexturedModalRect(0, 0, -(int)k*2, -(int)c*2 , 3000, 3000);
+		renderEngine.bindTexture(enderPortalEndSkyTextures);
+		drawTexturedModalRect(0, 0, -(int) k * 2, -(int) c * 2, 3000, 3000);
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
 		GL11.glColor4f(0.2f, 0.6f, 1f, sd < 0.75f ? sd : 0.75f);
-		Minecraft.getMinecraft().renderEngine.bindTexture(endPortalTextures);
-		drawTexturedModalRect(0, 0, (int)k*2, (int)c*2 , 3000, 3000);
+		renderEngine.bindTexture(endPortalTextures);
+		drawTexturedModalRect(0, 0, (int) k * 2, (int) c * 2, 3000, 3000);
 		GL11.glPopMatrix();
 
 	}
+
 	@Override
 	public void drawScreen(int par1, int par2, float par3) {
 
@@ -91,38 +98,44 @@ public class GuiTeleport extends GuiScreen{
 
 		this.buttonList.add(new GuiButton(EXIT_BUTTON, 5, 5, 20, 20, "X"));
 
-		int c = PlayerPadData.get(player).getAllCoords().size() ;
-		if(c < 1) 
+		int c = PlayerPadData.get(player).getAllCoords().size();
+
+		if (c < 1)
 			return;
 
-		for(int i = 0; i < c; i++){
+		for (int i = 0; i < c; i++) {
 			String name = PlayerPadData.get(player).getAllNames().get(i);
 
-			this.buttonList.add(new GuiButton(i, /*x*/(40) + (((i/10) > 0) && ((i%10) >= 0) ? 120*(i/10) : 0),/*y*/(130 + ((i*25))) - (((i/10) > 0) && ((i%10) >= 0) ? (250*(i/10))+100 : 100),
-					/*size*/100, 20, /**/name));
+			this.buttonList
+					.add(new GuiButton(
+							/* id */i,
+							/* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10)
+									: 0),
+							/* y */(130 + ((i * 25)))
+									- (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100
+											: 100),
+							/* size */100, 20,
+							/**/name));
 		}
 	}
 
 	@Override
-	protected void keyTyped(char c, int i)
-	{
+	protected void keyTyped(char c, int i) {
 		super.keyTyped(c, i);
 
-		if(i == Keyboard.KEY_ESCAPE){
+		if (i == Keyboard.KEY_ESCAPE) {
 			te.resetTE();
 			mc.thePlayer.closeScreen();
 		}
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k)
-	{
+	protected void mouseClicked(int i, int j, int k) {
 		super.mouseClicked(i, j, k);
 	}
 
-
-	public void sendPacket(int id){
-		int x = PlayerPadData.get(player).getAllCoords().get(id)[0]; 
+	public void sendPacket(int id) {
+		int x = PlayerPadData.get(player).getAllCoords().get(id)[0];
 		int y = PlayerPadData.get(player).getAllCoords().get(id)[1];
 		int z = PlayerPadData.get(player).getAllCoords().get(id)[2];
 		int dim = PlayerPadData.get(player).getAllDims().get(id);

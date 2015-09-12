@@ -6,7 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketTeleport implements IMessage{
+public class PacketTeleport implements IMessage {
 
 	public PacketTeleport() {
 	}
@@ -39,31 +39,30 @@ public class PacketTeleport implements IMessage{
 		buf.writeInt(dimension);
 	}
 
-	public static class HandlerPacketTeleport implements IMessageHandler<PacketTeleport, IMessage>{
+	public static class HandlerPacketTeleport implements
+			IMessageHandler<PacketTeleport, IMessage> {
 
 		@Override
 		public IMessage onMessage(PacketTeleport message, MessageContext ctx) {
 
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
-			
+
 			int dimID = message.dimension;
 
 			int otherX = message.x;
 			int otherY = message.y;
 			int otherZ = message.z;
 
-			if(dimID != player.worldObj.provider.dimensionId){
-				
-				if(player.worldObj.provider.dimensionId == 1) {
-					player.travelToDimension(1);
-				}else{
+			if (dimID != player.worldObj.provider.dimensionId) {
+				if (player.worldObj.provider.dimensionId != 1) {
 					player.travelToDimension(dimID);
-					player.setPositionAndUpdate(otherX+1.5d, otherY+0.5d, otherZ);
+					player.setPositionAndUpdate(otherX + 1.5d, otherY + 0.5d,
+							otherZ);
 				}
+			} else
+				player.setPositionAndUpdate(otherX + 1.5d, otherY + 0.5d,
+						otherZ);
 
-			} else {
-				player.setPositionAndUpdate(otherX+1.5d, otherY+0.5d, otherZ);
-			}
 			return null;
 		}
 	}

@@ -11,32 +11,31 @@ public class PadEvents {
 
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
-		if(!(event.entity instanceof EntityPlayer))
+		if (!(event.entity instanceof EntityPlayer))
 			return;
 		EntityPlayer p = (EntityPlayer) event.entity;
 
 		if ((PlayerPadData.get(p) == null)) {
 			PlayerPadData.register(p);
-			FMLLog.getLogger().info("initiated new save properties for player.");
+			FMLLog.getLogger()
+					.info("initiated new save properties for player.");
 		}
 	}
 
 	@SubscribeEvent
-	public void onEntityJoinWorld(EntityJoinWorldEvent event)
-	{
-		if (!event.entity.worldObj.isRemote && (event.entity instanceof EntityPlayer)) {
+	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+		if (!event.entity.worldObj.isRemote
+				&& (event.entity instanceof EntityPlayer)) {
 			PlayerPadData.loadProxyData((EntityPlayer) event.entity);
 		}
 	}
 
 	@SubscribeEvent
-	public void onLivingDeathEvent(LivingDeathEvent event)
-	{
+	public void onLivingDeathEvent(LivingDeathEvent event) {
 		// we only want to save data for players (most likely, anyway)
-		if (!event.entity.worldObj.isRemote && (event.entity instanceof EntityPlayer)) {
+		if (!event.entity.worldObj.isRemote
+				&& (event.entity instanceof EntityPlayer)) {
 			PlayerPadData.saveProxyData((EntityPlayer) event.entity);
 		}
 	}
-
-
 }

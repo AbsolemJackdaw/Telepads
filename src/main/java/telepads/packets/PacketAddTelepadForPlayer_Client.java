@@ -13,20 +13,19 @@ public class PacketAddTelepadForPlayer_Client implements IMessage {
 
 	public PacketAddTelepadForPlayer_Client() {
 	}
-	
+
 	int x;
 	int y;
 	int z;
 	String name;
-	
+
 	public PacketAddTelepadForPlayer_Client(int x, int y, int z, String name) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.name = name;
 	}
-	
-	
+
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		x = buf.readInt();
@@ -42,29 +41,37 @@ public class PacketAddTelepadForPlayer_Client implements IMessage {
 		buf.writeInt(z);
 		ByteBufUtils.writeUTF8String(buf, name);
 	}
-	
-	public static class HandlerPacketAddTelepadForPlayer_Client implements IMessageHandler<PacketAddTelepadForPlayer_Client, IMessage>{
+
+	public static class HandlerPacketAddTelepadForPlayer_Client implements
+			IMessageHandler<PacketAddTelepadForPlayer_Client, IMessage> {
 
 		@Override
-		public IMessage onMessage(PacketAddTelepadForPlayer_Client message, MessageContext ctx) {
-			
-			if(Telepads.proxy.getClientPlayer() == null)
+		public IMessage onMessage(PacketAddTelepadForPlayer_Client message,
+				MessageContext ctx) {
+
+			if (Telepads.proxy.getClientPlayer() == null)
 				return null;
-			
-			TETelepad pad = (TETelepad) Telepads.proxy.getClientPlayer().worldObj.getTileEntity(message.x, message.y, message.z);
-			
+
+			TETelepad pad = (TETelepad) Telepads.proxy.getClientPlayer().worldObj
+					.getTileEntity(message.x, message.y, message.z);
+
 			pad.telepadname = message.name;
-			pad.ownerName = Telepads.proxy.getClientPlayer().getGameProfile().getName();
+			pad.ownerName = Telepads.proxy.getClientPlayer().getGameProfile()
+					.getName();
 			pad.dimension = Telepads.proxy.getClientPlayer().worldObj.provider.dimensionId;
 
-			int[] a = new int[]{message.x, message.y, message.z};
+			int[] a = new int[] { message.x, message.y, message.z };
 
-			PlayerPadData.get(Telepads.proxy.getClientPlayer()).getAllCoords().add(a);
-			PlayerPadData.get(Telepads.proxy.getClientPlayer()).getAllNames().add(message.name);
-			PlayerPadData.get(Telepads.proxy.getClientPlayer()).getAllDims().add(pad.dimension);
+			PlayerPadData.get(Telepads.proxy.getClientPlayer()).getAllCoords()
+					.add(a);
+			PlayerPadData.get(Telepads.proxy.getClientPlayer()).getAllNames()
+					.add(message.name);
+			PlayerPadData.get(Telepads.proxy.getClientPlayer()).getAllDims()
+					.add(pad.dimension);
 
-			Telepads.proxy.getClientPlayer().worldObj.markBlockForUpdate(pad.xCoord,pad.yCoord,pad.zCoord);
-			
+			Telepads.proxy.getClientPlayer().worldObj.markBlockForUpdate(
+					pad.xCoord, pad.yCoord, pad.zCoord);
+
 			return null;
 		}
 	}

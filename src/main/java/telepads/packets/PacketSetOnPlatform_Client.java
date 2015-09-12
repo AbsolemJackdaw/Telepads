@@ -40,14 +40,17 @@ public class PacketSetOnPlatform_Client implements IMessage {
 		buf.writeBoolean(bool);
 	}
 
-	public static class HandlerPacketSetOnPlatform_Client implements IMessageHandler<PacketSetOnPlatform_Client, IMessage>{
+	public static class HandlerPacketSetOnPlatform_Client implements
+			IMessageHandler<PacketSetOnPlatform_Client, IMessage> {
 
 		@Override
-		public IMessage onMessage(PacketSetOnPlatform_Client message, MessageContext ctx) {
-			
-			TETelepad pad = (TETelepad) Telepads.proxy.getClientPlayer().worldObj.getTileEntity(message.x, message.y, message.z);
+		public IMessage onMessage(PacketSetOnPlatform_Client message,
+				MessageContext ctx) {
 
-			if(pad == null)
+			TETelepad pad = (TETelepad) Telepads.proxy.getClientPlayer().worldObj
+					.getTileEntity(message.x, message.y, message.z);
+
+			if (pad == null)
 				return null;
 
 			pad.setStandingOnPlatform(message.bool);

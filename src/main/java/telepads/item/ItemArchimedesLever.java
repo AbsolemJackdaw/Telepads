@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemArchimedesLever extends Item{
+public class ItemArchimedesLever extends Item {
 
 	public ItemArchimedesLever() {
 		super();

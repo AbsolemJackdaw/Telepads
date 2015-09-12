@@ -9,17 +9,17 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
 import telepads.Telepads;
 import telepads.packets.PacketSetOnPlatform_Client;
 import telepads.util.TelePadGuiHandler;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TETelepad extends TileEntity{
+public class TETelepad extends TileEntity {
 
-
-	//TE is "server side only" reflection
-	//timer doesnt get updated client side, and can therefor not influence particles directly
+	// TE is "server side only" reflection
+	// timer doesnt get updated client side, and can therefor not influence
+	// particles directly
 
 	public String telepadname = "TelePad";
 
@@ -29,10 +29,13 @@ public class TETelepad extends TileEntity{
 
 	public boolean isStandingOnPlatform = false;
 
-	public static final int def_count = 3*20;
+	public static final int def_count = 3 * 20;
 	public int counter = def_count;
 
-	/**checks if the teleport gui is already open to prevent it from openeing every tick*/
+	/**
+	 * checks if the teleport gui is already open to prevent it from openeing
+	 * every tick
+	 */
 	private boolean guiOpen;
 
 	public boolean isUniversal;
@@ -44,11 +47,10 @@ public class TETelepad extends TileEntity{
 		return true;
 	}
 
-	/**Sets isStandingOnPlatform, and reset's TE if false*/
-	public void changePlatformState(boolean b){
+	/** Sets isStandingOnPlatform, and reset's TE if false */
+	public void changePlatformState(boolean b) {
 		isStandingOnPlatform = b;
-		syncStandingOnPlatform(b);
-		if(!b)
+		if (!b)
 			resetTE();
 	}
 
@@ -56,12 +58,13 @@ public class TETelepad extends TileEntity{
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
+
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		this.readFromNBT(pkt.func_148857_g());  //packet.data
+		this.readFromNBT(pkt.func_148857_g()); // packet.data
 	}
 
 	@Override
@@ -76,42 +79,55 @@ public class TETelepad extends TileEntity{
 		super.readFromNBT(par1nbtTagCompound);
 	}
 
-	public void resetTE(){
+	public void resetTE() {
 		counter = def_count;
 		isStandingOnPlatform = false;
 		markDirty();
-		worldObj.markBlockForUpdate(xCoord, yCoord,zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		guiOpen = false;
 	}
-
 
 	@Override
 	public void updateEntity() {
 
-		if(!worldObj.isRemote){
-			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+0.5, yCoord+0.5, zCoord+0.5);
+		if (!worldObj.isRemote) {
+			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord,
+					zCoord, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 
-			List<EntityPlayer> playerInAabb = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
-			
-			if(isStandingOnPlatform) {
+			List<EntityPlayer> playerInAabb = worldObj.getEntitiesWithinAABB(
+					EntityPlayer.class, aabb);
 
-				if(playerInAabb.isEmpty()) {
+			if (isStandingOnPlatform) {
+
+				if (playerInAabb.isEmpty()) {
 					changePlatformState(false);
-					TargetPoint point = new TargetPoint(dimension, xCoord, yCoord, zCoord, 60.0d);
-					Telepads.SNW.sendToAllAround(new PacketSetOnPlatform_Client(xCoord,  yCoord, zCoord, false), point);
+					// WorldServer world = (WorldServer)worldObj;
+					// world.getEntityTracker().func_151248_b(,
+					// Telepads.SNW.getPacketFrom(new
+					// PacketSetOnPlatform_Client(xCoord, yCoord, zCoord,
+					// false)));
+					TargetPoint point = new TargetPoint(dimension, xCoord,
+							yCoord, zCoord, 60.0d);
+					Telepads.SNW.sendToAllAround(
+							new PacketSetOnPlatform_Client(xCoord, yCoord,
+									zCoord, false), point);
 					return;
 				}
 
-				if(counter >=0)
-					counter --;
+				if (counter >= 0)
+					counter--;
 
 				updatePlatformLogic(playerInAabb);
 
-			}else{
-				if(!playerInAabb.isEmpty()&& !isStandingOnPlatform){
+			} else {
+				if (!playerInAabb.isEmpty() && !isStandingOnPlatform) {
 					changePlatformState(true);
-					TargetPoint point = new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 60.0d);
-					Telepads.SNW.sendToAllAround(new PacketSetOnPlatform_Client(xCoord,  yCoord, zCoord, true), point);
+					TargetPoint point = new TargetPoint(
+							worldObj.provider.dimensionId, xCoord, yCoord,
+							zCoord, 60.0d);
+					Telepads.SNW.sendToAllAround(
+							new PacketSetOnPlatform_Client(xCoord, yCoord,
+									zCoord, true), point);
 				}
 			}
 		}
@@ -129,28 +145,28 @@ public class TETelepad extends TileEntity{
 		super.writeToNBT(par1nbtTagCompound);
 	}
 
-	private void updatePlatformLogic(List<EntityPlayer> playerInAabb){
-		//player should not be null, as list given is passed trough an empty check first
-		for(EntityPlayer p : playerInAabb){
+	/** gets called server side only */
+	private void updatePlatformLogic(List<EntityPlayer> playerInAabb) {
+		// player should not be null, as list given is passed trough an empty
+		// check first
+		for (EntityPlayer p : playerInAabb) {
 
-			if((counter < 0) && !guiOpen && !(p.openContainer instanceof ContainerTelePad)) {
-				/**No need for a register ...*/
-
+			if ((counter < 0) && !guiOpen
+					&& !(p.openContainer instanceof ContainerTelePad)) {
+				/** No need for a register ... */
 				markDirty();
 				guiOpen = true;
-				p.openGui(Telepads.instance, TelePadGuiHandler.TELEPORT, worldObj, xCoord, yCoord, zCoord);
+				p.openGui(Telepads.instance, TelePadGuiHandler.TELEPORT,
+						worldObj, xCoord, yCoord, zCoord);
 			}
 		}
 	}
-	private void syncStandingOnPlatform(boolean b) {
 
-		//		Telepads.SNW.sendToServer(new PacketSetOnPlatform_Server(xCoord, yCoord, zCoord, b));
-
-	}
-
-
-	/**called by ClientPacket to synch boolean to the client for particle updates-use*/
-	public void setStandingOnPlatform(boolean b){
+	/**
+	 * called by ClientPacket to synch boolean to the client for particle
+	 * updates-use
+	 */
+	public void setStandingOnPlatform(boolean b) {
 		isStandingOnPlatform = b;
 	}
 }

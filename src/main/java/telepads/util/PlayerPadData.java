@@ -11,9 +11,10 @@ import telepads.TelepadProxyServer;
 import telepads.block.TETelepad;
 import cpw.mods.fml.common.FMLLog;
 
-public class PlayerPadData implements IExtendedEntityProperties{
+public class PlayerPadData implements IExtendedEntityProperties {
 
 	public final static String EXT_PROP_NAME = "PlayerPadData";
+
 	public static final PlayerPadData get(EntityPlayer p) {
 		return (PlayerPadData) p.getExtendedProperties(EXT_PROP_NAME);
 	}
@@ -21,22 +22,28 @@ public class PlayerPadData implements IExtendedEntityProperties{
 	private static String getSaveKey(EntityPlayer player) {
 		return player.getDisplayName() + ":" + EXT_PROP_NAME;
 	}
+
 	/**
 	 * This cleans up the onEntityJoinWorld event by replacing most of the code
-	 * with a single line: ExtendedPlayer.loadProxyData((EntityPlayer) event.entity));
+	 * with a single line: ExtendedPlayer.loadProxyData((EntityPlayer)
+	 * event.entity));
 	 */
 	public static void loadProxyData(EntityPlayer player) {
 		PlayerPadData playerData = PlayerPadData.get(player);
-		NBTTagCompound savedData = TelepadProxyServer.getEntityData(getSaveKey(player));
+		NBTTagCompound savedData = TelepadProxyServer
+				.getEntityData(getSaveKey(player));
 
-		if(savedData != null) {
+		if (savedData != null) {
 			playerData.loadNBTData(savedData);
 		}
 	}
+
 	public static final void register(EntityPlayer player) {
 		if (player != null) {
-			player.registerExtendedProperties(EXT_PROP_NAME, new PlayerPadData(player));
-			FMLLog.getLogger().info("Player properties registered for Telepads");
+			player.registerExtendedProperties(EXT_PROP_NAME, new PlayerPadData(
+					player));
+			FMLLog.getLogger()
+					.info("Player properties registered for Telepads");
 		}
 	}
 
@@ -85,32 +92,31 @@ public class PlayerPadData implements IExtendedEntityProperties{
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		//reset arrays to prevent doubles and tripples
+		// reset arrays to prevent doubles and tripples
 		allCoords = new ArrayList<int[]>();
 		allNames = new ArrayList<String>();
 		allDims = new ArrayList<Integer>();
 
 		int i = compound.getInteger("Size");
 
-		for(int a = 0; a < i ; a++){
-			allCoords.add(compound.getIntArray("allCoords_"+a));
-			allDims.add(compound.getInteger("allDims_"+a));
-			allNames.add(compound.getString("allNames_"+a));
+		for (int a = 0; a < i; a++) {
+			allCoords.add(compound.getIntArray("allCoords_" + a));
+			allDims.add(compound.getInteger("allDims_" + a));
+			allNames.add(compound.getString("allNames_" + a));
 		}
 		trim();
 	}
 
-
-	public void removePad(TETelepad pad){
+	public void removePad(TETelepad pad) {
 
 		int a = pad.xCoord;
 		int b = pad.yCoord;
 		int c = pad.zCoord;
 
-		for(int i = 0; i < allCoords.size(); i++) {
-			if(allCoords.get(i)[0] == a) {
-				if(allCoords.get(i)[1] == b) {
-					if(allCoords.get(i)[2] == c){
+		for (int i = 0; i < allCoords.size(); i++) {
+			if (allCoords.get(i)[0] == a) {
+				if (allCoords.get(i)[1] == b) {
+					if (allCoords.get(i)[2] == c) {
 						allCoords.remove(i);
 						allNames.remove(i);
 						allDims.remove(i);
@@ -125,23 +131,23 @@ public class PlayerPadData implements IExtendedEntityProperties{
 	public void saveNBTData(NBTTagCompound compound) {
 		compound.setInteger("Size", allCoords.size());
 
-		for(int i = 0; i < allCoords.size(); i++) {
-			compound.setIntArray("allCoords_"+i, allCoords.get(i));
+		for (int i = 0; i < allCoords.size(); i++) {
+			compound.setIntArray("allCoords_" + i, allCoords.get(i));
 		}
 
-		for(int i = 0; i < allDims.size(); i++) {
-			compound.setInteger("allDims_"+i, allDims.get(i));
+		for (int i = 0; i < allDims.size(); i++) {
+			compound.setInteger("allDims_" + i, allDims.get(i));
 		}
 
-		for(int i = 0; i < allNames.size(); i++) {
-			compound.setString("allNames_"+i, allNames.get(i));
+		for (int i = 0; i < allNames.size(); i++) {
+			compound.setString("allNames_" + i, allNames.get(i));
 		}
 
 		trim();
 
 	}
 
-	private void trim(){
+	private void trim() {
 		allCoords.trimToSize();
 		allDims.trimToSize();
 		allNames.trimToSize();

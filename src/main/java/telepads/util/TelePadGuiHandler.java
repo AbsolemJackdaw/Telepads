@@ -8,7 +8,7 @@ import telepads.gui.GuiNameTelepad;
 import telepads.gui.GuiTeleport;
 import cpw.mods.fml.common.network.IGuiHandler;
 
-public class TelePadGuiHandler implements IGuiHandler{
+public class TelePadGuiHandler implements IGuiHandler {
 
 	public static final int TELEPORT = 0;
 	public static final int NAMETELEPAD = 1;
@@ -27,7 +27,6 @@ public class TelePadGuiHandler implements IGuiHandler{
 		}
 		return null;
 	}
-
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
