@@ -25,4 +25,24 @@ public class PlayerHandler {
         if (event.entity instanceof EntityPlayer && !PlayerLocationProperties.hasProperties((EntityPlayer) event.entity))
             PlayerLocationProperties.setProperties((EntityPlayer) event.entity);
     }
+    
+    @SubscribeEvent
+    public void testEvent (PlayerInteractEvent event) {
+        
+        List<Position> positions = PlayerLocationProperties.getProperties(event.entityPlayer).getPositions();
+        
+        
+        if (event.action == Action.RIGHT_CLICK_BLOCK) {
+            
+            if (event.entityPlayer.worldObj.isRemote)
+                System.out.println("Client: " + positions.toString());
+            
+            else 
+                System.out.println("Server: " + positions.toString());
+            
+            Constants.RANDOM.nextInt(1024);
+            positions.add(new Position(Constants.RANDOM.nextInt(1024), Constants.RANDOM.nextInt(1024), Constants.RANDOM.nextInt(1024)));
+            System.out.println("Position added");
+        }
+    }
 }
