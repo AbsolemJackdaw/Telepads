@@ -1,0 +1,9 @@
+*.class
+*.iml
+*.ipr
+*.iws
+
+/build
+/.gradle
+/eclipse/assets
+/output

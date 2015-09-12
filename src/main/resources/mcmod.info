@@ -1,0 +1,18 @@
+[
+{
+  "modid": "telepads",
+  "name": "Telepads",
+  "description": "Adds a universal teleporter to the game.",
+  "version": "1.0.0",
+  "credits": "Developerd by Subaraki and Darkhax",
+  "logoFile": "",
+  "mcversion": "1.7.10",
+  "updateUrl": "",
+  "authors": ["Subaraki", "Darkhax"],
+  "parent": "",
+  "screenshots": [],
+  "dependencies": [
+     "mod_MinecraftForge"
+  ]
+}
+]
