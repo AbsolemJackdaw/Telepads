@@ -8,9 +8,11 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.common.MinecraftForge;
 import net.subaraki.telepads.common.CommonProxy;
 import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.handler.GuiHandler;
+import net.subaraki.telepads.handler.PlayerHandler;
 import net.subaraki.telepads.util.Constants;
 
 @Mod(modid = Constants.MODID, name = Constants.MOD_NAME, version = Constants.VERSION, guiFactory = Constants.FACTORY, dependencies = Constants.DEPENDENCY)
@@ -33,6 +35,7 @@ public class Telepads {
         network = NetworkRegistry.INSTANCE.newSimpleChannel("Telepads");
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         new ConfigurationHandler(event.getSuggestedConfigurationFile());
+        MinecraftForge.EVENT_BUS.register(new PlayerHandler());
         
         proxy.preInit();
     }
