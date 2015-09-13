@@ -35,14 +35,16 @@ public class TelePadTileEntity extends TileEntity {
      */
     private boolean guiOpen;
     
-    public boolean isUniversal;
-    
-    public boolean lockedUniversal;
+    private boolean isUpgraded = false;
     
     @Override
     public boolean canUpdate () {
         
         return true;
+    }
+    
+    public void activateUpgrade(){
+    	isUpgraded = true;
     }
     
     /** Sets isStandingOnPlatform, and reset's TE if false */
@@ -74,8 +76,7 @@ public class TelePadTileEntity extends TileEntity {
         telepadname = (par1nbtTagCompound.getString("name"));
         ownerName = par1nbtTagCompound.getString("owner");
         dimension = par1nbtTagCompound.getInteger("dimension");
-        isUniversal = par1nbtTagCompound.getBoolean("isUniversal");
-        lockedUniversal = par1nbtTagCompound.getBoolean("lockedUniversal");
+        isUpgraded = par1nbtTagCompound.getBoolean("upgrade");
         
         super.readFromNBT(par1nbtTagCompound);
     }
@@ -128,8 +129,7 @@ public class TelePadTileEntity extends TileEntity {
         par1nbtTagCompound.setString("name", telepadname);
         par1nbtTagCompound.setString("owner", ownerName);
         par1nbtTagCompound.setInteger("dimension", dimension);
-        par1nbtTagCompound.setBoolean("isUniversal", isUniversal);
-        par1nbtTagCompound.setBoolean("lockedUniversal", lockedUniversal);
+        par1nbtTagCompound.setBoolean("upgrade", isUpgraded);
         
         super.writeToNBT(par1nbtTagCompound);
     }
