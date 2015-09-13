@@ -13,4 +13,8 @@ public class Constants {
     public static final String FACTORY = "net.subaraki.telepads.client.gui.TelepadsGuiFactory";
     public static final String DEPENDENCY = "required-after:bookshelf";
     public static final Logger LOG = LogManager.getLogger(MOD_NAME);
+    
+    public static final int GUI_ID_TELEPORT = 0;
+	public static final int GUI_ID_NAMEPAD = 1;
+    
 }

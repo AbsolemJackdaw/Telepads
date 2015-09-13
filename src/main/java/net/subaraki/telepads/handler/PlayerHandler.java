@@ -1,6 +1,5 @@
 package net.subaraki.telepads.handler;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -9,6 +8,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerHandler {
     
