@@ -20,7 +20,7 @@ import net.subaraki.telepads.common.network.PacketSyncPositions;
 
 public class PlayerLocations implements IExtendedEntityProperties {
     
-    public static final String PROP_NAME = "TeleporterPositions";
+    public static final String PROP_NAME = "TelepadProperties";
     
     private EntityPlayer player;
     private List<Position> positions;
