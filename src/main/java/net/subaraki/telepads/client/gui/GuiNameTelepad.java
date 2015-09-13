@@ -1,5 +1,6 @@
 package net.subaraki.telepads.client.gui;
 
+import net.darkhax.bookshelf.util.Position;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -7,6 +8,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.blocks.TelePadTileEntity;
+import net.subaraki.telepads.common.network.PacketAddTelepadEntry;
+import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 
 import org.lwjgl.input.Keyboard;
 
@@ -14,11 +17,9 @@ public class GuiNameTelepad extends GuiScreen {
 
 	private GuiTextField padNameField;
 
-	public EntityPlayer thePlayer;
 	public TelePadTileEntity te;
 
 	public GuiNameTelepad(EntityPlayer player, TelePadTileEntity te) {
-		thePlayer = player;
 		this.te = te;
 	}
 
@@ -100,7 +101,7 @@ public class GuiNameTelepad extends GuiScreen {
 
 	public void sendPacket(String padName) {
 
-		//TODO add coords and name to player data
+		Telepads.instance.network.sendToServer(new PacketAddTelepadEntry(mc.thePlayer.getUniqueID(), new TelepadEntry(padNameField.getText(), mc.thePlayer.worldObj.provider.dimensionId, new Position(te.xCoord, te.yCoord, te.zCoord))));
 
 		this.mc.thePlayer.closeScreen();
 

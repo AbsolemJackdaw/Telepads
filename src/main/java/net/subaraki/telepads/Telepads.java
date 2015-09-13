@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.subaraki.telepads.blocks.TelePadBlock;
+import net.subaraki.telepads.blocks.TelePadTileEntity;
 import net.subaraki.telepads.common.CommonProxy;
 import net.subaraki.telepads.common.network.PacketAddTelepadEntry;
 import net.subaraki.telepads.common.network.PacketRemoveTelepadEntry;
@@ -60,8 +61,9 @@ public class Telepads {
     
     @EventHandler
     public void init (FMLInitializationEvent event) {
-
         proxy.init();
+		GameRegistry.registerTileEntity(TelePadTileEntity.class, "TETelepad");
+
     }
     
     @EventHandler

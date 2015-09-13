@@ -81,8 +81,9 @@ public class TelePadBlock extends BlockContainer {
 			te.ownerName = p.getDisplayName();
 			te.dimension = par1World.provider.dimensionId;
 
-			p.openGui(Telepads.instance, Constants.GUI_ID_NAMEPAD,par1World, x, y, z);
+			p.openGui(Telepads.instance, Constants.GUI_ID_NAMEPAD, par1World, x, y, z);
 		}
+		
 		par1World.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 		par1World.setTileEntity(x, y, z, te);
 	}

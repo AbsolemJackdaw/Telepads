@@ -1,5 +1,6 @@
 package net.subaraki.telepads.client.gui;
 
+import net.darkhax.bookshelf.util.Position;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.blocks.TelePadTileEntity;
+import net.subaraki.telepads.common.network.PacketTeleport;
 import net.subaraki.telepads.handler.PlayerLocations;
 
 import org.lwjgl.input.Keyboard;
@@ -105,8 +107,7 @@ public class GuiTeleport extends GuiScreen {
 		for (int i = 0; i < c; i++) {
 			String name =  PlayerLocations.getProperties(player).getEntries().get(i).entryName;
 
-			this.buttonList
-					.add(new GuiButton(
+			this.buttonList.add(new GuiButton(
 							/* id */i,
 							/* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10)
 									: 0),
@@ -139,6 +140,6 @@ public class GuiTeleport extends GuiScreen {
 		int z = PlayerLocations.getProperties(player).getEntries().get(id).position.getZ();
 		int dim = PlayerLocations.getProperties(player).getEntries().get(id).dimensionID;
 
-		Telepads.SNW.sendToServer(new PacketTeleport(x, y, z, dim));
+		Telepads.instance.network.sendToServer(new PacketTeleport(new Position(x,y,z), dim));
 	}
 }
