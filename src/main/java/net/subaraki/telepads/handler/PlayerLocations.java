@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
+import io.netty.buffer.ByteBuf;
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -138,5 +140,83 @@ public class PlayerLocations implements IExtendedEntityProperties {
         
         if (FMLCommonHandler.instance().getSide().equals(Side.SERVER))
             Telepads.instance.network.sendTo(new PacketSyncPositions(player.getUniqueID(), this.positions), (EntityPlayerMP) player);
+    }
+    
+    public static class TelepadEntry {
+        
+        /**
+         * The user defined name for the TelePad entry.
+         */
+        public String entryName;
+        
+        /**
+         * The dimension that the TelePad entry is located in.
+         */
+        public int dimensionID;
+        
+        /**
+         * The coordinates of the TelePad entry.
+         */
+        public Position position;
+        
+        /**
+         * Creates a TelepadEntry from a ByteBuf. This is useful for reading from networking.
+         * 
+         * @param buf: A ByteBuf containing the data needed to create a TelepadEntry.
+         */
+        public TelepadEntry(ByteBuf buf) {
+            
+            this(ByteBufUtils.readUTF8String(buf), buf.readInt(), new Position(buf));
+        }
+        
+        /**
+         * Creates a TelepadEntry from a NBTTagCompound. This is used for reading from
+         * NBTTagCompound.
+         * 
+         * @param tag: An NBTTagCompound to read the required data from.
+         */
+        public TelepadEntry(NBTTagCompound tag) {
+            
+            this(tag.getString("entryName"), tag.getInteger("dimensionID"), new Position(tag));
+        }
+        
+        /**
+         * Creates a new TelepadEntry. This is used to represent an entry that a player can
+         * teleport to.
+         * 
+         * @param name: A display name to use for the entry.
+         * @param dimension: The id of the dimension that this entry is within.
+         * @param pos: The Position of this TelepadEntry.
+         */
+        public TelepadEntry(String name, int dimension, Position pos) {
+            
+            this.entryName = name;
+            this.dimensionID = dimension;
+            this.position = pos;
+        }
+        
+        /**
+         * Writes the TelepadEntry to a NBTTagCompound.
+         * 
+         * @param tag: The tag to write the TelepadEntry to.
+         */
+        public void writeToNBT (NBTTagCompound tag) {
+            
+            tag.setString("entryName", this.entryName);
+            tag.setInteger("dimensionID", this.dimensionID);
+            this.position.write(tag);
+        }
+        
+        /**
+         * Write the TelepadEntry to a ByteBuf.
+         * 
+         * @param buf: The ByteBuf to write the TelepadEntry to.
+         */
+        public void writeToByteBuf (ByteBuf buf) {
+            
+            ByteBufUtils.writeUTF8String(buf, this.entryName);
+            buf.writeInt(this.dimensionID);
+            this.position.write(buf);
+        }
     }
 }
