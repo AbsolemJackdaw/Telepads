@@ -14,6 +14,7 @@ public class PacketTeleport implements IMessage{
 	public int dimension;
 	
 	public PacketTeleport(Position pos, int dimension) {
+	    
 		this.pos = pos;
 		this.dimension = dimension;
 	}
@@ -28,37 +29,22 @@ public class PacketTeleport implements IMessage{
 	@Override
 	public void toBytes(ByteBuf buf) {
 
-		ByteBufUtils.writeVarInt(buf, pos.getX(), 32);
-		ByteBufUtils.writeVarInt(buf, pos.getY(), 32);
-		ByteBufUtils.writeVarInt(buf, pos.getZ(), 32);
-		ByteBufUtils.writeVarInt(buf, dimension, 8);
-
+	    pos.write(buf);
+	    buf.writeInt(dimension);
 	}
 
 	public static class PacketTeleportHandler implements IMessageHandler<PacketTeleport, IMessage>{
 
 		@Override
-		public IMessage onMessage(PacketTeleport message, MessageContext ctx) {
+		public IMessage onMessage(PacketTeleport packet, MessageContext ctx) {
 			
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
 
-			int dimID = message.dimension;
+			if (packet.dimension != player.dimension)
+			    player.travelToDimension(packet.dimension);
 
-			int otherX = message.pos.getX();
-			int otherY = message.pos.getY();
-			int otherZ = message.pos.getZ();
-
-			if (dimID != player.worldObj.provider.dimensionId) {
-				if (player.worldObj.provider.dimensionId != 1) {
-					player.travelToDimension(dimID);
-					player.setPositionAndUpdate(otherX + 1.5d, otherY + 0.5d,otherZ);
-				}
-			} else
-				player.setPositionAndUpdate(otherX + 1.5d, otherY + 0.5d,otherZ);
-
-			
+			packet.pos.sendEntityToPosition(player);
 			return null;
 		}
 	}
-
 }
