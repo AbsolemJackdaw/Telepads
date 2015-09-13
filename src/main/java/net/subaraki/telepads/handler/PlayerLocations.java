@@ -137,7 +137,8 @@ public class PlayerLocations implements IExtendedEntityProperties {
      */
     public void sync () {
         
-        Telepads.instance.network.sendTo(new PacketSyncTelepadEntries(player.getUniqueID(), this.entries), (EntityPlayerMP) player);
+        if (player instanceof EntityPlayerMP)
+            Telepads.instance.network.sendTo(new PacketSyncTelepadEntries(player.getUniqueID(), this.entries), (EntityPlayerMP) player);
     }
     
     public static class TelepadEntry {
