@@ -47,6 +47,10 @@ public class TelePadTileEntity extends TileEntity {
     	isUpgraded = true;
     }
     
+    public boolean isUpgraded(){
+    	return isUpgraded;
+    }
+    
     /** Sets isStandingOnPlatform, and reset's TE if false */
     public void changePlatformState (boolean b) {
         
