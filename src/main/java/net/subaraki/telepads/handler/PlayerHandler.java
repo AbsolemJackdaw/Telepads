@@ -1,7 +1,5 @@
 package net.subaraki.telepads.handler;
 
-import java.util.UUID;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,12 +40,7 @@ public class PlayerHandler {
         
         if (event.action == Action.RIGHT_CLICK_BLOCK) {
             
-            // Grabs the players list of entries, and adds a new one.
-            locations.getEntries().add(new TelepadEntry(UUID.randomUUID().toString(), event.entityPlayer.dimension, new Position(event.entityPlayer)));
-            
-            // Can be called whenever you want. This will ensure that the client and server
-            // versions of this location instance are 100% synced up to this point.
-            locations.sync();
+            locations.addEntry(new TelepadEntry(locations.getSuggestedEntryName(), event.entityPlayer.dimension, new Position(event.entityPlayer)));
             
             if (event.entityPlayer.worldObj.isRemote)
                 System.out.println("Client: " + locations.getEntries().toString());

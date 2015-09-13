@@ -61,7 +61,7 @@ public class PacketSyncTelepadEntries implements IMessage {
         public IMessage onMessage (PacketSyncTelepadEntries packet, MessageContext ctx) {
             
             EntityPlayer player = Utilities.getPlayerFromUUID(Utilities.thePlayer().worldObj, packet.playerUUID);
-            PlayerLocations.getProperties(player).setEntries(packet.entries);
+            PlayerLocations.getProperties(player).overrideEntries(packet.entries);
             return null;
         }
     }
