@@ -3,9 +3,7 @@ package net.subaraki.telepads.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.entity.Entity;
@@ -16,43 +14,45 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.subaraki.telepads.Telepads;
-import net.subaraki.telepads.common.network.PacketSyncPositions;
+import net.subaraki.telepads.common.network.PacketSyncTelepadEntries;
+import net.subaraki.telepads.util.Constants;
 
 public class PlayerLocations implements IExtendedEntityProperties {
     
     public static final String PROP_NAME = "TelepadProperties";
     
     private EntityPlayer player;
-    private List<Position> positions;
+    private List<TelepadEntry> entries;
     
     public PlayerLocations(EntityPlayer player) {
         
         this.player = player;
-        this.positions = new ArrayList<Position>();
+        this.entries = new ArrayList<TelepadEntry>();
     }
     
     @Override
     public void saveNBTData (NBTTagCompound compound) {
         
-        NBTTagList positionList = new NBTTagList();
+        Constants.LOG.info("Saving Telepad data");
+        NBTTagList entryList = new NBTTagList();
         
-        for (Position pos : positions)
-            positionList.appendTag(pos.write(new NBTTagCompound()));
+        for (TelepadEntry entry : this.entries)
+            entryList.appendTag(entry.writeToNBT(new NBTTagCompound()));
             
-        compound.setTag("positions", positionList);
+        compound.setTag(PROP_NAME, entryList);
     }
     
     @Override
     public void loadNBTData (NBTTagCompound compound) {
         
-        List<Position> positions = new ArrayList<Position>();
-        NBTTagList positionList = compound.getTagList("positions", 10);
+        Constants.LOG.info("Loading Telepad data");
+        List<TelepadEntry> entryList = new ArrayList<TelepadEntry>();
+        NBTTagList entryTagList = compound.getTagList(PROP_NAME, 10);
         
-        for (int tagPos = 0; tagPos < positionList.tagCount(); tagPos++)
-            positions.add(new Position(positionList.getCompoundTagAt(tagPos)));
+        for (int tagPos = 0; tagPos < entryTagList.tagCount(); tagPos++)
+            entryList.add(new TelepadEntry(entryTagList.getCompoundTagAt(tagPos)));
             
-        this.positions = positions;
-        sync();
+        this.entries = entryList;
     }
     
     @Override
@@ -104,7 +104,7 @@ public class PlayerLocations implements IExtendedEntityProperties {
      */
     public void copy (PlayerLocations properties) {
         
-        this.positions = properties.positions;
+        this.entries = properties.entries;
     }
     
     /**
@@ -112,12 +112,12 @@ public class PlayerLocations implements IExtendedEntityProperties {
      * 
      * @return List<Position>: A list containing all positions linked to the player.
      */
-    public List<Position> getPositions () {
+    public List<TelepadEntry> getEntries () {
         
-        if (this.positions == null)
-            this.positions = new ArrayList<Position>();
+        if (this.entries == null)
+            this.entries = new ArrayList<TelepadEntry>();
             
-        return this.positions;
+        return this.entries;
     }
     
     /**
@@ -125,9 +125,9 @@ public class PlayerLocations implements IExtendedEntityProperties {
      * 
      * @param positions: The list of new positions to se to the player data.
      */
-    public void setPositions (List<Position> positions) {
+    public void setEntries (List<TelepadEntry> entries) {
         
-        this.positions = positions;
+        this.entries = entries;
     }
     
     /**
@@ -138,8 +138,7 @@ public class PlayerLocations implements IExtendedEntityProperties {
      */
     public void sync () {
         
-        if (FMLCommonHandler.instance().getSide().equals(Side.SERVER))
-            Telepads.instance.network.sendTo(new PacketSyncPositions(player.getUniqueID(), this.positions), (EntityPlayerMP) player);
+        Telepads.instance.network.sendTo(new PacketSyncTelepadEntries(player.getUniqueID(), this.entries), (EntityPlayerMP) player);
     }
     
     public static class TelepadEntry {
@@ -200,11 +199,19 @@ public class PlayerLocations implements IExtendedEntityProperties {
          * 
          * @param tag: The tag to write the TelepadEntry to.
          */
-        public void writeToNBT (NBTTagCompound tag) {
+        
+        /**
+         * Writes the TelepadEntry to a NBTTagCompound.
+         * 
+         * @param tag: The tag to write the TelepadEntry to.
+         * @return NBTTagCompound: An NBTTagCompound containing all of the TelepadEntry data.
+         */
+        public NBTTagCompound writeToNBT (NBTTagCompound tag) {
             
             tag.setString("entryName", this.entryName);
             tag.setInteger("dimensionID", this.dimensionID);
             this.position.write(tag);
+            return tag;
         }
         
         /**
@@ -217,6 +224,28 @@ public class PlayerLocations implements IExtendedEntityProperties {
             ByteBufUtils.writeUTF8String(buf, this.entryName);
             buf.writeInt(this.dimensionID);
             this.position.write(buf);
+        }
+        
+        @Override
+        public String toString () {
+            
+            return "Entry Name: " + this.entryName + " DimensionID: " + this.dimensionID + " " + this.position.toString();
+        }
+        
+        @Override
+        public Object clone () {
+            
+            return new TelepadEntry(this.entryName, this.dimensionID, this.position);
+        }
+        
+        @Override
+        public boolean equals (Object compared) {
+            
+            if (!(compared instanceof TelepadEntry))
+                return false;
+                
+            TelepadEntry entry = (TelepadEntry) compared;
+            return this.entryName.equals(entry.entryName) && this.dimensionID == entry.dimensionID && this.position.equals(entry.position);
         }
     }
 }
