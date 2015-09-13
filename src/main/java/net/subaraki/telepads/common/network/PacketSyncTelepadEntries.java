@@ -55,7 +55,7 @@ public class PacketSyncTelepadEntries implements IMessage {
             entry.writeToByteBuf(buf);
     }
     
-    public static class PacketSyncPositionsHandler implements IMessageHandler<PacketSyncTelepadEntries, IMessage> {
+    public static class PacketSyncTelepadEntriesHandler implements IMessageHandler<PacketSyncTelepadEntries, IMessage> {
         
         @Override
         public IMessage onMessage (PacketSyncTelepadEntries packet, MessageContext ctx) {

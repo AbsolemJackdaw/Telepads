@@ -11,6 +11,8 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 import net.subaraki.telepads.common.CommonProxy;
+import net.subaraki.telepads.common.network.PacketAddTelepadEntry;
+import net.subaraki.telepads.common.network.PacketRemoveTelepadEntry;
 import net.subaraki.telepads.common.network.PacketSyncTelepadEntries;
 import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.handler.GuiHandler;
@@ -35,7 +37,9 @@ public class Telepads {
     public void preInit (FMLPreInitializationEvent event) {
         
         network = NetworkRegistry.INSTANCE.newSimpleChannel("Telepads");
-        network.registerMessage(PacketSyncTelepadEntries.PacketSyncPositionsHandler.class, PacketSyncTelepadEntries.class, 0, Side.CLIENT);
+        network.registerMessage(PacketSyncTelepadEntries.PacketSyncTelepadEntriesHandler.class, PacketSyncTelepadEntries.class, 0, Side.CLIENT);
+        network.registerMessage(PacketAddTelepadEntry.PacketAddTelepadEntryHandler.class, PacketAddTelepadEntry.class, 1, Side.SERVER);
+        network.registerMessage(PacketRemoveTelepadEntry.PacketRemoveTelepadEntryHandler.class, PacketRemoveTelepadEntry.class, 2, Side.SERVER);
         
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         new ConfigurationHandler(event.getSuggestedConfigurationFile());
