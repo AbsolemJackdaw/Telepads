@@ -18,7 +18,7 @@ import net.subaraki.telepads.blocks.model.TelePadModel;
 public class TelePadTESR extends TileEntitySpecialRenderer {
     
     TelePadModel padModel = new TelePadModel();
-    private static ResourceLocation loc = new ResourceLocation("telepads:net/subaraki/telepads/textures/telepad.png");
+    private static ResourceLocation loc = new ResourceLocation("telepads:textures/entity/tile/telepad.png");
     
     // copied from RenderEndPortal.java
     private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
