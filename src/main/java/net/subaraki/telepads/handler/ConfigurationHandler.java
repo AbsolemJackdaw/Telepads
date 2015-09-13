@@ -2,11 +2,11 @@ package net.subaraki.telepads.handler;
 
 import java.io.File;
 
-import net.minecraftforge.common.config.Configuration;
-import net.subaraki.telepads.util.Constants;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.common.config.Configuration;
+import net.subaraki.telepads.util.Constants;
 
 public class ConfigurationHandler {
     
