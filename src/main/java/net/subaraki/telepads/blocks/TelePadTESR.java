@@ -18,8 +18,7 @@ import org.lwjgl.opengl.GL11;
 public class TelePadTESR extends TileEntitySpecialRenderer {
     
     TelePadModel padModel = new TelePadModel();
-    private static ResourceLocation loc = new ResourceLocation("telepads:textures/telepad.png");
-    private static ResourceLocation locUniversal = new ResourceLocation("telepads:textures/padUniversal.png");
+    private static ResourceLocation loc = new ResourceLocation("telepads:net/subaraki/telepads/textures/telepad.png");
     
     // copied from RenderEndPortal.java
     private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
@@ -158,9 +157,9 @@ public class TelePadTESR extends TileEntitySpecialRenderer {
         
         if (te != null) {
             // if (!te.isUniversal) {
-            // bindTexture(loc);
+             bindTexture(loc);
             // } else {
-            bindTexture(locUniversal);
+//            bindTexture(locUniversal);
             // }
         }
         else {
