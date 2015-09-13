@@ -12,17 +12,35 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.common.network.PacketSyncTelepadEntries;
 
 public class PlayerLocations implements IExtendedEntityProperties {
     
-    public static final String PROP_NAME = "TelepadProperties";
+    /**
+     * The name of the NBTTagCompound which holds all of the data handled by this class.
+     */
+    public static final String PROP_NAME = "TelepadLocations";
     
+    /**
+     * An instance of the specific player that is being read and written to.
+     */
     private EntityPlayer player;
+    
+    /**
+     * A list of entries that this player has acces to.
+     */
     private List<TelepadEntry> entries;
     
+    /**
+     * Constructs a new PlayerLocations instance. This should only be used when creating new
+     * properties for a player. To add properties to a player, look at setProperties.
+     * 
+     * @param player: The player that the new PlayerLocations instance is for.
+     */
     public PlayerLocations(EntityPlayer player) {
         
         this.player = player;
@@ -107,9 +125,9 @@ public class PlayerLocations implements IExtendedEntityProperties {
     }
     
     /**
-     * Provides a list of all Positions linked to this player.
+     * Provides a list of all TelepadEntrys that the player has access to.
      * 
-     * @return List<Position>: A list containing all positions linked to the player.
+     * @return List<TelepadEntry>: A list of every TelepadEntry stored on the players file.
      */
     public List<TelepadEntry> getEntries () {
         
@@ -120,25 +138,71 @@ public class PlayerLocations implements IExtendedEntityProperties {
     }
     
     /**
-     * Sets the list of positions linked to the player, to a new list.
+     * Sets the list of all TelepadEntrys to a new list of entries. This will delete all
+     * previous entries. This will also sync all server side data to the client.
      * 
-     * @param positions: The list of new positions to se to the player data.
+     * @param entries: The new list of entries that will replace the old ones.
      */
-    public void setEntries (List<TelepadEntry> entries) {
+    public void overrideEntries (List<TelepadEntry> entries) {
         
         this.entries = entries;
+        this.sync();
     }
     
     /**
-     * Synchronizes the players PlayerLocations from the server to the client. This will take
-     * all of the data from the server side, and ensure that the client side data reflects it.
-     * This method should only be called from a server side thread. Client sided calls are
-     * automatically ignored.
+     * Adds a new TelepadEntry to the players list of entries. This will also sync all server
+     * side data to the client.
+     * 
+     * @param entry: The new TelepadEntry to add for the player.
+     */
+    public void addEntry (TelepadEntry entry) {
+        
+        this.getEntries().add(entry);
+        this.sync();
+    }
+    
+    /**
+     * Removes a specified TelepadEntry from the players list of entries. This will also sync
+     * all server side data to the client.
+     * 
+     * @param entry: The entry that you want to remove.
+     */
+    public void removeEntry (TelepadEntry entry) {
+        
+        this.getEntries().remove(entry);
+        this.sync();
+    }
+    
+    /**
+     * Synchronizes the data between the server and the client. In some cases the client's
+     * version of the PlayerLocation may be out of sync. Calling this will fix that.
      */
     public void sync () {
         
         if (player instanceof EntityPlayerMP)
             Telepads.instance.network.sendTo(new PacketSyncTelepadEntries(player.getUniqueID(), this.entries), (EntityPlayerMP) player);
+    }
+    
+    /**
+     * Provides a suggested TelepadEntry name based on the players dimension, and existing
+     * entries.
+     * 
+     * @return String: A name that can be used for a TelepadEntry. Example: Surface 9
+     */
+    public String getSuggestedEntryName () {
+        
+        String entryName = "Unknown Dimension";
+        int entryIndex = 1;
+        WorldProvider provider = DimensionManager.getProvider(player.dimension);
+        
+        if (provider != null)
+            entryName = provider.getDimensionName();
+            
+        for (int index = 0; index < this.getEntries().size(); index++)
+            if (this.getEntries().get(index).dimensionID == player.dimension)
+                entryIndex++;
+                
+        return entryName + " " + entryIndex;
     }
     
     public static class TelepadEntry {
@@ -193,12 +257,6 @@ public class PlayerLocations implements IExtendedEntityProperties {
             this.dimensionID = dimension;
             this.position = pos;
         }
-        
-        /**
-         * Writes the TelepadEntry to a NBTTagCompound.
-         * 
-         * @param tag: The tag to write the TelepadEntry to.
-         */
         
         /**
          * Writes the TelepadEntry to a NBTTagCompound.
