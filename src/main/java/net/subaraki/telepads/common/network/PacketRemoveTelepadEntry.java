@@ -13,13 +13,25 @@ import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 
 public class PacketRemoveTelepadEntry implements IMessage {
     
+    /**
+     * The UUID of the player to remove the entry from.
+     */
     private UUID playerUUID;
+    
+    /**
+     * The entry to be removed from the player's list of locations.
+     */
     private TelepadEntry entry;
     
-    public PacketRemoveTelepadEntry() {
-    
-    }
-    
+    /**
+     * A packet to remove a TelepadEntry from a player's list of locations. This packet is used
+     * to send data from the client to the server, and should not be sent from a server thread.
+     * When this packet is handled on the server side, a sync packet will automatically be send
+     * back to the client to ensure that everthing is consistent.
+     * 
+     * @param playerUUID: The UUID of the player to remove the entry from.
+     * @param entry: The entry to be removed from the player's list of locations.
+     */
     public PacketRemoveTelepadEntry(UUID playerUUID, TelepadEntry entry) {
         
         this.playerUUID = playerUUID;
@@ -38,6 +50,10 @@ public class PacketRemoveTelepadEntry implements IMessage {
         
         ByteBufUtils.writeUTF8String(buf, this.playerUUID.toString());
         this.entry.writeToByteBuf(buf);
+    }
+    
+    public PacketRemoveTelepadEntry() {
+    
     }
     
     public static class PacketRemoveTelepadEntryHandler implements IMessageHandler<PacketRemoveTelepadEntry, IMessage> {

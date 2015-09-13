@@ -16,13 +16,24 @@ import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 
 public class PacketSyncTelepadEntries implements IMessage {
     
+    /**
+     * The unique identifier of the player sync this data to.
+     */
     private UUID playerUUID;
+    
+    /**
+     * The list of entries to sync to the player.
+     */
     private List<TelepadEntry> entries;
     
-    public PacketSyncTelepadEntries() {
-    
-    }
-    
+    /**
+     * A packet to sync entries to a player, on the client side. This packet must only be sent
+     * from a server thread. The entries on the client side will be overridden with the
+     * provided list of entries.
+     * 
+     * @param playerUUID: The unique identifier of the player sync this data to.
+     * @param entries: The list of entries to sync to the player.
+     */
     public PacketSyncTelepadEntries(UUID playerUUID, List<TelepadEntry> entries) {
         
         this.playerUUID = playerUUID;
@@ -53,6 +64,10 @@ public class PacketSyncTelepadEntries implements IMessage {
         
         for (TelepadEntry entry : this.entries)
             entry.writeToByteBuf(buf);
+    }
+    
+    public PacketSyncTelepadEntries() {
+    
     }
     
     public static class PacketSyncTelepadEntriesHandler implements IMessageHandler<PacketSyncTelepadEntries, IMessage> {

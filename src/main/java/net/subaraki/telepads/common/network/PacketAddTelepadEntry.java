@@ -13,13 +13,25 @@ import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 
 public class PacketAddTelepadEntry implements IMessage {
     
+    /**
+     * The UUID of the player to add the new TelepadEntry to.
+     */
     private UUID playerUUID;
+    
+    /**
+     * The entry to be added to the player's list of locations.
+     */
     private TelepadEntry entry;
     
-    public PacketAddTelepadEntry() {
-    
-    }
-    
+    /**
+     * A packet to add a new TelepadEntry to a player's list of locations. This packet is used
+     * to send data from the client to the server, and should not be sent from a server thread.
+     * When this packet is handled on the server side, a sync packet with automatically be sent
+     * back to the client to ensure everything is consistent.
+     * 
+     * @param playerUUID: The UUID of the player to add the new TelepadEntry to.
+     * @param entry: The TelepadEntry to be added to the player's list of locations.
+     */
     public PacketAddTelepadEntry(UUID playerUUID, TelepadEntry entry) {
         
         this.playerUUID = playerUUID;
@@ -38,6 +50,10 @@ public class PacketAddTelepadEntry implements IMessage {
         
         ByteBufUtils.writeUTF8String(buf, this.playerUUID.toString());
         this.entry.writeToByteBuf(buf);
+    }
+    
+    public PacketAddTelepadEntry() {
+    
     }
     
     public static class PacketAddTelepadEntryHandler implements IMessageHandler<PacketAddTelepadEntry, IMessage> {
