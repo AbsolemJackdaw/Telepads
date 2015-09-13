@@ -15,7 +15,11 @@ public class ConfigurationHandler {
      */
     public static Configuration config;
     
-    public static boolean isFluxCapacitorEnabled = false;
+    /**
+     * A configurable flag that determines whether or not the user wants to receive debug
+     * messages from the Telepads mod.
+     */
+    public static boolean allowDebugMessages = true;
     
     /**
      * Constructs the ConfigurationHandler. Only one ConfigurationHandler instance should ever
@@ -42,7 +46,7 @@ public class ConfigurationHandler {
      */
     private void syncConfigData () {
         
-        isFluxCapacitorEnabled = config.getBoolean("isFluxEnabled", "secrets", isFluxCapacitorEnabled, "Turns on the flux capacitor. With this, the Telepads can not only transfer through space, but also through time!!!");
+        allowDebugMessages = config.getBoolean("allowDebug", "settings", allowDebugMessages, "Determines whether or not dubug messages from the Telepads mod should be printed to the console.");
         
         if (config.hasChanged())
             config.save();

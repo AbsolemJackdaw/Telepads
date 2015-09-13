@@ -55,4 +55,16 @@ public class Telepads {
         
         proxy.postInit();
     }
+    
+    /**
+     * Prints a specified message to the console. If the user has disabled debug messages,
+     * messages sent through this method will not be logged.
+     * 
+     * @param message: The message to send to the console.
+     */
+    public static void printDebugMessage (String message) {
+        
+        if (ConfigurationHandler.allowDebugMessages)
+            Constants.LOG.info(message);
+    }
 }

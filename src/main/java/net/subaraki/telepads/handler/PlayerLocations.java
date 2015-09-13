@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.common.network.PacketSyncTelepadEntries;
-import net.subaraki.telepads.util.Constants;
 
 public class PlayerLocations implements IExtendedEntityProperties {
     
@@ -33,7 +32,7 @@ public class PlayerLocations implements IExtendedEntityProperties {
     @Override
     public void saveNBTData (NBTTagCompound compound) {
         
-        Constants.LOG.info("Saving Telepad data");
+        Telepads.printDebugMessage("Saving Telepad data");
         NBTTagList entryList = new NBTTagList();
         
         for (TelepadEntry entry : this.entries)
@@ -45,7 +44,7 @@ public class PlayerLocations implements IExtendedEntityProperties {
     @Override
     public void loadNBTData (NBTTagCompound compound) {
         
-        Constants.LOG.info("Loading Telepad data");
+        Telepads.printDebugMessage("Loading Telepad data");
         List<TelepadEntry> entryList = new ArrayList<TelepadEntry>();
         NBTTagList entryTagList = compound.getTagList(PROP_NAME, 10);
         
