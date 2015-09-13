@@ -18,7 +18,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class TelePadBlock extends BlockContainer {
     
-    protected TelePadBlock(Material mat) {
+    public TelePadBlock(Material mat) {
         super(mat);
         
         float f = 0.5F;

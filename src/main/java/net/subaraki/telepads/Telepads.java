@@ -1,15 +1,9 @@
 package net.subaraki.telepads;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
+import net.subaraki.telepads.blocks.TelePadBlock;
 import net.subaraki.telepads.common.CommonProxy;
 import net.subaraki.telepads.common.network.PacketAddTelepadEntry;
 import net.subaraki.telepads.common.network.PacketRemoveTelepadEntry;
@@ -18,6 +12,16 @@ import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.handler.GuiHandler;
 import net.subaraki.telepads.handler.PlayerHandler;
 import net.subaraki.telepads.util.Constants;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = Constants.MODID, name = Constants.MOD_NAME, version = Constants.VERSION, guiFactory = Constants.FACTORY, dependencies = Constants.DEPENDENCY)
 public class Telepads {
@@ -33,9 +37,15 @@ public class Telepads {
      */
     public SimpleNetworkWrapper network;
     
+	public static TelePadBlock blockPad;
+
+	
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
         
+    	blockPad = (TelePadBlock) new TelePadBlock(Material.wood).setBlockName("telepad").setLightLevel(0.2f).setCreativeTab(CreativeTabs.tabTransport).setBlockUnbreakable().setBlockTextureName("wool_colored_pink");
+		GameRegistry.registerBlock(blockPad, "TelePad");
+		
         network = NetworkRegistry.INSTANCE.newSimpleChannel("Telepads");
         network.registerMessage(PacketSyncTelepadEntries.PacketSyncTelepadEntriesHandler.class, PacketSyncTelepadEntries.class, 0, Side.CLIENT);
         network.registerMessage(PacketAddTelepadEntry.PacketAddTelepadEntryHandler.class, PacketAddTelepadEntry.class, 1, Side.SERVER);
@@ -50,7 +60,7 @@ public class Telepads {
     
     @EventHandler
     public void init (FMLInitializationEvent event) {
-        
+
         proxy.init();
     }
     
