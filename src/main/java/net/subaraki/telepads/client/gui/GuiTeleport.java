@@ -135,6 +135,11 @@ public class GuiTeleport extends GuiScreen {
 	}
 
 	public void sendPacket(int id) {
+		if(player == null)
+			return;
+		
+		System.out.println(player.getUniqueID());
+
 		int x = PlayerLocations.getProperties(player).getEntries().get(id).position.getX();
 		int y = PlayerLocations.getProperties(player).getEntries().get(id).position.getY();
 		int z = PlayerLocations.getProperties(player).getEntries().get(id).position.getZ();

@@ -13,6 +13,9 @@ public class PacketTeleport implements IMessage{
 	public Position pos;
 	public int dimension;
 	
+	public PacketTeleport() {
+	}
+	
 	public PacketTeleport(Position pos, int dimension) {
 	    
 		this.pos = pos;
