@@ -1,7 +1,6 @@
 package net.subaraki.telepads.tileentity;
 
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,16 +15,9 @@ import net.subaraki.telepads.util.Constants;
 
 public class TileEntityTelepad extends TileEntity {
     
-    // TE is "server side only" reflection
-    // timer doesnt get updated client side, and can therefor not influence
-    // particles directly
-    
     public String telepadname = "TelePad";
-    
     public int dimension;
-    
     public String ownerName = "";
-    
     public boolean isStandingOnPlatform = false;
     
     public static final int def_count = 3 * 20;
@@ -100,9 +92,8 @@ public class TileEntityTelepad extends TileEntity {
     @Override
     public void updateEntity () {
         
-        if (isStandingOnPlatform)
-            playParticles(worldObj.rand, xCoord, yCoord, zCoord);
-            
+        Telepads.proxy.createTelepadParticleEffect(xCoord, yCoord, zCoord, isStandingOnPlatform);
+        
         if (!worldObj.isRemote) {
             AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
             
@@ -162,48 +153,5 @@ public class TileEntityTelepad extends TileEntity {
     public void setStandingOnPlatform (boolean b) {
         
         isStandingOnPlatform = b;
-    }
-    
-    private void playParticles (Random rand, int x, int y, int z) {
-        
-        TileEntityTelepad te = (TileEntityTelepad) worldObj.getTileEntity(x, y, z);
-        
-        if (te == null)
-            return;
-            
-        if (te.isStandingOnPlatform) {
-            for (int l = 0; l < 100; ++l) {
-                double d1 = y + (rand.nextFloat() * 1.5f);
-                double d0 = x + rand.nextFloat();
-                double d2 = 0.0D;
-                double d3 = 0.0D;
-                double d4 = 0.0D;
-                int i1 = (rand.nextInt(2) * 2) - 1;
-                int j1 = (rand.nextInt(2) * 2) - 1;
-                d2 = (rand.nextFloat() - 0.5D) * 0.125D;
-                d3 = (rand.nextFloat() - 0.5D) * 0.125D;
-                d4 = (rand.nextFloat() - 0.5D) * 0.125D;
-                d4 = rand.nextFloat() * 1.0F * j1;
-                d2 = rand.nextFloat() * 1.0F * i1;
-                this.worldObj.spawnParticle("portal", x + 0.5, d1, z + 0.5, d2, d3, d4);
-            }
-        }
-        else {
-            for (int l = 0; l < 5; ++l) {
-                double d1 = y + (rand.nextFloat() * 1.5f);
-                double d0 = z + rand.nextFloat();
-                double d2 = 0.0D;
-                double d3 = 0.0D;
-                double d4 = 0.0D;
-                int i1 = (rand.nextInt(2) * 2) - 1;
-                int j1 = (rand.nextInt(2) * 2) - 1;
-                d2 = (rand.nextFloat() - 0.5D) * 0.125D;
-                d3 = (rand.nextFloat() - 0.5D) * 0.125D;
-                d4 = (rand.nextFloat() - 0.5D) * 0.125D;
-                d4 = rand.nextFloat() * 1.0F * j1;
-                d2 = rand.nextFloat() * 1.0F * i1;
-                worldObj.spawnParticle("portal", x + 0.5, d1, z + 0.5, d2, d3, d4);
-            }
-        }
     }
 }
