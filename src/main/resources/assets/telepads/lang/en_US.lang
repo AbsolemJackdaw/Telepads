@@ -1,0 +1,8 @@
+#English Language File
+
+#Tiles
+tile.telepad.name=Telepad
+
+#Gui
+gui.telepad.padname=Name your Telepad
+gui.telepad.confirm=Confirm
