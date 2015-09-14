@@ -4,6 +4,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,11 +19,18 @@ import net.subaraki.telepads.util.Constants;
 
 public class BlockTelepad extends BlockContainer {
     
-    public BlockTelepad(Material mat) {
-        super(mat);
+    public BlockTelepad() {
         
-        float f = 0.5F;
-        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
+        super(Material.glass);
+        
+        this.setBlockName("telepad");
+        this.setLightLevel(0.2f);
+        this.setBlockTextureName("glass");
+        this.setStepSound(soundTypeGlass);
+        this.setCreativeTab(CreativeTabs.tabTransport);
+        
+        float offset = 0.5F;
+        this.setBlockBounds(0.5F - offset, 0.0F, 0.5F - offset, 0.5F + offset, 0.25F, 0.5F + offset);
     }
     
     @Override

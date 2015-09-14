@@ -10,6 +10,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,32 +40,29 @@ public class Telepads {
      */
     public SimpleNetworkWrapper network;
     
-    public static BlockTelepad blockPad;
+    public static Block blockPad = new BlockTelepad();
     
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
-        
-        blockPad = (BlockTelepad) new BlockTelepad(Material.wood).setBlockName("telepad").setLightLevel(0.2f).setCreativeTab(CreativeTabs.tabTransport).setBlockUnbreakable().setBlockTextureName("wool_colored_pink");
-        GameRegistry.registerBlock(blockPad, "TelePad");
         
         network = NetworkRegistry.INSTANCE.newSimpleChannel("Telepads");
         network.registerMessage(PacketSyncTelepadEntries.PacketSyncTelepadEntriesHandler.class, PacketSyncTelepadEntries.class, 0, Side.CLIENT);
         network.registerMessage(PacketAddTelepadEntry.PacketAddTelepadEntryHandler.class, PacketAddTelepadEntry.class, 1, Side.SERVER);
         network.registerMessage(PacketRemoveTelepadEntry.PacketRemoveTelepadEntryHandler.class, PacketRemoveTelepadEntry.class, 2, Side.SERVER);
         network.registerMessage(PacketTeleport.PacketTeleportHandler.class, PacketTeleport.class, 3, Side.SERVER);
-        
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+        
         new ConfigurationHandler(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
         
-        proxy.preInit();
+        GameRegistry.registerBlock(blockPad, "telepad");  
+        GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
     }
     
     @EventHandler
     public void init (FMLInitializationEvent event) {
         
         proxy.init();
-        GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
         
     }
     
