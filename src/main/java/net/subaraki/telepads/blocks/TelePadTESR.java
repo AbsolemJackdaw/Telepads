@@ -20,7 +20,7 @@ public class TelePadTESR extends TileEntitySpecialRenderer {
     TelePadModel padModel = new TelePadModel();
     private static ResourceLocation loc = new ResourceLocation("telepads:textures/entity/tile/telepad.png");
     private static ResourceLocation loc_upgrade = new ResourceLocation("telepads:textures/entity/tile/telepad_upgraded.png");
-
+    
     // copied from RenderEndPortal.java
     private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
     private static final ResourceLocation endPortalTextures = new ResourceLocation("textures/entity/end_portal.png");
@@ -157,11 +157,11 @@ public class TelePadTESR extends TileEntitySpecialRenderer {
         GL11.glScalef(1.0F, -1F, -1F);
         
         if (te != null) {
-            if(te.isUpgraded())
+            if (te.isUpgraded())
                 bindTexture(loc_upgrade);
             else
                 bindTexture(loc);
-
+                
         }
         else {
             bindTexture(loc);
