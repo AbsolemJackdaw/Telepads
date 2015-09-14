@@ -12,6 +12,7 @@ import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.client.renderer.RenderItemTelepad;
 import net.subaraki.telepads.client.renderer.RenderTileEntityTelepad;
 import net.subaraki.telepads.common.CommonProxy;
+import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
 public class ClientProxy extends CommonProxy {
@@ -26,13 +27,14 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void createTelepadParticleEffect (int x, int y, int z, boolean isStandingOnPlate) {
         
-        Random rand = Constants.RANDOM;
-        int maxParticleCount = (isStandingOnPlate) ? 100 : 5;
         World world = Minecraft.getMinecraft().theWorld;
         
-        if (world == null)
+        if (world == null || !ConfigurationHandler.allowParticleEffects)
             return;
             
+        Random rand = Constants.RANDOM;
+        int maxParticleCount = (isStandingOnPlate) ? 100 : 5;
+        
         for (int particleCount = 0; particleCount < maxParticleCount; ++particleCount) {
             
             double posX = x + 0.5f;
@@ -49,7 +51,7 @@ public class ClientProxy extends CommonProxy {
             velocityZ = (rand.nextFloat() - 0.5D) * 0.125D;
             velocityX = rand.nextFloat() * 1.0F * velocityXOffset;
             velocityZ = rand.nextFloat() * 1.0F * velocityZOffset;
-            world.spawnParticle("portal", posX, posY, posZ, velocityX, volocityY, velocityZ);
+            world.spawnParticle(ConfigurationHandler.particleName, posX, posY, posZ, velocityX, volocityY, velocityZ);
         }
     }
 }

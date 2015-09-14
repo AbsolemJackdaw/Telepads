@@ -22,6 +22,18 @@ public class ConfigurationHandler {
     public static boolean allowDebugMessages = true;
     
     /**
+     * A configurable flag that determines whether or not the Telepad will spawn particle
+     * effects.
+     */
+    public static boolean allowParticleEffects = true;
+    
+    /**
+     * A configurable string that determines the type of particle that is spawned by the
+     * Telepad.
+     */
+    public static String particleName = "portal";
+    
+    /**
      * Constructs the ConfigurationHandler. Only one ConfigurationHandler instance should ever
      * be created.
      * 
@@ -46,7 +58,10 @@ public class ConfigurationHandler {
      */
     private void syncConfigData () {
         
+        // Settings
         allowDebugMessages = config.getBoolean("allowDebug", "settings", allowDebugMessages, "Determines whether or not dubug messages from the Telepads mod should be printed to the console.");
+        allowParticleEffects = config.getBoolean("allowParticles", "settings", allowParticleEffects, "Should particle effects be spawned from the Telepad?");
+        particleName = config.getString("particleType", "settings", particleName, "The type of particle that should spawn from the Telepad?");
         
         if (config.hasChanged())
             config.save();
