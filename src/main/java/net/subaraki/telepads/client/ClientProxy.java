@@ -13,18 +13,8 @@ public class ClientProxy extends CommonProxy {
     
     @Override
     public void preInit () {
-    
-    }
-    
-    @Override
-    public void init () {
         
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(Telepads.blockPad), new RenderItemTelepad());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTelepad.class, new RenderTileEntityTelepad());
-    }
-    
-    @Override
-    public void postInit () {
-    
     }
 }

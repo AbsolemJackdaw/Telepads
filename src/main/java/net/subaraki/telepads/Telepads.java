@@ -3,16 +3,12 @@ package net.subaraki.telepads;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.subaraki.telepads.blocks.BlockTelepad;
 import net.subaraki.telepads.common.CommonProxy;
@@ -55,21 +51,10 @@ public class Telepads {
         new ConfigurationHandler(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
         
-        GameRegistry.registerBlock(blockPad, "telepad");  
+        GameRegistry.registerBlock(blockPad, "telepad");
         GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
-    }
-    
-    @EventHandler
-    public void init (FMLInitializationEvent event) {
         
-        proxy.init();
-        
-    }
-    
-    @EventHandler
-    public void onPostInit (FMLPostInitializationEvent event) {
-        
-        proxy.postInit();
+        proxy.preInit();
     }
     
     /**
