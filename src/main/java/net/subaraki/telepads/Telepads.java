@@ -13,8 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
-import net.subaraki.telepads.blocks.TelePadBlock;
-import net.subaraki.telepads.blocks.TelePadTileEntity;
+import net.subaraki.telepads.blocks.BlockTelepad;
 import net.subaraki.telepads.common.CommonProxy;
 import net.subaraki.telepads.common.network.PacketAddTelepadEntry;
 import net.subaraki.telepads.common.network.PacketRemoveTelepadEntry;
@@ -23,6 +22,7 @@ import net.subaraki.telepads.common.network.PacketTeleport;
 import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.handler.GuiHandler;
 import net.subaraki.telepads.handler.PlayerHandler;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 import net.subaraki.telepads.util.Constants;
 
 @Mod(modid = Constants.MODID, name = Constants.MOD_NAME, version = Constants.VERSION, guiFactory = Constants.FACTORY, dependencies = Constants.DEPENDENCY)
@@ -39,12 +39,12 @@ public class Telepads {
      */
     public SimpleNetworkWrapper network;
     
-    public static TelePadBlock blockPad;
+    public static BlockTelepad blockPad;
     
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
         
-        blockPad = (TelePadBlock) new TelePadBlock(Material.wood).setBlockName("telepad").setLightLevel(0.2f).setCreativeTab(CreativeTabs.tabTransport).setBlockUnbreakable().setBlockTextureName("wool_colored_pink");
+        blockPad = (BlockTelepad) new BlockTelepad(Material.wood).setBlockName("telepad").setLightLevel(0.2f).setCreativeTab(CreativeTabs.tabTransport).setBlockUnbreakable().setBlockTextureName("wool_colored_pink");
         GameRegistry.registerBlock(blockPad, "TelePad");
         
         network = NetworkRegistry.INSTANCE.newSimpleChannel("Telepads");
@@ -64,7 +64,7 @@ public class Telepads {
     public void init (FMLInitializationEvent event) {
         
         proxy.init();
-        GameRegistry.registerTileEntity(TelePadTileEntity.class, "TETelepad");
+        GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
         
     }
     

@@ -9,17 +9,17 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
 import net.subaraki.telepads.Telepads;
-import net.subaraki.telepads.blocks.TelePadTileEntity;
 import net.subaraki.telepads.common.network.PacketAddTelepadEntry;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
 public class GuiNameTelepad extends GuiScreen {
     
     private GuiTextField padNameField;
     
-    public TelePadTileEntity te;
+    public TileEntityTelepad te;
     
-    public GuiNameTelepad(EntityPlayer player, TelePadTileEntity te) {
+    public GuiNameTelepad(EntityPlayer player, TileEntityTelepad te) {
         this.te = te;
     }
     

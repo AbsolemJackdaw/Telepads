@@ -11,16 +11,16 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.subaraki.telepads.Telepads;
-import net.subaraki.telepads.blocks.TelePadTileEntity;
 import net.subaraki.telepads.common.network.PacketTeleport;
 import net.subaraki.telepads.handler.PlayerLocations;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
 public class GuiTeleport extends GuiScreen {
     
     // private int prevSetting;
     
     public EntityPlayer player;
-    public TelePadTileEntity te;
+    public TileEntityTelepad te;
     
     public static final int EXIT_BUTTON = 10000;
     
@@ -34,7 +34,7 @@ public class GuiTeleport extends GuiScreen {
     
     float sd = 0;
     
-    public GuiTeleport(EntityPlayer player, TelePadTileEntity te) {
+    public GuiTeleport(EntityPlayer player, TileEntityTelepad te) {
         
         this.te = te;
         this.player = player;

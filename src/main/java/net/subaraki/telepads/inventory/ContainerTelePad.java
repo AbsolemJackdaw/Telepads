@@ -1,4 +1,4 @@
-package net.subaraki.telepads.blocks;
+package net.subaraki.telepads.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

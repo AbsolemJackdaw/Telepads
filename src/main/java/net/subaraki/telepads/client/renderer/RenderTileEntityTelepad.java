@@ -1,4 +1,4 @@
-package net.subaraki.telepads.blocks;
+package net.subaraki.telepads.client.renderer;
 
 import java.nio.FloatBuffer;
 import java.util.Random;
@@ -13,11 +13,12 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.subaraki.telepads.blocks.model.TelePadModel;
+import net.subaraki.telepads.client.model.ModelTelepad;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
-public class TelePadTESR extends TileEntitySpecialRenderer {
+public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
     
-    TelePadModel padModel = new TelePadModel();
+    ModelTelepad padModel = new ModelTelepad();
     private static ResourceLocation loc = new ResourceLocation("telepads:textures/entity/tile/telepad.png");
     private static ResourceLocation loc_upgrade = new ResourceLocation("telepads:textures/entity/tile/telepad_upgraded.png");
     
@@ -142,10 +143,10 @@ public class TelePadTESR extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt (TileEntity tileentity, double d, double d1, double d2, float f) {
         
-        TelePadTileEntity te = null;
+        TileEntityTelepad te = null;
         
-        if (tileentity instanceof TelePadTileEntity) {
-            te = (TelePadTileEntity) tileentity;
+        if (tileentity instanceof TileEntityTelepad) {
+            te = (TileEntityTelepad) tileentity;
         }
         
         GL11.glPushMatrix();

@@ -1,4 +1,4 @@
-package net.subaraki.telepads.blocks;
+package net.subaraki.telepads.tileentity;
 
 import java.util.List;
 import java.util.Random;
@@ -11,9 +11,10 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.subaraki.telepads.Telepads;
+import net.subaraki.telepads.inventory.ContainerTelePad;
 import net.subaraki.telepads.util.Constants;
 
-public class TelePadTileEntity extends TileEntity {
+public class TileEntityTelepad extends TileEntity {
     
     // TE is "server side only" reflection
     // timer doesnt get updated client side, and can therefor not influence
@@ -165,7 +166,7 @@ public class TelePadTileEntity extends TileEntity {
     
     private void playParticles (Random rand, int x, int y, int z) {
         
-        TelePadTileEntity te = (TelePadTileEntity) worldObj.getTileEntity(x, y, z);
+        TileEntityTelepad te = (TileEntityTelepad) worldObj.getTileEntity(x, y, z);
         
         if (te == null)
             return;

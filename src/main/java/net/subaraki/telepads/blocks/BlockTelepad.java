@@ -13,11 +13,12 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.subaraki.telepads.Telepads;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 import net.subaraki.telepads.util.Constants;
 
-public class TelePadBlock extends BlockContainer {
+public class BlockTelepad extends BlockContainer {
     
-    public TelePadBlock(Material mat) {
+    public BlockTelepad(Material mat) {
         super(mat);
         
         float f = 0.5F;
@@ -27,7 +28,7 @@ public class TelePadBlock extends BlockContainer {
     @Override
     public TileEntity createNewTileEntity (World world, int meta) {
         
-        return new TelePadTileEntity();
+        return new TileEntityTelepad();
     }
     
     @Override
@@ -75,7 +76,7 @@ public class TelePadBlock extends BlockContainer {
             return;
         }
         
-        TelePadTileEntity te = new TelePadTileEntity();
+        TileEntityTelepad te = new TileEntityTelepad();
         
         if (par5EntityLivingBase instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) par5EntityLivingBase;

@@ -1,18 +1,19 @@
-package net.subaraki.telepads.blocks;
+package net.subaraki.telepads.client.renderer;
 
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-import net.subaraki.telepads.blocks.model.TelePadModel;
+import net.subaraki.telepads.client.model.ModelTelepad;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
-public class RenderItemBlock implements IItemRenderer {
-    private TelePadModel pad;
+public class RenderItemTelepad implements IItemRenderer {
+    private ModelTelepad pad;
     
     private static ResourceLocation loc = new ResourceLocation("telepads:textures/telepad.png");
     
-    public RenderItemBlock() {
-        pad = new TelePadModel();
+    public RenderItemTelepad() {
+        pad = new ModelTelepad();
     }
     
     @Override
@@ -24,7 +25,7 @@ public class RenderItemBlock implements IItemRenderer {
     @Override
     public void renderItem (ItemRenderType type, ItemStack item, Object... data) {
         
-        TileEntityRendererDispatcher.instance.renderTileEntityAt(new TelePadTileEntity(), 0.0D, 0.0D, 0.0D, 0.0F);
+        TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityTelepad(), 0.0D, 0.0D, 0.0D, 0.0F);
         
     }
     

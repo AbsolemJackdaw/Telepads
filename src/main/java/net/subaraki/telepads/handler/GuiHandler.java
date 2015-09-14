@@ -3,10 +3,10 @@ package net.subaraki.telepads.handler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.subaraki.telepads.blocks.ContainerTelePad;
-import net.subaraki.telepads.blocks.TelePadTileEntity;
 import net.subaraki.telepads.client.gui.GuiNameTelepad;
 import net.subaraki.telepads.client.gui.GuiTeleport;
+import net.subaraki.telepads.inventory.ContainerTelePad;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
 public class GuiHandler implements IGuiHandler {
     
@@ -24,7 +24,7 @@ public class GuiHandler implements IGuiHandler {
     @Override
     public Object getClientGuiElement (int ID, EntityPlayer player, World world, int x, int y, int z) {
         
-        TelePadTileEntity te = (TelePadTileEntity) world.getTileEntity(x, y, z);
+        TileEntityTelepad te = (TileEntityTelepad) world.getTileEntity(x, y, z);
         
         switch (ID) {
             case 0:

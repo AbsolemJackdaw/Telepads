@@ -1,10 +1,10 @@
-package net.subaraki.telepads.blocks.model;
+package net.subaraki.telepads.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class TelePadModel extends ModelBase {
+public class ModelTelepad extends ModelBase {
     // fields
     ModelRenderer Shape1;
     ModelRenderer Shape2;
@@ -17,7 +17,7 @@ public class TelePadModel extends ModelBase {
     ModelRenderer Shape9;
     ModelRenderer Shape10;
     
-    public TelePadModel() {
+    public ModelTelepad() {
         textureWidth = 64;
         textureHeight = 32;
         
