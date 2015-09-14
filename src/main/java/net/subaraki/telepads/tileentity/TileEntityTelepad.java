@@ -2,6 +2,7 @@ package net.subaraki.telepads.tileentity;
 
 import java.util.List;
 
+import net.darkhax.bookshelf.util.EnumVanillaColors;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -9,6 +10,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.inventory.ContainerTelePad;
 import net.subaraki.telepads.util.Constants;
@@ -19,6 +21,7 @@ public class TileEntityTelepad extends TileEntity {
     public int dimension;
     public String ownerName = "";
     public boolean isStandingOnPlatform = false;
+    public int color = EnumVanillaColors.WHITE.colorObj.getRGB();
     
     public static final int def_count = 3 * 20;
     public int counter = def_count;
@@ -70,14 +73,15 @@ public class TileEntityTelepad extends TileEntity {
     }
     
     @Override
-    public void readFromNBT (NBTTagCompound par1nbtTagCompound) {
+    public void readFromNBT (NBTTagCompound tag) {
         
-        telepadname = (par1nbtTagCompound.getString("name"));
-        ownerName = par1nbtTagCompound.getString("owner");
-        dimension = par1nbtTagCompound.getInteger("dimension");
-        isUpgraded = par1nbtTagCompound.getBoolean("upgrade");
+        telepadname = (tag.getString("name"));
+        ownerName = tag.getString("owner");
+        dimension = tag.getInteger("dimension");
+        isUpgraded = tag.getBoolean("upgrade");
+        this.color = tag.getInteger("color");
         
-        super.readFromNBT(par1nbtTagCompound);
+        super.readFromNBT(tag);
     }
     
     public void resetTE () {
@@ -122,14 +126,15 @@ public class TileEntityTelepad extends TileEntity {
     }
     
     @Override
-    public void writeToNBT (NBTTagCompound par1nbtTagCompound) {
+    public void writeToNBT (NBTTagCompound tag) {
         
-        par1nbtTagCompound.setString("name", telepadname);
-        par1nbtTagCompound.setString("owner", ownerName);
-        par1nbtTagCompound.setInteger("dimension", dimension);
-        par1nbtTagCompound.setBoolean("upgrade", isUpgraded);
+        tag.setString("name", telepadname);
+        tag.setString("owner", ownerName);
+        tag.setInteger("dimension", dimension);
+        tag.setBoolean("upgrade", isUpgraded);
+        tag.setInteger("color", this.color);
         
-        super.writeToNBT(par1nbtTagCompound);
+        super.writeToNBT(tag);
     }
     
     /** gets called server side only */

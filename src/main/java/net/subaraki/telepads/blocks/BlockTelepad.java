@@ -1,6 +1,7 @@
 package net.subaraki.telepads.blocks;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -66,6 +67,22 @@ public class BlockTelepad extends BlockContainer {
     
     @Override
     public boolean isOpaqueCube () {
+        
+        return false;
+    }
+    
+    @Override
+    public boolean onBlockActivated (World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        
+        TileEntityTelepad telepad = (TileEntityTelepad) world.getTileEntity(x, y, z);
+        int itemColor = Utilities.getItemColor(player.getHeldItem());
+        
+        if (itemColor != -1) {
+            
+            telepad.color = itemColor;
+            telepad.markDirty();
+            player.getHeldItem().stackSize--;
+        }
         
         return false;
     }

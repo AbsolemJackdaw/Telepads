@@ -1,5 +1,6 @@
 package net.subaraki.telepads.client.renderer;
 
+import java.awt.Color;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
@@ -149,6 +150,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
             te = (TileEntityTelepad) tileentity;
         }
         
+        Color color = new Color(te.color);
+        
         GL11.glPushMatrix();
         renderEndPortalSurface(d, d1, d2, f);
         GL11.glPopMatrix();
@@ -157,21 +160,15 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
         GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F, (float) d2 + 0.5F);
         GL11.glScalef(1.0F, -1F, -1F);
         
-        if (te != null) {
-            if (te.isUpgraded())
-                bindTexture(loc_upgrade);
-            else
-                bindTexture(loc);
-                
-        }
-        else {
-            bindTexture(loc);
-        }
+        bindTexture((te != null && te.isUpgraded()) ? loc_upgrade : loc);
+        GL11.glColor3f((float) (color.getRed() / 255.0f), (float) (color.getGreen() / 255.0f), (float) (color.getBlue() / 255.0f));
         
         float f2 = 1.5f;
         GL11.glScalef(f2, f2, f2);
         padModel.render(0.0625f);
         
         GL11.glPopMatrix();
+        
+        System.out.println("The color is: " + color.toString());
     }
 }
