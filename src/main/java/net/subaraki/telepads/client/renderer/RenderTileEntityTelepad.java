@@ -19,15 +19,18 @@ import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
 public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
     
-    ModelTelepad padModel = new ModelTelepad();
-    private static ResourceLocation loc = new ResourceLocation("telepads:textures/entity/tile/telepad.png");
+    private static String resourcePath = "telepads:textures/entity/tile/";
+    private static ResourceLocation base = new ResourceLocation(resourcePath + "telepad_base.png");
+    private static ResourceLocation frame = new ResourceLocation(resourcePath + "telepad_frame.png");
     private static ResourceLocation loc_upgrade = new ResourceLocation("telepads:textures/entity/tile/telepad_upgraded.png");
     
     // copied from RenderEndPortal.java
     private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
     private static final ResourceLocation endPortalTextures = new ResourceLocation("textures/entity/end_portal.png");
-    private static final Random field_110644_e = new Random(31100L);
+    private static final Random teleporterRandom = new Random(31100L);
+    
     FloatBuffer field_76908_a = GLAllocation.createDirectFloatBuffer(16);
+    ModelTelepad padModel = new ModelTelepad();
     
     private FloatBuffer func_76907_a (float par1, float par2, float par3, float par4) {
         
@@ -39,13 +42,11 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
     
     public void renderEndPortalSurface (double par2, double par4, double par6, float par8) {
         
-        float f1 = (float) TileEntityRendererDispatcher.staticPlayerX; // tile
-                                                                       // entity
-                                                                       // renderer
+        float f1 = (float) TileEntityRendererDispatcher.staticPlayerX;
         float f2 = (float) TileEntityRendererDispatcher.staticPlayerY;
         float f3 = (float) TileEntityRendererDispatcher.staticPlayerZ;
         GL11.glDisable(GL11.GL_LIGHTING);
-        field_110644_e.setSeed(31100L);
+        teleporterRandom.setSeed(31100L);
         float f4 = 0.75F / 5;// offset y
         
         par2 += 0.05d; // offset x/z
@@ -110,9 +111,9 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
             GL11.glTranslatef((ActiveRenderInfo.objectX * f5) / f9, (ActiveRenderInfo.objectZ * f5) / f9, -f2);
             Tessellator tessellator = Tessellator.instance;
             tessellator.startDrawingQuads();
-            f11 = (field_110644_e.nextFloat() * 0.5F) + 0.1F;
-            float f12 = (field_110644_e.nextFloat() * 0.5F) + 0.4F;
-            float f13 = (field_110644_e.nextFloat() * 0.5F) + 0.5F;
+            f11 = (teleporterRandom.nextFloat() * 0.5F) + 0.1F;
+            float f12 = (teleporterRandom.nextFloat() * 0.5F) + 0.4F;
+            float f13 = (teleporterRandom.nextFloat() * 0.5F) + 0.5F;
             
             if (i == 0) {
                 f13 = 1.0F;
@@ -150,7 +151,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
             te = (TileEntityTelepad) tileentity;
         }
         
-        Color color = new Color(te.color);
+        Color colorBase = new Color(te.colorBase);
+        Color colorFrame = new Color(te.colorFrame);
         
         GL11.glPushMatrix();
         renderEndPortalSurface(d, d1, d2, f);
@@ -160,15 +162,23 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
         GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F, (float) d2 + 0.5F);
         GL11.glScalef(1.0F, -1F, -1F);
         
-        bindTexture((te != null && te.isUpgraded()) ? loc_upgrade : loc);
-        GL11.glColor3f((float) (color.getRed() / 255.0f), (float) (color.getGreen() / 255.0f), (float) (color.getBlue() / 255.0f));
-        
         float f2 = 1.5f;
         GL11.glScalef(f2, f2, f2);
-        padModel.render(0.0625f);
+        
+        GL11.glPushMatrix();
+        bindTexture(base);
+        GL11.glColor3f((float) (colorBase.getRed() / 255.0f), (float) (colorBase.getGreen() / 255.0f), (float) (colorBase.getBlue() / 255.0f));
+        padModel.renderArrows(0.0625f);
+        GL11.glPopMatrix();
+        
+        GL11.glPushMatrix();
+        bindTexture(frame);
+        GL11.glColor3f((float) (colorFrame.getRed() / 255.0f), (float) (colorFrame.getGreen() / 255.0f), (float) (colorFrame.getBlue() / 255.0f));
+        padModel.renderFrameAndLegs(0.0625f);
+        GL11.glPopMatrix();
         
         GL11.glPopMatrix();
         
-        System.out.println("The color is: " + color.toString());
+        System.out.println("The color is: " + colorBase.toString());
     }
 }
