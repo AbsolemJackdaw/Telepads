@@ -1,10 +1,15 @@
 package net.subaraki.telepads.handler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.subaraki.telepads.blocks.BlockTelepad;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
 public class PlayerHandler {
     
@@ -26,5 +31,29 @@ public class PlayerHandler {
         
         if (event.entity instanceof EntityPlayer && !event.entity.worldObj.isRemote && PlayerLocations.hasProperties((EntityPlayer) event.entity))
             PlayerLocations.getProperties((EntityPlayer) event.entity).sync();
+    }
+    
+    @SubscribeEvent
+    
+    public void onPlayerInteractiong (PlayerInteractEvent event) {
+        
+        if (event.action.equals(Action.RIGHT_CLICK_BLOCK) && event.world.getBlock(event.x, event.y, event.z) instanceof BlockTelepad) {
+            
+            TileEntityTelepad telepad = (TileEntityTelepad) event.world.getTileEntity(event.x, event.y, event.z);
+            int itemColor = Utilities.getItemColor(event.entityPlayer.getHeldItem());
+            
+            if (itemColor != -1337) {
+                
+                if (event.entityPlayer.isSneaking())
+                    telepad.colorBase = itemColor;
+                    
+                else
+                    telepad.colorFrame = itemColor;
+                    
+                telepad.markDirty();
+                event.entityPlayer.getHeldItem().stackSize--;
+                event.entityPlayer.swingItem();
+            }
+        }
     }
 }
