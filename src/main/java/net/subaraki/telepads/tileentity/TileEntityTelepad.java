@@ -1,8 +1,8 @@
 package net.subaraki.telepads.tileentity;
 
+import java.awt.Color;
 import java.util.List;
 
-import net.darkhax.bookshelf.util.EnumVanillaColors;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -10,7 +10,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumChatFormatting;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.inventory.ContainerTelePad;
 import net.subaraki.telepads.util.Constants;
@@ -21,7 +20,8 @@ public class TileEntityTelepad extends TileEntity {
     public int dimension;
     public String ownerName = "";
     public boolean isStandingOnPlatform = false;
-    public int color = EnumVanillaColors.WHITE.colorObj.getRGB();
+    public int colorFrame = new Color(26, 246, 172).getRGB();
+    public int colorBase = new Color(243, 89, 233).getRGB();
     
     public static final int def_count = 3 * 20;
     public int counter = def_count;
@@ -79,7 +79,8 @@ public class TileEntityTelepad extends TileEntity {
         ownerName = tag.getString("owner");
         dimension = tag.getInteger("dimension");
         isUpgraded = tag.getBoolean("upgrade");
-        this.color = tag.getInteger("color");
+        this.colorBase = tag.getInteger("colorBase");
+        this.colorFrame = tag.getInteger("colorFrame");
         
         super.readFromNBT(tag);
     }
@@ -132,7 +133,8 @@ public class TileEntityTelepad extends TileEntity {
         tag.setString("owner", ownerName);
         tag.setInteger("dimension", dimension);
         tag.setBoolean("upgrade", isUpgraded);
-        tag.setInteger("color", this.color);
+        tag.setInteger("colorBase", this.colorBase);
+        tag.setInteger("colorFrame", this.colorFrame);
         
         super.writeToNBT(tag);
     }
