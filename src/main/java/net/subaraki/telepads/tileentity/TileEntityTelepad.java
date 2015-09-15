@@ -16,45 +16,25 @@ import net.subaraki.telepads.util.Constants;
 
 public class TileEntityTelepad extends TileEntity {
     
+    //TODO all of these should be private
     public String telepadname = "TelePad";
     public int dimension;
     public String ownerName = "";
-    public boolean isStandingOnPlatform = false;
     public int colorFrame = new Color(26, 246, 172).getRGB();
     public int colorBase = new Color(243, 89, 233).getRGB();
     
-    public static final int def_count = 3 * 20;
-    public int counter = def_count;
-    
-    /**
-     * checks if the teleport gui is already open to prevent it from openeing every tick
-     */
-    private boolean guiOpen;
-    
+    //TODO this should be made less generic, as there are possibly many upgrades.
     private boolean isUpgraded = false;
+    
+    private static int MAX_TIME = 3 * 20;
+    public int counter = MAX_TIME;
+    private boolean guiOpen;
+    public boolean isStandingOnPlatform = false;
     
     @Override
     public boolean canUpdate () {
         
         return true;
-    }
-    
-    public void activateUpgrade () {
-        
-        isUpgraded = true;
-    }
-    
-    public boolean isUpgraded () {
-        
-        return isUpgraded;
-    }
-    
-    /** Sets isStandingOnPlatform, and reset's TE if false */
-    public void changePlatformState (boolean b) {
-        
-        isStandingOnPlatform = b;
-        if (!b)
-            resetTE();
     }
     
     @Override
@@ -69,7 +49,7 @@ public class TileEntityTelepad extends TileEntity {
     @Override
     public void onDataPacket (NetworkManager net, S35PacketUpdateTileEntity pkt) {
         
-        this.readFromNBT(pkt.func_148857_g()); // packet.data
+        this.readFromNBT(pkt.func_148857_g());
     }
     
     @Override
@@ -85,47 +65,6 @@ public class TileEntityTelepad extends TileEntity {
         super.readFromNBT(tag);
     }
     
-    public void resetTE () {
-        
-        counter = def_count;
-        isStandingOnPlatform = false;
-        markDirty();
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        guiOpen = false;
-    }
-    
-    @Override
-    public void updateEntity () {
-        
-        Telepads.proxy.createTelepadParticleEffect(xCoord, yCoord, zCoord, isStandingOnPlatform);
-        
-        if (!worldObj.isRemote) {
-            AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-            
-            List<EntityPlayer> playerInAabb = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
-            
-            if (isStandingOnPlatform) {
-                
-                if (playerInAabb.isEmpty()) {
-                    changePlatformState(false);
-                    return;
-                }
-                
-                if (counter >= 0)
-                    counter--;
-                    
-                updatePlatformLogic(playerInAabb);
-                
-            }
-            else {
-                if (!playerInAabb.isEmpty() && !isStandingOnPlatform) {
-                    changePlatformState(true);
-                    
-                }
-            }
-        }
-    }
-    
     @Override
     public void writeToNBT (NBTTagCompound tag) {
         
@@ -139,26 +78,82 @@ public class TileEntityTelepad extends TileEntity {
         super.writeToNBT(tag);
     }
     
-    /** gets called server side only */
-    private void updatePlatformLogic (List<EntityPlayer> playerInAabb) {
+    @Override
+    public void updateEntity () {
         
-        // player should not be null, as list given is passed trough an empty
-        // check first
-        for (EntityPlayer p : playerInAabb) {
+        Telepads.proxy.createTelepadParticleEffect(xCoord, yCoord, zCoord, isStandingOnPlatform);
+        
+        if (!worldObj.isRemote) {
             
-            if ((counter < 0) && !guiOpen && !(p.openContainer instanceof ContainerTelePad)) {
-                markDirty();
+            AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+            List<EntityPlayer> playersInRange = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+            
+            if (isStandingOnPlatform) {
+                
+                if (playersInRange.isEmpty()) {
+                    
+                    changePlatformState(false);
+                    return;
+                }
+                
+                if (counter >= 0)
+                    counter--;
+                    
+                activateTelepadGui(playersInRange);
+                
+            }
+            
+            else if (!playersInRange.isEmpty() && !isStandingOnPlatform)
+                changePlatformState(true);
+        }
+    }
+    
+    /**
+     * Resets the count down of the pad, sets that there is no player on the pad, and no player
+     * using the gui. And causes a block update.
+     */
+    public void resetTE () {
+        
+        counter = MAX_TIME;
+        isStandingOnPlatform = false;
+        markDirty();
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        guiOpen = false;
+    }
+    
+    /**
+     * Activates the Telepad GUI. This will trigger the gui for the first player detected on
+     * the pad, other players will be locked out, until that player leaves the pad.
+     * 
+     * @param playerInRange: A list of all players atempting to travel through the telepad.
+     */
+    private void activateTelepadGui (List<EntityPlayer> playerInRange) {
+        
+        for (EntityPlayer player : playerInRange) {
+            
+            if ((counter < 0) && !guiOpen && !(player.openContainer instanceof ContainerTelePad)) {
+                
                 guiOpen = true;
-                p.openGui(Telepads.instance, Constants.GUI_ID_TELEPORT, worldObj, xCoord, yCoord, zCoord);
+                player.openGui(Telepads.instance, Constants.GUI_ID_TELEPORT, worldObj, xCoord, yCoord, zCoord);
+                markDirty();
+                break;
             }
         }
     }
     
     /**
-     * called by ClientPacket to synch boolean to the client for particle updates-use
+     * Updates the standing state of the platform. This is used to set whether or not a player
+     * is currently standing on the pad. If the state is set to false, this will reset the
+     * Telepad timer and cause a block update.
+     * 
+     * @param state: The new state for the pad. false means nobody is standing on it, true
+     *            means that there is.
      */
-    public void setStandingOnPlatform (boolean b) {
+    public void changePlatformState (boolean state) {
         
-        isStandingOnPlatform = b;
+        isStandingOnPlatform = state;
+        
+        if (!state)
+            resetTE();
     }
 }
