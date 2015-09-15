@@ -1,7 +1,6 @@
 package net.subaraki.telepads.blocks;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -72,30 +71,13 @@ public class BlockTelepad extends BlockContainer {
     }
     
     @Override
-    public boolean onBlockActivated (World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        
-        TileEntityTelepad telepad = (TileEntityTelepad) world.getTileEntity(x, y, z);
-        int itemColor = Utilities.getItemColor(player.getHeldItem());
-        
-        if (itemColor != -1) {
-            
-            telepad.color = itemColor;
-            telepad.markDirty();
-            player.getHeldItem().stackSize--;
-        }
-        
-        return false;
-    }
-    
-    @Override
     public void onBlockPlacedBy (World par1World, int x, int y, int z, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
         
         if (par1World.provider.dimensionId == 1) {
             par1World.newExplosion((Entity) null, x + 0.5F, y + 0.5F, z + 0.5F, 5.0F, true, true);
             par1World.setBlockToAir(x, y, z);
             par1World.removeTileEntity(x, y, z);
-            if (!par1World.isRemote) // this should not crash. only player can
-                                     // put this down
+            if (!par1World.isRemote)
                 ((EntityPlayer) par5EntityLivingBase).addChatMessage(new ChatComponentText("The Magic in the End was too strong for the TelePad..."));
                 
             return;
