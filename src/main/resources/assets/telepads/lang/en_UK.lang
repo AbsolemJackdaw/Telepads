@@ -1,11 +1,10 @@
 #item
 tile.telepad.name=TelePad
 
-
-
 #block
 item.register.name=TelePad Register
 item.Crowbar.name=Archimede's Lever
+
 
 #gui text
 enter.to.confirm=Press Enter to confirm

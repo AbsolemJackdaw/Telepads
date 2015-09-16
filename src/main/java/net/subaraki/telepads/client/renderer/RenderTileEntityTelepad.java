@@ -23,8 +23,13 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 	private static ResourceLocation base = new ResourceLocation(resourcePath + "telepad_base.png");
 	private static ResourceLocation pads = new ResourceLocation(resourcePath + "telepad_pads.png");
 	private static ResourceLocation frame = new ResourceLocation(resourcePath + "telepad_frame.png");
-	private static ResourceLocation frame_interDimension = new ResourceLocation(resourcePath + "telepad_frame_interDimension.png");
+	private static ResourceLocation frame_empty = new ResourceLocation(resourcePath + "telepad_frame_interDimension.png");
+	private static ResourceLocation frame_upgrade = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade.png");
+	private static ResourceLocation frame_upgrade_2 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_2.png");
+	private static ResourceLocation frame_upgrade_3 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_3.png");
+	private static ResourceLocation frame_upgrade_4 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_4.png");
 
+	private static int animation_counter;
 
 	// copied from RenderEndPortal.java
 	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
@@ -102,7 +107,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 			// GL11.glTranslatef(0.0F, (float)(Minecraft.getSystemTime() %
-					// 700000L) / 700000.0F, 0.0F);
+			// 700000L) / 700000.0F, 0.0F);
 			GL11.glRotatef((Minecraft.getSystemTime() % 7000L) / 7000.0F, 1, 1, 0);
 			GL11.glScalef(f6, f6, f6);// scales stars
 			GL11.glTranslatef(0.5F, 0.5f, 0.0F);
@@ -147,6 +152,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt (TileEntity tileentity, double d, double d1, double d2, float f) {
 
+		animation_counter++;
+
 		TileEntityTelepad te = null;
 
 		if (tileentity instanceof TileEntityTelepad) {
@@ -180,16 +187,39 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
-		
-		if(te.hasDimensionUpgrade())
-			bindTexture(frame_interDimension);
-		
-		else
-			bindTexture(frame);
-		
-		GL11.glColor3f(1f,0f,0.1f);
+
+		//				if(te.hasDimensionUpgrade())
+		//					bindTexture(frame_empty);
+		//				
+		//				else
+		bindTexture(frame);
+
+		GL11.glColor3f(1f,1f,1f);
 		padModel.renderFrame(0.0625f);
 		GL11.glPopMatrix();
+
+		if(te.hasDimensionUpgrade()){
+			GL11.glPushMatrix();
+			
+			if(animation_counter < 100)
+				bindTexture(frame_upgrade);
+			else if(animation_counter < 300)
+				bindTexture(frame_upgrade_2);
+			else if(animation_counter < 500)
+				bindTexture(frame_upgrade_3);
+			else if(animation_counter < 700 )
+				bindTexture(frame_upgrade_4);
+			else
+				bindTexture(frame_upgrade_4);
+			
+			if (animation_counter == 900)
+				animation_counter = 0;
+			
+			GL11.glColor3f(1,1,1);
+			padModel.renderUpgrade(0.0625f);
+			GL11.glPopMatrix();
+		}
+
 
 		GL11.glPopMatrix();
 

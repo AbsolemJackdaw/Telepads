@@ -16,10 +16,25 @@ public class ModelTelepad extends ModelBase {
     ModelRenderer legNorthRight;
     ModelRenderer legNorthLeft;
     
+    ModelRenderer antenna;
+    ModelRenderer antennaPad;
+    
     public ModelTelepad() {
         
         textureWidth = 64;
         textureHeight = 32;
+        
+        antenna = new ModelRenderer(this, 0, 27);
+        antenna.addBox(2f, -4f, -0.5f, 1, 4, 1);
+        antenna.setRotationPoint(-5F, 21F, 4F);
+        antenna.setTextureSize(64, 32);
+        setRotation(antenna, 0, -0.80f, 0);
+        
+        antennaPad = new ModelRenderer(this, 4, 28);
+        antennaPad.addBox(-3f, 0f, -2f, 6, 1, 3);
+        antennaPad.setRotationPoint(-5F, 21F, 4F);
+        antennaPad.setTextureSize(64, 32);
+        setRotation(antennaPad, 0, -0.80f, 0);
         
         frame = new ModelRenderer(this, 0, 0);
         frame.addBox(-5F, 0F, -5F, 10, 1, 10);
@@ -102,6 +117,12 @@ public class ModelTelepad extends ModelBase {
         legSouthLeft.render(f5);
         legNorthRight.render(f5);
         legNorthLeft.render(f5);
+    }
+    
+    public void renderUpgrade(float f5){
+    	
+    	antenna.render(f5);
+    	antennaPad.render(f5);
     }
     
     public void renderFrame(float f5){
