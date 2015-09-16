@@ -92,9 +92,8 @@ public class ModelTelepad extends ModelBase {
         setRotation(legNorthLeft, -0.4F, -0.05F, -0.2F);
     }
     
-    public void renderFrameAndLegs (float f5) {
+    public void renderLegs (float f5) {
         
-        frame.render(f5);
         legWestRight.render(f5);
         legWestLeft.render(f5);
         legEastRight.render(f5);
@@ -103,6 +102,11 @@ public class ModelTelepad extends ModelBase {
         legSouthLeft.render(f5);
         legNorthRight.render(f5);
         legNorthLeft.render(f5);
+    }
+    
+    public void renderFrame(float f5){
+    	
+        frame.render(f5);
     }
     
     public void renderArrows (float f5) {

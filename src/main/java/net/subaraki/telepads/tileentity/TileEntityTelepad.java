@@ -201,4 +201,7 @@ public class TileEntityTelepad extends TileEntity {
     	return hasDimensionUpgrade;
     }
     
+    public void addDimensionUpgrade(){
+    	hasDimensionUpgrade = true;
+    }
 }

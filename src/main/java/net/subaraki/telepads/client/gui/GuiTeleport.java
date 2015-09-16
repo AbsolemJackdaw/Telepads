@@ -46,6 +46,7 @@ public class GuiTeleport extends GuiScreen {
 
 		this.te = te;
 		this.player = player;
+		dimension_counter = player.worldObj.provider.dimensionId;
 	}
 
 	@Override
@@ -112,25 +113,25 @@ public class GuiTeleport extends GuiScreen {
 
 		List<TelepadEntry> telepads= PlayerLocations.getProperties(player).getEntries();
 
-		//		if(!te.hasDimensionUpgrade()){
-		//			fontRendererObj.drawSplitString(te.getWorldObj().provider.getDimensionName(), 48+1, 11+1, 180, 0x000000);
-		//			fontRendererObj.drawSplitString(te.getWorldObj().provider.getDimensionName(), 48, 11, 180, 0xffffff);
-		//		}else{
-		WorldProvider world = null;
-
-		try{
-			world = te.getWorldObj().provider.getProviderForDimension(dimension_counter);
-		}catch (Exception e){
-		}
-
-		if(world != null){
-			fontRendererObj.drawSplitString(world.getDimensionName(), 48 + 1 ,11 + 1, 180, 0x000000);
-			fontRendererObj.drawSplitString(world.getDimensionName(), 48 , 11, 180, 0xffffff);
+		if(!te.hasDimensionUpgrade()){
+			fontRendererObj.drawSplitString(te.getWorldObj().provider.getDimensionName(), 48+1, 11+1, 180, 0x000000);
+			fontRendererObj.drawSplitString(te.getWorldObj().provider.getDimensionName(), 48, 11, 180, 0xffffff);
 		}else{
-			fontRendererObj.drawSplitString("No%Dim- Error : Hrtz " + dimension_counter, 48 + 1, 11 + 1, 180, 0x000000);
-			fontRendererObj.drawSplitString("No%Dim- Error : Hrtz " + dimension_counter, 48, 11, 180, 0xffffff);
+			WorldProvider world = null;
+
+			try{
+				world = te.getWorldObj().provider.getProviderForDimension(dimension_counter);
+			}catch (Exception e){
+			}
+
+			if(world != null){
+				fontRendererObj.drawSplitString(world.getDimensionName(), 48 + 1 ,11 + 1, 180, 0x000000);
+				fontRendererObj.drawSplitString(world.getDimensionName(), 48 , 11, 180, 0xffffff);
+			}else{
+				fontRendererObj.drawSplitString("No%Dim- Error : Hz " + dimension_counter, 48 + 1, 11 + 1, 180, 0x000000);
+				fontRendererObj.drawSplitString("No%Dim- Error : Hz " + dimension_counter, 48, 11, 180, 0xffffff);
+			}
 		}
-		//		}
 	}
 
 	private void reDrawTeleportButtons(){
@@ -157,7 +158,7 @@ public class GuiTeleport extends GuiScreen {
 				this.buttonList.add(new GuiButton(/* id */i, /* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10) : 0), /* y */(130 + ((i * 25))) - (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100 : 100), /* size */100, 20, name));
 		}
 
-		if(!te.hasDimensionUpgrade()){
+		if(te.hasDimensionUpgrade()){
 			this.buttonList.add(new GuiButton(AREA_LEFT, 25, 5, 20, 20, "<"));
 			this.buttonList.add(new GuiButton(AREA_RIGHT, 175, 5, 20, 20, ">"));
 		}
