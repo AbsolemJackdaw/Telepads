@@ -2,10 +2,12 @@ package net.subaraki.telepads.handler;
 
 import java.awt.Color;
 
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -54,19 +56,36 @@ public class PlayerHandler {
 					telepad.colorFrame = itemColor;
 
 				telepad.markDirty();
+
 				if(!event.entityPlayer.capabilities.isCreativeMode)
 					event.entityPlayer.getHeldItem().stackSize--;
+
 				event.entityPlayer.swingItem();
 			}
-
-			if(event.entityPlayer.getHeldItem().equals(Items.water_bucket)){
 			
+			if(event.entityPlayer.getHeldItem().getItem().equals(Items.water_bucket)){
+
 				if (event.entityPlayer.isSneaking())
-					telepad.colorBase = new Color(26, 246, 172).getRGB();
-				
+					telepad.colorBase =new Color(243, 89, 233).getRGB() ;
+
 				else
-					telepad.colorFrame = new Color(243, 89, 233).getRGB();
+					telepad.colorFrame = new Color(26, 246, 172).getRGB();
+
+				telepad.markDirty();
+
+				if(!event.entityPlayer.capabilities.isCreativeMode)
+					event.entityPlayer.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, 1));
+
+				event.entityPlayer.swingItem();
+				
+				event.useItem = Result.DENY;
+				event.setCanceled(true);
 			}
 		}
 	}
+	
+	
+//	public void bucket (net.minecraftforge.event.entity.player.PlayerUseItemEvent event){
+//		event.item.getItem().equals(Items.water_bucket)
+//	}
 }
