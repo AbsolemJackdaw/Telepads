@@ -58,13 +58,13 @@ public class GuiTeleport extends GuiScreen {
 			
 			else if (id == AREA_LEFT) {
 				dimension_counter--;
-				initGui();
+				drawButtonsOnScreen();
 				Telepads.printDebugMessage("" + dimension_counter);
 			}
 			
 			else if (id == AREA_RIGHT) {
 				dimension_counter++;
-				initGui();
+				drawButtonsOnScreen();
 				Telepads.printDebugMessage("" + dimension_counter);
 			}
 			
@@ -133,11 +133,15 @@ public class GuiTeleport extends GuiScreen {
 		}
 	}
 
-	@Override
-	public void initGui () {
-
+	public void drawButtonsOnScreen(){
+		
 		this.buttonList.clear();
 
+		if(te.hasDimensionUpgrade()){
+			this.buttonList.add(new GuiButton(AREA_LEFT, 25, 5, 20, 20, "<"));
+			this.buttonList.add(new GuiButton(AREA_RIGHT, 175, 5, 20, 20, ">"));
+		}
+		
 		this.buttonList.add(new GuiButton(EXIT_BUTTON, 5, 5, 20, 20, "X"));
 
 		List<TelepadEntry> telepads= PlayerLocations.getProperties(player).getEntries();
@@ -153,7 +157,13 @@ public class GuiTeleport extends GuiScreen {
 			if(telepads.get(i).dimensionID == dimension_counter)
 				this.buttonList.add(new GuiButton(/* id */i, /* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10) : 0), /* y */(130 + ((i * 25))) - (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100 : 100), /* size */100, 20, name));
 		}
+	}
+	
+	@Override
+	public void initGui () {
 
+		drawButtonsOnScreen();
+		
 		if(te.hasDimensionUpgrade()){
 			this.buttonList.add(new GuiButton(AREA_LEFT, 25, 5, 20, 20, "<"));
 			this.buttonList.add(new GuiButton(AREA_RIGHT, 175, 5, 20, 20, ">"));
