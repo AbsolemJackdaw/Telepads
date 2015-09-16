@@ -21,8 +21,6 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiTeleport extends GuiScreen {
 
-	// private int prevSetting;
-
 	public EntityPlayer player;
 	public TileEntityTelepad te;
 
@@ -55,20 +53,21 @@ public class GuiTeleport extends GuiScreen {
 		if (player != null) {
 			int id = button.id;
 
-			if (id == EXIT_BUTTON) {
+			if (id == EXIT_BUTTON)
 				this.mc.thePlayer.closeScreen(); // closes the screen
-
-			}
+			
 			else if (id == AREA_LEFT) {
 				dimension_counter--;
 				initGui();
 				Telepads.printDebugMessage("" + dimension_counter);
 			}
+			
 			else if (id == AREA_RIGHT) {
 				dimension_counter++;
 				initGui();
 				Telepads.printDebugMessage("" + dimension_counter);
 			}
+			
 			else {
 				sendPacket(id);
 				this.mc.thePlayer.closeScreen();
@@ -132,9 +131,6 @@ public class GuiTeleport extends GuiScreen {
 				fontRendererObj.drawSplitString("No%Dim- Error : Hz " + dimension_counter, 48, 11, 180, 0xffffff);
 			}
 		}
-	}
-
-	private void reDrawTeleportButtons(){
 	}
 
 	@Override
