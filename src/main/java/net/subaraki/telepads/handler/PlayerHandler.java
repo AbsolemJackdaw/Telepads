@@ -83,9 +83,4 @@ public class PlayerHandler {
 			}
 		}
 	}
-	
-	
-//	public void bucket (net.minecraftforge.event.entity.player.PlayerUseItemEvent event){
-//		event.item.getItem().equals(Items.water_bucket)
-//	}
 }
