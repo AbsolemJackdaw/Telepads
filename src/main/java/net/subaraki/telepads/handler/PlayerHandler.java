@@ -50,10 +50,10 @@ public class PlayerHandler {
 			if (itemColor != -1337) {
 
 				if (event.entityPlayer.isSneaking())
-					telepad.colorBase = itemColor;
+					telepad.setBaseColor(itemColor);
 
 				else
-					telepad.colorFrame = itemColor;
+					telepad.setFrameColor(itemColor);
 
 				telepad.markDirty();
 
@@ -66,10 +66,10 @@ public class PlayerHandler {
 			if(event.entityPlayer.getHeldItem().getItem().equals(Items.water_bucket)){
 
 				if (event.entityPlayer.isSneaking())
-					telepad.colorBase =new Color(243, 89, 233).getRGB() ;
+					telepad.setBaseColor(new Color(243, 89, 233).getRGB());
 
 				else
-					telepad.colorFrame = new Color(26, 246, 172).getRGB();
+					telepad.setFrameColor(new Color(26, 246, 172).getRGB());
 
 				telepad.markDirty();
 

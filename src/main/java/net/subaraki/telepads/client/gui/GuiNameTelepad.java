@@ -69,7 +69,7 @@ public class GuiNameTelepad extends GuiScreen {
         padNameField = new GuiTextField(fontRendererObj, posX - (150 / 2), posY - 50, 150, 20);
         padNameField.setFocused(true);
         
-        String padName = te.telepadname.equals("TelePad") ? te.getWorldObj().getBiomeGenForCoords(te.xCoord, te.zCoord).biomeName : te.telepadname;
+        String padName = te.getTelePadName().equals("TelePad") ? te.getWorldObj().getBiomeGenForCoords(te.xCoord, te.zCoord).biomeName : te.getTelePadName();
         
         if (padNameField != null) {
             padNameField.setText(padName);

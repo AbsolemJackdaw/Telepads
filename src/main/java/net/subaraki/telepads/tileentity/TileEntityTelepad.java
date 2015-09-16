@@ -16,21 +16,20 @@ import net.subaraki.telepads.util.Constants;
 
 public class TileEntityTelepad extends TileEntity {
     
-    //TODO all of these should be private
-    public String telepadname = "TelePad";
-    public int dimension;
-    public String ownerName = "";
-    public int colorFrame = new Color(26, 246, 172).getRGB();
-    public int colorBase = new Color(243, 89, 233).getRGB();
+    private String telepadname = "TelePad";
+    private int dimension;
+    private String padOwner = "";
+    private int colorFrame = new Color(26, 246, 172).getRGB();
+    private int colorBase = new Color(243, 89, 233).getRGB();
     
-    //TODO this should be made less generic, as there are possibly many upgrades.
-    private boolean isUpgraded = false;
+    private boolean hasDimensionUpgrade = false;
     
     private static int MAX_TIME = 3 * 20;
     public int counter = MAX_TIME;
     private boolean guiOpen;
     public boolean isStandingOnPlatform = false;
     
+   
     @Override
     public boolean canUpdate () {
         
@@ -56,9 +55,9 @@ public class TileEntityTelepad extends TileEntity {
     public void readFromNBT (NBTTagCompound tag) {
         
         telepadname = (tag.getString("name"));
-        ownerName = tag.getString("owner");
+        padOwner = tag.getString("owner");
         dimension = tag.getInteger("dimension");
-        isUpgraded = tag.getBoolean("upgrade");
+        hasDimensionUpgrade = tag.getBoolean("upgrade");
         this.colorBase = tag.getInteger("colorBase");
         this.colorFrame = tag.getInteger("colorFrame");
         
@@ -69,9 +68,9 @@ public class TileEntityTelepad extends TileEntity {
     public void writeToNBT (NBTTagCompound tag) {
         
         tag.setString("name", telepadname);
-        tag.setString("owner", ownerName);
+        tag.setString("owner", padOwner);
         tag.setInteger("dimension", dimension);
-        tag.setBoolean("upgrade", isUpgraded);
+        tag.setBoolean("upgrade", hasDimensionUpgrade);
         tag.setInteger("colorBase", this.colorBase);
         tag.setInteger("colorFrame", this.colorFrame);
         
@@ -156,4 +155,46 @@ public class TileEntityTelepad extends TileEntity {
         if (!state)
             resetTE();
     }
+    
+    
+    public String getTelePadName(){
+    	return telepadname;
+    }
+    
+    public void setTelePadName(String name){
+    	telepadname = name;
+    }
+    
+    public int getDimension(){
+    	return dimension;
+    }
+    
+    public void setDimension(int dimensionID){
+    	dimension = dimensionID;
+    }
+    
+    public String getOwnerName(){
+    	return padOwner;
+    }
+
+    public void setOwnerName(String name){
+    	padOwner = name;
+    }
+    
+    public void setFrameColor(int rgb){
+    	colorFrame = rgb;
+    }
+    
+    public void setBaseColor(int rgb){
+    	colorBase = rgb;
+    }
+    
+    public int getColorFrame(){
+    	return colorFrame;
+    }
+    
+    public int getColorBase(){
+    	return colorBase;
+    }
+    
 }

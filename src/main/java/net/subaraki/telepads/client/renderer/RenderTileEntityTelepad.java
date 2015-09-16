@@ -151,8 +151,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
             te = (TileEntityTelepad) tileentity;
         }
         
-        Color colorBase = new Color(te.colorBase);
-        Color colorFrame = new Color(te.colorFrame);
+        Color colorBase = new Color(te.getColorBase());
+        Color colorFrame = new Color(te.getColorFrame());
         
         GL11.glPushMatrix();
         renderEndPortalSurface(d, d1, d2, f);

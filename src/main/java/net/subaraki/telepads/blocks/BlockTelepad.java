@@ -88,8 +88,8 @@ public class BlockTelepad extends BlockContainer {
         if (par5EntityLivingBase instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) par5EntityLivingBase;
             
-            te.ownerName = p.getDisplayName();
-            te.dimension = par1World.provider.dimensionId;
+            te.setOwnerName(p.getDisplayName());
+            te.setDimension(par1World.provider.dimensionId);
             
             p.openGui(Telepads.instance, Constants.GUI_ID_NAMEPAD, par1World, x, y, z);
         }
