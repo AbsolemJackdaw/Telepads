@@ -179,6 +179,6 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
         
         GL11.glPopMatrix();
         
-        System.out.println("The color is: " + colorBase.toString());
+      //  System.out.println("The color is: " + colorBase.toString());
     }
 }
