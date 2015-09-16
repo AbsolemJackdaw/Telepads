@@ -57,7 +57,7 @@ public class TileEntityTelepad extends TileEntity {
         telepadname = (tag.getString("name"));
         padOwner = tag.getString("owner");
         dimension = tag.getInteger("dimension");
-        hasDimensionUpgrade = tag.getBoolean("upgrade");
+        hasDimensionUpgrade = tag.getBoolean("upgrade_dimension");
         this.colorBase = tag.getInteger("colorBase");
         this.colorFrame = tag.getInteger("colorFrame");
         
@@ -70,7 +70,7 @@ public class TileEntityTelepad extends TileEntity {
         tag.setString("name", telepadname);
         tag.setString("owner", padOwner);
         tag.setInteger("dimension", dimension);
-        tag.setBoolean("upgrade", hasDimensionUpgrade);
+        tag.setBoolean("upgrade_dimension", hasDimensionUpgrade);
         tag.setInteger("colorBase", this.colorBase);
         tag.setInteger("colorFrame", this.colorFrame);
         
@@ -195,6 +195,10 @@ public class TileEntityTelepad extends TileEntity {
     
     public int getColorBase(){
     	return colorBase;
+    }
+    
+    public boolean hasDimensionUpgrade(){
+    	return hasDimensionUpgrade;
     }
     
 }
