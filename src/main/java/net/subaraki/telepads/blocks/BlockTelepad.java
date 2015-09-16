@@ -61,7 +61,7 @@ public class BlockTelepad extends BlockContainer {
     @Override
     public int getRenderType () {
         
-        return RenderingRegistry.getNextAvailableRenderId();
+        return -1;
     }
     
     @Override
