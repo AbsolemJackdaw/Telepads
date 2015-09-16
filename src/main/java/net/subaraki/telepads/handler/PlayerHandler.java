@@ -1,8 +1,11 @@
 package net.subaraki.telepads.handler;
 
+import java.awt.Color;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -35,7 +38,7 @@ public class PlayerHandler {
 
 	@SubscribeEvent
 
-	public void onPlayerInteractiong (PlayerInteractEvent event) {
+	public void onPlayerInteraction (PlayerInteractEvent event) {
 
 		if (event.action.equals(Action.RIGHT_CLICK_BLOCK) && event.world.getBlock(event.x, event.y, event.z) instanceof BlockTelepad) {
 
@@ -54,6 +57,15 @@ public class PlayerHandler {
 				if(!event.entityPlayer.capabilities.isCreativeMode)
 					event.entityPlayer.getHeldItem().stackSize--;
 				event.entityPlayer.swingItem();
+			}
+
+			if(event.entityPlayer.getHeldItem().equals(Items.water_bucket)){
+			
+				if (event.entityPlayer.isSneaking())
+					telepad.colorBase = new Color(26, 246, 172).getRGB();
+				
+				else
+					telepad.colorFrame = new Color(243, 89, 233).getRGB();
 			}
 		}
 	}
