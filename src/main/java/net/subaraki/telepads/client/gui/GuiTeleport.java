@@ -6,6 +6,7 @@ import net.darkhax.bookshelf.util.Position;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -35,6 +36,8 @@ public class GuiTeleport extends GuiScreen {
 	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
 
 	private static final ResourceLocation endPortalTextures = new ResourceLocation("textures/entity/end_portal.png");
+
+//    private static final ResourceLocation fieldTexture = new ResourceLocation("textures/gui/widgets.png");
 
 	private float c = 0;
 
@@ -112,6 +115,10 @@ public class GuiTeleport extends GuiScreen {
 
 		List<TelepadEntry> telepads= PlayerLocations.getProperties(player).getEntries();
 
+		 drawRect(46 - 1, 7 - 1, 174 + 1, 23 + 1, -6250336);
+         drawRect(46, 7, 174, 23, -16777216);
+    
+         
 		if(!te.hasDimensionUpgrade()){
 			fontRendererObj.drawSplitString(te.getWorldObj().provider.getDimensionName(), 48+1, 11+1, 180, 0x000000);
 			fontRendererObj.drawSplitString(te.getWorldObj().provider.getDimensionName(), 48, 11, 180, 0xffffff);
