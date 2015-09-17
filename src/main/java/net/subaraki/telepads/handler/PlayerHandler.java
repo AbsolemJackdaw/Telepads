@@ -2,8 +2,6 @@ package net.subaraki.telepads.handler;
 
 import java.awt.Color;
 
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -15,6 +13,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.subaraki.telepads.blocks.BlockTelepad;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerHandler {
 
@@ -62,7 +62,7 @@ public class PlayerHandler {
 
 				event.entityPlayer.swingItem();
 			}
-			
+
 			if(event.entityPlayer.getHeldItem().getItem().equals(Items.water_bucket)){
 
 				if (event.entityPlayer.isSneaking())
@@ -77,13 +77,13 @@ public class PlayerHandler {
 					event.entityPlayer.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, 1));
 
 				event.entityPlayer.swingItem();
-				
+
 				event.useItem = Result.DENY;
 				event.setCanceled(true);
 			}
-			
+
 			//TODO stub for upgrade. Change Item and implement stacksize--
-			else if(event.entityPlayer.getHeldItem().getItem().equals(Items.diamond)){
+			else if(event.entityPlayer.getHeldItem().getItem().equals(Items.diamond) && !telepad.hasDimensionUpgrade()){
 				telepad.addDimensionUpgrade();
 			}
 		}

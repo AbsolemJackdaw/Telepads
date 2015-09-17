@@ -3,6 +3,8 @@ package net.subaraki.telepads.tileentity;
 import java.awt.Color;
 import java.util.List;
 
+import scala.util.Random;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -21,6 +23,9 @@ public class TileEntityTelepad extends TileEntity {
     private String padOwner = "";
     private int colorFrame = new Color(26, 246, 172).getRGB();
     private int colorBase = new Color(243, 89, 233).getRGB();
+    
+    /**rotation set when inter-dimension upgrade is applied. nr from 0 to 3 to determin the position of the transmitter*/
+    private int upgradeRotation = 0;
     
     private boolean hasDimensionUpgrade = false;
     
@@ -60,6 +65,7 @@ public class TileEntityTelepad extends TileEntity {
         hasDimensionUpgrade = tag.getBoolean("upgrade_dimension");
         this.colorBase = tag.getInteger("colorBase");
         this.colorFrame = tag.getInteger("colorFrame");
+        this.upgradeRotation = tag.getInteger("upgradeRotation");
         
         super.readFromNBT(tag);
     }
@@ -73,7 +79,7 @@ public class TileEntityTelepad extends TileEntity {
         tag.setBoolean("upgrade_dimension", hasDimensionUpgrade);
         tag.setInteger("colorBase", this.colorBase);
         tag.setInteger("colorFrame", this.colorFrame);
-        
+        tag.setInteger("upgradeRotation", upgradeRotation);
         super.writeToNBT(tag);
     }
     
@@ -202,6 +208,11 @@ public class TileEntityTelepad extends TileEntity {
     }
     
     public void addDimensionUpgrade(){
+    	this.upgradeRotation = new Random().nextInt(4);
     	hasDimensionUpgrade = true;
+    }
+    
+    public int getUpgradeRotation(){
+    	return upgradeRotation;
     }
 }

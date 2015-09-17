@@ -199,8 +199,9 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		if(te.hasDimensionUpgrade()){
+
 			GL11.glPushMatrix();
-			
+
 			if(animation_counter < 100)
 				bindTexture(frame_upgrade);
 			else if(animation_counter < 300)
@@ -211,11 +212,35 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 				bindTexture(frame_upgrade_4);
 			else
 				bindTexture(frame_upgrade_4);
-			
+
 			if (animation_counter == 900)
 				animation_counter = 0;
-			
+
 			GL11.glColor3f(1,1,1);
+			GL11.glScalef(0.75f, 0.75f, 0.75f);
+			GL11.glTranslatef(-0.1f, 0.45f, 0.1f);
+
+			switch (te.getUpgradeRotation()) {
+			case 0:
+				GL11.glRotatef(0f, 0, 1, 0);
+				GL11.glTranslatef(0f, 0, 0f);
+				break;
+			case 1:
+				GL11.glRotatef(-90f, 0, 1, 0);
+				GL11.glTranslatef(-0.1f, 0, 0f);
+				break;
+			case 2:
+				GL11.glRotatef(180f, 0, 1, 0);
+				GL11.glTranslatef(-0.2f, 0, 0.2f);
+				break;
+			case 3:
+				GL11.glRotatef(90f, 0, 1, 0);
+				GL11.glTranslatef(0f, 0, 0.2f);
+				break;
+			default:
+				break;
+			}
+
 			padModel.renderUpgrade(0.0625f);
 			GL11.glPopMatrix();
 		}
