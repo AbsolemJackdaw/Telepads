@@ -82,9 +82,10 @@ public class PlayerHandler {
 				event.setCanceled(true);
 			}
 
-			//TODO stub for upgrade. Change Item and implement stacksize--
 			else if(event.entityPlayer.getHeldItem().getItem().equals(Items.diamond) && !telepad.hasDimensionUpgrade()){
 				telepad.addDimensionUpgrade();
+				if(!event.entityPlayer.capabilities.isCreativeMode)
+					event.entityPlayer.getHeldItem().stackSize--;
 			}
 		}
 	}
