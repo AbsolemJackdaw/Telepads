@@ -41,12 +41,12 @@ public class GuiNameTelepad extends GuiScreen {
         int posY = (this.height) / 2;
         try {
             
-            String p = StatCollector.translateToLocal("gui.telepad.confrim");
+            String p = StatCollector.translateToLocal("enter.to.confirm");
             
             fontRendererObj.drawSplitString(p, (posX + 1) - 75, posY - 1, 180, 0x000000);
             fontRendererObj.drawSplitString(p, posX - 75, posY, 180, 0xffffff);
             
-            String q = StatCollector.translateToLocal("gui.telepad.name");
+            String q = StatCollector.translateToLocal("name.your.telepad");
             
             fontRendererObj.drawSplitString(q + " : " + padNameField.getText(), (posX + 1) - 75, posY - 1 - 20, 180, 0x000000);
             fontRendererObj.drawSplitString(q + " : " + padNameField.getText(), posX - 75, posY - 20, 180, 0xff0000);
