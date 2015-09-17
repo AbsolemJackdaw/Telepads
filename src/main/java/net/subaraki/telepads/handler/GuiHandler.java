@@ -1,12 +1,12 @@
 package net.subaraki.telepads.handler;
 
-import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.subaraki.telepads.client.gui.GuiNameTelepad;
 import net.subaraki.telepads.client.gui.GuiTeleport;
 import net.subaraki.telepads.inventory.ContainerTelePad;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
+import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
     

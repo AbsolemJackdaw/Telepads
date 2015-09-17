@@ -1,15 +1,16 @@
 package net.subaraki.telepads.common.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.UUID;
 
+import net.darkhax.bookshelf.util.Utilities;
+import net.subaraki.telepads.handler.PlayerLocations;
+import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import io.netty.buffer.ByteBuf;
-import net.darkhax.bookshelf.util.Utilities;
-import net.subaraki.telepads.handler.PlayerLocations;
-import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 
 public class PacketAddTelepadEntry implements IMessage {
     

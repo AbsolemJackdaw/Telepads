@@ -3,8 +3,6 @@ package net.subaraki.telepads.tileentity;
 import java.awt.Color;
 import java.util.List;
 
-import scala.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -15,6 +13,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.inventory.ContainerTelePad;
 import net.subaraki.telepads.util.Constants;
+import scala.util.Random;
 
 public class TileEntityTelepad extends TileEntity {
     
