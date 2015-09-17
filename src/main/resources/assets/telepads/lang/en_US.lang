@@ -1,22 +1,6 @@
-#item
-tile.telepad.name=TelePad
-
-
-
 #block
-item.register.name=TelePad Register
-item.Crowbar.name=Archimede's Lever
+tile.telepad.name=TelePad
 
 #gui text
 enter.to.confirm=Press Enter to confirm
 name.your.telepad=Name your TelePad
-
-#item text
-info.1 =/*======= How To Use =======*/
-info.2 =1. Teleporting: stand on pad and wait 3-5 Seconds.
-info.3 =2. Removing TelePad: Rightclick on TelePad
-info.4 =3. Allowing Friends to use your pad:
-info.5 =3a. Sneak-right click your pad.
-info.6 =3b. Let friends rightclick pad with register
-info.7 =For security reasons, you can not remove pads that have been registered to friends.
-info.8 =If noone registered, you can set it back to normal by sneak-rightclicking it again.
