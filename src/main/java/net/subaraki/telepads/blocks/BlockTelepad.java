@@ -32,14 +32,13 @@ public class BlockTelepad extends BlockContainer {
 		this.setBlockName("telepad");
 		this.setLightLevel(0.2f);
 		this.setHardness(5f);
-//		this.setHarvestLevel("pickaxe", 1);
 		this.setBlockTextureName("glass");
 		this.setStepSound(soundTypeGlass);
 		this.setCreativeTab(CreativeTabs.tabTransport);
 
 		float offset = 0.5F;
 		this.setBlockBounds(0.5F - offset, 0.0F, 0.5F - offset, 0.5F + offset, 0.25F, 0.5F + offset);
-		
+
 	}
 
 	@Override
@@ -126,30 +125,31 @@ public class BlockTelepad extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer player, int meta, float f, float f1, float f2) {
 
-		if(player.isSneaking() && w.getTileEntity(x, y, z) instanceof TileEntityTelepad){
+		if(player.getHeldItem() == null)
+			if(player.isSneaking() && w.getTileEntity(x, y, z) instanceof TileEntityTelepad){
 
-			TileEntityTelepad telepad = (TileEntityTelepad) w.getTileEntity(x, y, z);
+				TileEntityTelepad telepad = (TileEntityTelepad) w.getTileEntity(x, y, z);
 
-			PlayerLocations pl = PlayerLocations.getProperties(player);
+				PlayerLocations pl = PlayerLocations.getProperties(player);
 
-			boolean match = false;
+				boolean match = false;
 
-			for(TelepadEntry tpe : pl.getEntries()){
+				for(TelepadEntry tpe : pl.getEntries()){
 
-				if(tpe.position.getX() == x)
-					if(tpe.position.getY() == y)
-						if(tpe.position.getZ() == z)
-							match = true;
+					if(tpe.position.getX() == x)
+						if(tpe.position.getY() == y)
+							if(tpe.position.getZ() == z)
+								match = true;
+				}
+
+				if(!match){
+					pl.addEntry(new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(x, y, z)));
+					if(!w.isRemote)
+						player.addChatMessage(new ChatComponentText("Succesfully added " + telepad.getTelePadName()));
+				}else
+					if(!w.isRemote)
+						player.addChatMessage(new ChatComponentText(telepad.getTelePadName() + " has already been registered"));
 			}
-
-			if(!match){
-				pl.addEntry(new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(x, y, z)));
-				if(!w.isRemote)
-					player.addChatMessage(new ChatComponentText("Succesfully added " + telepad.getTelePadName()));
-			}else
-				if(!w.isRemote)
-					player.addChatMessage(new ChatComponentText(telepad.getTelePadName() + " has already been registered"));
-		}
 
 		return false;
 	}
@@ -180,7 +180,7 @@ public class BlockTelepad extends BlockContainer {
 		nbt.setInteger("colorFrame", telepad.getColorFrame());
 		stack.writeToNBT(nbt);
 		stack.setTagCompound(nbt);
-		
+
 		ei.setEntityItemStack(stack);
 
 		world.spawnEntityInWorld(ei);

@@ -1,5 +1,7 @@
 package net.subaraki.telepads.client.gui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.darkhax.bookshelf.util.Position;
@@ -38,6 +40,9 @@ public class GuiTeleport extends GuiScreen {
 
 //    private static final ResourceLocation fieldTexture = new ResourceLocation("textures/gui/widgets.png");
 
+	/**int : buttonID to keep track of entry to look for in player locations, TelepadEntry*/
+	private HashMap<TelepadEntry, Integer> pageEntries = new HashMap<TelepadEntry, Integer>();
+	
 	private float c = 0;
 
 	float sd = 0;
@@ -61,13 +66,11 @@ public class GuiTeleport extends GuiScreen {
 			else if (id == AREA_LEFT) {
 				dimension_counter--;
 				drawButtonsOnScreen();
-				Telepads.printDebugMessage("" + dimension_counter);
 			}
 			
 			else if (id == AREA_RIGHT) {
 				dimension_counter++;
 				drawButtonsOnScreen();
-				Telepads.printDebugMessage("" + dimension_counter);
 			}
 			
 			else {
@@ -142,6 +145,7 @@ public class GuiTeleport extends GuiScreen {
 	public void drawButtonsOnScreen(){
 		
 		this.buttonList.clear();
+		pageEntries.clear();
 
 		if(te.hasDimensionUpgrade()){
 			this.buttonList.add(new GuiButton(AREA_LEFT, 25, 5, 20, 20, "<"));
@@ -150,19 +154,8 @@ public class GuiTeleport extends GuiScreen {
 		
 		this.buttonList.add(new GuiButton(EXIT_BUTTON, 5, 5, 20, 20, "X"));
 
-		List<TelepadEntry> telepads= PlayerLocations.getProperties(player).getEntries();
-
-		int c = telepads.size();
-
-		if (c < 1)
-			return;
-
-		for (int i = 0; i < c; i++) {
-			String name = telepads.get(i).entryName;
-
-			if(telepads.get(i).dimensionID == dimension_counter)
-				this.buttonList.add(new GuiButton(/* id */i, /* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10) : 0), /* y */(130 + ((i * 25))) - (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100 : 100), /* size */100, 20, name));
-		}
+		makePage();
+		
 	}
 	
 	@Override
@@ -206,5 +199,28 @@ public class GuiTeleport extends GuiScreen {
 		int dim = PlayerLocations.getProperties(player).getEntries().get(id).dimensionID;
 
 		Telepads.instance.network.sendToServer(new PacketTeleport(new Position(x, y, z), dim));
+	}
+	
+	private void makePage(){
+		
+		PlayerLocations pl = PlayerLocations.getProperties(player);
+		
+		int classificationID = 0;
+		
+		for(TelepadEntry tpe : pl.getEntries()){
+			
+			if(tpe.dimensionID == dimension_counter)
+				pageEntries.put(tpe, classificationID);
+			classificationID++;
+		}
+
+		int i = 0;
+		
+		for(TelepadEntry tpe : pageEntries.keySet()){
+			
+			String name = tpe.entryName;
+			this.buttonList.add(new GuiButton(pageEntries.get(tpe), /* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10) : 0), /* y */(130 + ((i * 25))) - (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100 : 100), /* size */100, 20, name));
+			i++;
+		}
 	}
 }
