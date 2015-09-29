@@ -31,6 +31,8 @@ public class BlockTelepad extends BlockContainer {
 
 		this.setBlockName("telepad");
 		this.setLightLevel(0.2f);
+		this.setHardness(5f);
+//		this.setHarvestLevel("pickaxe", 1);
 		this.setBlockTextureName("glass");
 		this.setStepSound(soundTypeGlass);
 		this.setCreativeTab(CreativeTabs.tabTransport);
