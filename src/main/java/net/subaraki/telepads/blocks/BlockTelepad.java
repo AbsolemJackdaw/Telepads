@@ -1,5 +1,7 @@
 package net.subaraki.telepads.blocks;
 
+import java.util.Random;
+
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -7,8 +9,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
@@ -33,6 +37,7 @@ public class BlockTelepad extends BlockContainer {
 
 		float offset = 0.5F;
 		this.setBlockBounds(0.5F - offset, 0.0F, 0.5F - offset, 0.5F + offset, 0.25F, 0.5F + offset);
+		
 	}
 
 	@Override
@@ -51,13 +56,21 @@ public class BlockTelepad extends BlockContainer {
 	@Override
 	public boolean canEntityDestroy (IBlockAccess world, int x, int y, int z, Entity entity) {
 
+		if(entity instanceof EntityPlayer)
+			return true;
+
 		return false;
 	}
 
 	@Override
 	protected void dropBlockAsItem (World world, int x, int y, int z, ItemStack is) {
 
-		super.dropBlockAsItem(world, x, y, z, is);
+		//keep empty
+	}
+
+	@Override
+	public int quantityDropped(int meta, int fortune, Random random) {
+		return 0;
 	}
 
 	@Override
@@ -73,30 +86,39 @@ public class BlockTelepad extends BlockContainer {
 	}
 
 	@Override
-	public void onBlockPlacedBy (World par1World, int x, int y, int z, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
+	public void onBlockPlacedBy (World par1World, int x, int y, int z, EntityLivingBase elb, ItemStack is) {
 
 		if (par1World.provider.dimensionId == 1) {
 			par1World.newExplosion((Entity) null, x + 0.5F, y + 0.5F, z + 0.5F, 5.0F, true, true);
 			par1World.setBlockToAir(x, y, z);
 			par1World.removeTileEntity(x, y, z);
 			if (!par1World.isRemote)
-				((EntityPlayer) par5EntityLivingBase).addChatMessage(new ChatComponentText("The Magic in the End was too strong for the TelePad..."));
+				((EntityPlayer) elb).addChatMessage(new ChatComponentText("The Magic in the End was too strong for the TelePad..."));
 
-						return;
+			return;
 		}
 
 		TileEntityTelepad te = new TileEntityTelepad();
 
-		if (par5EntityLivingBase instanceof EntityPlayer) {
-			EntityPlayer p = (EntityPlayer) par5EntityLivingBase;
+		if (elb instanceof EntityPlayer) {
+			EntityPlayer p = (EntityPlayer) elb;
 
 			te.setDimension(par1World.provider.dimensionId);
 
 			p.openGui(Telepads.instance, Constants.GUI_ID_NAMEPAD, par1World, x, y, z);
 		}
 
+		if(is.hasTagCompound()){
+			if(is.getTagCompound().hasKey("colorFrame"))
+				te.setFrameColor(is.getTagCompound().getInteger("colorFrame"));
+			if(is.getTagCompound().hasKey("colorBase"))
+				te.setBaseColor(is.getTagCompound().getInteger("colorBase"));
+		}
+
 		par1World.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 		par1World.setTileEntity(x, y, z, te);
+
+
 	}
 
 	@Override
@@ -117,7 +139,7 @@ public class BlockTelepad extends BlockContainer {
 						if(tpe.position.getZ() == z)
 							match = true;
 			}
-			
+
 			if(!match){
 				pl.addEntry(new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(x, y, z)));
 				if(!w.isRemote)
@@ -128,5 +150,39 @@ public class BlockTelepad extends BlockContainer {
 		}
 
 		return false;
+	}
+
+	@Override
+	public float getExplosionResistance(Entity ent) {
+		return Float.MAX_VALUE;
+	}
+
+	@Override
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+
+		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntityTelepad telepad = null;
+
+		if(te instanceof TileEntityTelepad)
+			telepad = (TileEntityTelepad)te;
+
+		if(telepad == null)
+			return false;
+
+		EntityItem ei = new EntityItem(world);
+		ei.setPosition(x, y, z);
+
+		ItemStack stack = new ItemStack(Telepads.blockPad);
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("colorBase", telepad.getColorBase());
+		nbt.setInteger("colorFrame", telepad.getColorFrame());
+		stack.writeToNBT(nbt);
+		stack.setTagCompound(nbt);
+		
+		ei.setEntityItemStack(stack);
+
+		world.spawnEntityInWorld(ei);
+
+		return world.setBlockToAir(x, y, z);
 	}
 }
