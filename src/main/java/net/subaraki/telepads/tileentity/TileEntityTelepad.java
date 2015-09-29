@@ -19,7 +19,6 @@ public class TileEntityTelepad extends TileEntity {
     
     private String telepadname = "TelePad";
     private int dimension;
-    private String padOwner = "";
     private int colorFrame = new Color(26, 246, 172).getRGB();
     private int colorBase = new Color(243, 89, 233).getRGB();
     
@@ -59,7 +58,6 @@ public class TileEntityTelepad extends TileEntity {
     public void readFromNBT (NBTTagCompound tag) {
         
         telepadname = (tag.getString("name"));
-        padOwner = tag.getString("owner");
         dimension = tag.getInteger("dimension");
         hasDimensionUpgrade = tag.getBoolean("upgrade_dimension");
         this.colorBase = tag.getInteger("colorBase");
@@ -73,7 +71,6 @@ public class TileEntityTelepad extends TileEntity {
     public void writeToNBT (NBTTagCompound tag) {
         
         tag.setString("name", telepadname);
-        tag.setString("owner", padOwner);
         tag.setInteger("dimension", dimension);
         tag.setBoolean("upgrade_dimension", hasDimensionUpgrade);
         tag.setInteger("colorBase", this.colorBase);
@@ -176,14 +173,6 @@ public class TileEntityTelepad extends TileEntity {
     
     public void setDimension(int dimensionID){
     	dimension = dimensionID;
-    }
-    
-    public String getOwnerName(){
-    	return padOwner;
-    }
-
-    public void setOwnerName(String name){
-    	padOwner = name;
     }
     
     public void setFrameColor(int rgb){
