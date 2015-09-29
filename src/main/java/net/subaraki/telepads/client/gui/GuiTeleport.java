@@ -30,8 +30,9 @@ public class GuiTeleport extends GuiScreen {
 	public static final int AREA_LEFT = 3999;
 	public static final int AREA_RIGHT = 3998;
 
-	private int dimension_counter;
-
+	private int tuner_counter;
+	private int dimension_ID;
+	
 	private TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
 
 	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
@@ -43,6 +44,8 @@ public class GuiTeleport extends GuiScreen {
 	/**int : buttonID to keep track of entry to look for in player locations, TelepadEntry*/
 	private HashMap<TelepadEntry, Integer> pageEntries = new HashMap<TelepadEntry, Integer>();
 	
+	private List<Integer> dimensionsVisited = new ArrayList<Integer>();
+	
 	private float c = 0;
 
 	float sd = 0;
@@ -51,7 +54,13 @@ public class GuiTeleport extends GuiScreen {
 
 		this.te = te;
 		this.player = player;
-		dimension_counter = player.worldObj.provider.dimensionId;
+		dimension_ID = player.worldObj.provider.dimensionId;
+		
+		PlayerLocations pl = PlayerLocations.getProperties(player);
+		for(TelepadEntry tpe : pl.getEntries()){
+			if(!dimensionsVisited.contains(tpe.dimensionID))
+				dimensionsVisited.add(tpe.dimensionID);
+		}
 	}
 
 	@Override
@@ -64,12 +73,12 @@ public class GuiTeleport extends GuiScreen {
 				this.mc.thePlayer.closeScreen(); // closes the screen
 			
 			else if (id == AREA_LEFT) {
-				dimension_counter--;
+				tuner_counter--;
 				drawButtonsOnScreen();
 			}
 			
 			else if (id == AREA_RIGHT) {
-				dimension_counter++;
+				tuner_counter++;
 				drawButtonsOnScreen();
 			}
 			
@@ -128,7 +137,7 @@ public class GuiTeleport extends GuiScreen {
 			WorldProvider world = null;
 
 			try{
-				world = te.getWorldObj().provider.getProviderForDimension(dimension_counter);
+				world = te.getWorldObj().provider.getProviderForDimension(dimension_ID);
 			}catch (Exception e){
 			}
 
@@ -136,8 +145,8 @@ public class GuiTeleport extends GuiScreen {
 				fontRendererObj.drawSplitString(world.getDimensionName(), 48 + 1 ,11 + 1, 180, 0x000000);
 				fontRendererObj.drawSplitString(world.getDimensionName(), 48 , 11, 180, 0xffffff);
 			}else{
-				fontRendererObj.drawSplitString("No%Dim- Error : Hz " + dimension_counter, 48 + 1, 11 + 1, 180, 0x000000);
-				fontRendererObj.drawSplitString("No%Dim- Error : Hz " + dimension_counter, 48, 11, 180, 0xffffff);
+				fontRendererObj.drawSplitString("No%Dim- Error : Hz " + dimension_ID, 48 + 1, 11 + 1, 180, 0x000000);
+				fontRendererObj.drawSplitString("No%Dim- Error : Hz " + dimension_ID, 48, 11, 180, 0xffffff);
 			}
 		}
 	}
@@ -146,6 +155,14 @@ public class GuiTeleport extends GuiScreen {
 		
 		this.buttonList.clear();
 		pageEntries.clear();
+
+		if(tuner_counter >= dimensionsVisited.size())
+			tuner_counter = 0;
+		if(tuner_counter < 0)
+			tuner_counter = dimensionsVisited.size()-1;
+		
+		dimension_ID = dimensionsVisited.get(tuner_counter);
+
 
 		if(te.hasDimensionUpgrade()){
 			this.buttonList.add(new GuiButton(AREA_LEFT, 25, 5, 20, 20, "<"));
@@ -209,7 +226,7 @@ public class GuiTeleport extends GuiScreen {
 		
 		for(TelepadEntry tpe : pl.getEntries()){
 			
-			if(tpe.dimensionID == dimension_counter)
+			if(tpe.dimensionID == dimension_ID)
 				pageEntries.put(tpe, classificationID);
 			classificationID++;
 		}
