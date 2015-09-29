@@ -37,7 +37,7 @@ public class Telepads {
     public SimpleNetworkWrapper network;
     
     public static Block blockPad = new BlockTelepad();
-    
+
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
         
@@ -51,7 +51,7 @@ public class Telepads {
         new ConfigurationHandler(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
         
-        GameRegistry.registerBlock(blockPad, "telepad");
+        GameRegistry.registerBlock(blockPad,"telepad");
         GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
         
         proxy.preInit();

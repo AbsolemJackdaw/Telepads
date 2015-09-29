@@ -3,14 +3,18 @@ package net.subaraki.telepads.handler;
 import java.awt.Color;
 
 import net.darkhax.bookshelf.util.Utilities;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.oredict.OreDictionary;
+import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.blocks.BlockTelepad;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -87,6 +91,26 @@ public class PlayerHandler {
 				if(!event.entityPlayer.capabilities.isCreativeMode)
 					event.entityPlayer.getHeldItem().stackSize--;
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onTooltip(ItemTooltipEvent event)
+	{
+		ItemStack is = event.itemStack;
+
+		if(is.getItem() != null){
+			Block b = Block.getBlockFromItem(event.itemStack.getItem());
+			if(b.equals(Telepads.blockPad)){
+				if(is.hasTagCompound()){
+					if(is.getTagCompound().hasKey("colorFrame"))
+						event.toolTip.add("frame color : " +OreDictionary.getOreName(is.getTagCompound().getInteger("colorFrame")));
+
+					if(is.getTagCompound().hasKey("colorBase"))
+						event.toolTip.add("base color : " +OreDictionary.getOreName(is.getTagCompound().getInteger("colorBase")));
+				}
+			}
+
 		}
 	}
 }
