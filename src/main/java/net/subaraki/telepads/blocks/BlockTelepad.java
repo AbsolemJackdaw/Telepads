@@ -89,15 +89,15 @@ public class BlockTelepad extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy (World par1World, int x, int y, int z, EntityLivingBase elb, ItemStack is) {
 
-		if (par1World.provider.dimensionId == 1) {
-			par1World.newExplosion((Entity) null, x + 0.5F, y + 0.5F, z + 0.5F, 5.0F, true, true);
-			par1World.setBlockToAir(x, y, z);
-			par1World.removeTileEntity(x, y, z);
-			if (!par1World.isRemote)
-				((EntityPlayer) elb).addChatMessage(new ChatComponentText("The Magic in the End was too strong for the TelePad..."));
-
-			return;
-		}
+//		if (par1World.provider.dimensionId == 1) {
+//			par1World.newExplosion((Entity) null, x + 0.5F, y + 0.5F, z + 0.5F, 5.0F, true, true);
+//			par1World.setBlockToAir(x, y, z);
+//			par1World.removeTileEntity(x, y, z);
+//			if (!par1World.isRemote)
+//				((EntityPlayer) elb).addChatMessage(new ChatComponentText("The Magic in the End was too strong for the TelePad..."));
+//
+//			return;
+//		}
 
 		TileEntityTelepad te = new TileEntityTelepad();
 
