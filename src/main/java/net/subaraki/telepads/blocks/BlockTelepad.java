@@ -1,5 +1,7 @@
 package net.subaraki.telepads.blocks;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.Random;
 
 import net.darkhax.bookshelf.util.Position;
@@ -13,6 +15,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PlayerPositionComparator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
@@ -52,6 +55,7 @@ public class BlockTelepad extends BlockContainer {
 
 		super.breakBlock(par1World, par2, par3, par4, b, par6);
 		par1World.removeTileEntity(par2, par3, par4);
+		//TODO remove position from other player's files
 	}
 
 	@Override
@@ -185,6 +189,23 @@ public class BlockTelepad extends BlockContainer {
 
 		world.spawnEntityInWorld(ei);
 
+		PlayerLocations.getProperties(player).removeEntry(new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(telepad.xCoord,  telepad.yCoord,  telepad.zCoord)));
+		removeLocationFromPossibleOtherPlayers();
+		
 		return world.setBlockToAir(x, y, z);
+	}
+
+	private void removeLocationFromPossibleOtherPlayers() {
+		
+		File folder = new File("your/path");
+		File[] listOfFiles = folder.listFiles();
+
+		    for (int i = 0; i < listOfFiles.length; i++) {
+		      if (listOfFiles[i].isFile()) {
+		        System.out.println("File " + listOfFiles[i].getName());
+		      } else if (listOfFiles[i].isDirectory()) {
+		        System.out.println("Directory " + listOfFiles[i].getName());
+		      }
+		    }
 	}
 }
