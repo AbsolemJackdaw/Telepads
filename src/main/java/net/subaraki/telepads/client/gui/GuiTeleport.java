@@ -56,7 +56,14 @@ public class GuiTeleport extends GuiScreen {
 		this.player = player;
 		dimension_ID = player.worldObj.provider.dimensionId;
 		
+		Telepads.printDebugMessage(dimension_ID + "");
+		
 		PlayerLocations pl = PlayerLocations.getProperties(player);
+
+		//this check is performed so that the id of the current world
+		//is always set first ! this prevents wrong dimensions from displaying the default
+		dimensionsVisited.add(dimension_ID);
+		
 		for(TelepadEntry tpe : pl.getEntries()){
 			if(!dimensionsVisited.contains(tpe.dimensionID))
 				dimensionsVisited.add(tpe.dimensionID);
@@ -162,8 +169,7 @@ public class GuiTeleport extends GuiScreen {
 			tuner_counter = dimensionsVisited.size()-1;
 		
 		dimension_ID = dimensionsVisited.get(tuner_counter);
-
-
+		
 		if(te.hasDimensionUpgrade()){
 			this.buttonList.add(new GuiButton(AREA_LEFT, 25, 5, 20, 20, "<"));
 			this.buttonList.add(new GuiButton(AREA_RIGHT, 175, 5, 20, 20, ">"));

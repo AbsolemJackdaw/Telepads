@@ -101,12 +101,12 @@ public class TileEntityTelepad extends TileEntity {
 				if (counter >= 0)
 					counter--;
 
-				if(worldObj.provider.dimensionId == 1 && counter < 0){
-					for (EntityPlayer player : playersInRange)
-						player.addChatMessage(new ChatComponentText("The magic aura from The End does not allow you to leave through this portal ..."));
-					counter = MAX_TIME;
-				}
-				else
+//				if(worldObj.provider.dimensionId == 1 && counter < 0){
+//					for (EntityPlayer player : playersInRange)
+//						player.addChatMessage(new ChatComponentText("The magic aura from The End does not allow you to leave through this portal ..."));
+//					counter = MAX_TIME;
+//				}
+//				else
 					activateTelepadGui(playersInRange);
 
 			}
