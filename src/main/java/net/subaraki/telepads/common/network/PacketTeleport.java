@@ -77,11 +77,11 @@ public class PacketTeleport implements IMessage {
 
 			}else{
 				WorldServer worldToCheck = DimensionManager.getWorld(packet.dimension);
-
-				if(worldToCheck.getTileEntity(packet.pos.getX(), packet.pos.getY(), packet.pos.getZ()) != null){
-					if(player instanceof EntityPlayerMP)
-						TeleportUtility.transferPlayerToDimension((EntityPlayerMP) player, packet.dimension, packet.pos);
-				}
+				if(worldToCheck!= null)
+					if(worldToCheck.getTileEntity(packet.pos.getX(), packet.pos.getY(), packet.pos.getZ()) != null){
+						if(player instanceof EntityPlayerMP)
+							TeleportUtility.transferPlayerToDimension((EntityPlayerMP) player, packet.dimension, packet.pos);
+					}
 			}
 			return null;
 		}
