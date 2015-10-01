@@ -10,6 +10,7 @@ import net.subaraki.telepads.common.network.PacketSyncTelepadEntries;
 import net.subaraki.telepads.common.network.PacketTeleport;
 import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.handler.GuiHandler;
+import net.subaraki.telepads.handler.ItemHandler;
 import net.subaraki.telepads.handler.PlayerHandler;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
 import net.subaraki.telepads.util.Constants;
@@ -50,7 +51,8 @@ public class Telepads {
         
         new ConfigurationHandler(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
-        
+        MinecraftForge.EVENT_BUS.register(new ItemHandler());
+
         GameRegistry.registerBlock(blockPad,"telepad");
         GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
         

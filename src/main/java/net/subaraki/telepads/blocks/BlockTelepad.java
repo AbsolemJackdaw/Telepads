@@ -1,7 +1,6 @@
 package net.subaraki.telepads.blocks;
 
-import java.io.File;
-import java.io.InputStream;
+import java.util.List;
 import java.util.Random;
 
 import net.darkhax.bookshelf.util.Position;
@@ -15,11 +14,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.management.PlayerPositionComparator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.handler.PlayerLocations;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
@@ -93,15 +92,15 @@ public class BlockTelepad extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy (World par1World, int x, int y, int z, EntityLivingBase elb, ItemStack is) {
 
-//		if (par1World.provider.dimensionId == 1) {
-//			par1World.newExplosion((Entity) null, x + 0.5F, y + 0.5F, z + 0.5F, 5.0F, true, true);
-//			par1World.setBlockToAir(x, y, z);
-//			par1World.removeTileEntity(x, y, z);
-//			if (!par1World.isRemote)
-//				((EntityPlayer) elb).addChatMessage(new ChatComponentText("The Magic in the End was too strong for the TelePad..."));
-//
-//			return;
-//		}
+		//		if (par1World.provider.dimensionId == 1) {
+		//			par1World.newExplosion((Entity) null, x + 0.5F, y + 0.5F, z + 0.5F, 5.0F, true, true);
+		//			par1World.setBlockToAir(x, y, z);
+		//			par1World.removeTileEntity(x, y, z);
+		//			if (!par1World.isRemote)
+		//				((EntityPlayer) elb).addChatMessage(new ChatComponentText("The Magic in the End was too strong for the TelePad..."));
+		//
+		//			return;
+		//		}
 
 		TileEntityTelepad te = new TileEntityTelepad();
 
@@ -190,22 +189,26 @@ public class BlockTelepad extends BlockContainer {
 		world.spawnEntityInWorld(ei);
 
 		PlayerLocations.getProperties(player).removeEntry(new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(telepad.xCoord,  telepad.yCoord,  telepad.zCoord)));
-		removeLocationFromPossibleOtherPlayers();
-		
+		removeLocationFromPossibleOtherPlayers(world, new Position(telepad.xCoord, telepad.yCoord, telepad.zCoord));
+
 		return world.setBlockToAir(x, y, z);
 	}
 
-	private void removeLocationFromPossibleOtherPlayers() {
-		
-		File folder = new File("your/path");
-		File[] listOfFiles = folder.listFiles();
+	/**Position is original position given to compare with registered locations of all players on the server*/
+	private void removeLocationFromPossibleOtherPlayers(World world, Position pos){
 
-		    for (int i = 0; i < listOfFiles.length; i++) {
-		      if (listOfFiles[i].isFile()) {
-		        System.out.println("File " + listOfFiles[i].getName());
-		      } else if (listOfFiles[i].isDirectory()) {
-		        System.out.println("Directory " + listOfFiles[i].getName());
-		      }
-		    }
+		if(!world.isRemote){
+			WorldServer ws = (WorldServer)world;
+			List<EntityPlayer> allPlayers = ws.playerEntities;
+			
+			for(EntityPlayer player : allPlayers){
+				PlayerLocations playerLocation = PlayerLocations.getProperties(player);
+				TelepadEntry tpe = (TelepadEntry)playerLocation.getEntries();
+				if(tpe.position.equals(pos)){
+					playerLocation.removeEntry(tpe);
+				}
+			}
+		}
+
 	}
 }
