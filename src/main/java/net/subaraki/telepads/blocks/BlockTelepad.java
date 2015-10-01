@@ -188,25 +188,29 @@ public class BlockTelepad extends BlockContainer {
 
 		world.spawnEntityInWorld(ei);
 
-		PlayerLocations.getProperties(player).removeEntry(new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(telepad.xCoord,  telepad.yCoord,  telepad.zCoord)));
-		removeLocationFromPossibleOtherPlayers(world, new Position(telepad.xCoord, telepad.yCoord, telepad.zCoord));
+		TelepadEntry tpe = new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(telepad.xCoord,  telepad.yCoord,  telepad.zCoord));
+		
+		PlayerLocations.getProperties(player).removeEntry(tpe);
+		removeLocationFromPossibleOtherPlayers(world, tpe);
 
 		return world.setBlockToAir(x, y, z);
 	}
 
 	/**Position is original position given to compare with registered locations of all players on the server*/
-	private void removeLocationFromPossibleOtherPlayers(World world, Position pos){
+	private void removeLocationFromPossibleOtherPlayers(World world, TelepadEntry tpe){
 
 		if(!world.isRemote){
 			WorldServer ws = (WorldServer)world;
 			List<EntityPlayer> allPlayers = ws.playerEntities;
 			
 			for(EntityPlayer player : allPlayers){
+				
 				PlayerLocations playerLocation = PlayerLocations.getProperties(player);
-				TelepadEntry tpe = (TelepadEntry)playerLocation.getEntries();
-				if(tpe.position.equals(pos)){
+				TelepadEntry tpeCompare = (TelepadEntry)playerLocation.getEntries();
+				
+				if(tpeCompare.position.equals(tpe) && tpe.dimensionID == tpeCompare.dimensionID)
+					
 					playerLocation.removeEntry(tpe);
-				}
 			}
 		}
 
