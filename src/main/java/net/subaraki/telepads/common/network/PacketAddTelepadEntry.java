@@ -69,6 +69,7 @@ public class PacketAddTelepadEntry implements IMessage {
 					if(!tpe.position.equals(packet.entry.position)){
 						locations.addEntry(packet.entry);
 						locations.sync();
+						break;
 					}
 
 			return null;
