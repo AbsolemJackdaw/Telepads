@@ -221,7 +221,7 @@ public class GuiTeleport extends GuiScreen {
 		int z = PlayerLocations.getProperties(player).getEntries().get(id).position.getZ();
 		int dim = PlayerLocations.getProperties(player).getEntries().get(id).dimensionID;
 
-		Telepads.instance.network.sendToServer(new PacketTeleport(new Position(x, y, z), dim));
+		Telepads.instance.network.sendToServer(new PacketTeleport(new Position(x, y, z), dim, new Position(te.xCoord, te.yCoord, te.zCoord)));
 	}
 	
 	private void makePage(){
