@@ -5,8 +5,10 @@ import io.netty.buffer.ByteBuf;
 import java.util.UUID;
 
 import net.darkhax.bookshelf.util.Utilities;
+import net.minecraft.tileentity.TileEntity;
 import net.subaraki.telepads.handler.PlayerLocations;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -64,14 +66,24 @@ public class PacketAddTelepadEntry implements IMessage {
 
 			PlayerLocations locations = PlayerLocations.getProperties(Utilities.getPlayerFromUUID(ctx.getServerHandler().playerEntity.worldObj, packet.playerUUID));
 
-			for(TelepadEntry tpe : locations.getEntries())
-				if(tpe.dimensionID != packet.entry.dimensionID)
+			if(locations.getEntries().isEmpty())
+				locations.addEntry(packet.entry);
+			else
+				for(TelepadEntry tpe : locations.getEntries())
 					if(!tpe.position.equals(packet.entry.position)){
 						locations.addEntry(packet.entry);
 						locations.sync();
 						break;
 					}
 
+			TileEntity te = ctx.getServerHandler().playerEntity.worldObj.getTileEntity(packet.entry.position.getX(),packet.entry.position.getY(),packet.entry.position.getZ());
+			
+			if(te instanceof TileEntityTelepad){
+				
+				TileEntityTelepad telepad = (TileEntityTelepad)te;
+				telepad.setTelePadName(packet.entry.entryName);
+			}
+			
 			return null;
 		}
 	}
