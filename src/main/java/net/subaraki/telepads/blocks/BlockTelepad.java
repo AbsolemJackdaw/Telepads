@@ -148,7 +148,7 @@ public class BlockTelepad extends BlockContainer {
 
 	@Override
 	public float getExplosionResistance(Entity ent) {
-		return Float.MAX_VALUE;
+		return 0;// Float.MAX_VALUE;
 	}
 
 	@Override
@@ -157,11 +157,35 @@ public class BlockTelepad extends BlockContainer {
 		TileEntity te = world.getTileEntity(x, y, z);
 		TileEntityTelepad telepad = null;
 
+		if(te == null)
+			return false;
+
 		if(te instanceof TileEntityTelepad)
 			telepad = (TileEntityTelepad)te;
 
 		if(telepad == null)
 			return false;
+
+		PlayerLocations pl = PlayerLocations.getProperties(player);
+
+		for(TelepadEntry tpe : pl.getEntries()){
+			if(tpe.position.equals(new Position(telepad.xCoord, telepad.yCoord, telepad.zCoord)))
+				if(tpe.dimensionID == telepad.getWorldObj().provider.dimensionId){
+					if(tpe.entryName.equals(telepad.getTelePadName())){
+
+						pl.removeEntry(tpe);
+						dropPad(world, telepad, x, y, z);
+						Telepads.printDebugMessage("pad was removed succesfully");
+						return world.setBlockToAir(x, y, z);
+
+					}
+				}
+		}
+		return false;
+
+	}
+
+	private void dropPad(World world, TileEntityTelepad telepad, int x, int y,int z) {
 
 		EntityItem ei = new EntityItem(world);
 		ei.setPosition(x, y, z);
@@ -170,41 +194,12 @@ public class BlockTelepad extends BlockContainer {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("colorBase", telepad.getColorBase());
 		nbt.setInteger("colorFrame", telepad.getColorFrame());
-		stack.writeToNBT(nbt);
 		stack.setTagCompound(nbt);
 
 		ei.setEntityItemStack(stack);
 
 		world.spawnEntityInWorld(ei);
 
-		TelepadEntry tpe = new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(telepad.xCoord,  telepad.yCoord,  telepad.zCoord));
-		removeLocationsFromAnyPlayer(world, tpe);
-
-		return world.setBlockToAir(x, y, z);
-	}
-
-	/**Position is original position given to compare with registered locations of all players on the server*/
-	private void removeLocationsFromAnyPlayer(World world, TelepadEntry tpe){
-
-		List<EntityPlayer> allPlayers = world.playerEntities;
-
-		for(EntityPlayer player : allPlayers){
-
-			PlayerLocations playerLocation = PlayerLocations.getProperties(player);
-			List<TelepadEntry> list = playerLocation.getEntries();
-
-			int count = 0;
-			
-			for(TelepadEntry tpeCompare : list){
-				if(tpeCompare.position.equals(tpe) && tpeCompare.dimensionID == tpe.dimensionID){
-					TelepadEntry remove = playerLocation.getEntries().get(count);
-					playerLocation.removeEntry(remove);
-				}
-				count++;	
-			}
-
-			playerLocation.sync();
-		}
 
 	}
 }
