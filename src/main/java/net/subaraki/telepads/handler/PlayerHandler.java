@@ -67,7 +67,7 @@ public class PlayerHandler {
 				event.entityPlayer.swingItem();
 			}
 
-			if(event.entityPlayer.getHeldItem().getItem().equals(Items.water_bucket)){
+			if(event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().getItem().equals(Items.water_bucket)){
 
 				if (event.entityPlayer.isSneaking())
 					telepad.setBaseColor(new Color(243, 89, 233).getRGB());
