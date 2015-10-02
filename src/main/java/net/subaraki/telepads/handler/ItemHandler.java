@@ -1,5 +1,6 @@
 package net.subaraki.telepads.handler;
 
+import net.darkhax.bookshelf.util.EnumVanillaColors;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -18,14 +19,22 @@ public class ItemHandler {
 			Block b = Block.getBlockFromItem(event.itemStack.getItem());
 			if(b.equals(Telepads.blockPad)){
 				if(is.hasTagCompound()){
-					if(is.getTagCompound().hasKey("colorFrame"))
-						event.toolTip.add("frame color : " +OreDictionary.getOreName(is.getTagCompound().getInteger("colorFrame")));
 
-					if(is.getTagCompound().hasKey("colorBase"))
-						event.toolTip.add("base color : " +OreDictionary.getOreName(is.getTagCompound().getInteger("colorBase")));
+					if(is.getTagCompound().hasKey("colorFrame")){
+						for (EnumVanillaColors color : EnumVanillaColors.values())
+							if(color.colorObj.getRGB() == is.getTagCompound().getInteger("colorFrame"))
+								event.toolTip.add("frame color : " +color.colorName);
+					}else
+						event.toolTip.add("frame color : " + "none");	
+
+					if(is.getTagCompound().hasKey("colorBase")){
+						for (EnumVanillaColors color : EnumVanillaColors.values())
+							if(color.colorObj.getRGB() == is.getTagCompound().getInteger("colorBase"))
+								event.toolTip.add("base color : " +color.colorName);	
+					}else
+						event.toolTip.add("base color : " + "none");	
 				}
 			}
-
 		}
 	}
 }
