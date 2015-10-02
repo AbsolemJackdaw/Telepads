@@ -188,10 +188,6 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 		GL11.glPushMatrix();
 
-		//				if(te.hasDimensionUpgrade())
-		//					bindTexture(frame_empty);
-		//				
-		//				else
 		bindTexture(frame);
 
 		GL11.glColor3f(1f,1f,1f);
@@ -249,5 +245,49 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		//  System.out.println("The color is: " + colorBase.toString());
+	}
+	
+	
+	public void renderInventory(TileEntity tileentity, Color colorFrame, Color colorBase, double d, double d1, double d2, float f) {
+
+		animation_counter++;
+
+		TileEntityTelepad te = null;
+
+		if (tileentity instanceof TileEntityTelepad)
+			te = (TileEntityTelepad) tileentity;
+
+		GL11.glPushMatrix();
+		renderEndPortalSurface(d, d1, d2, f);
+		GL11.glPopMatrix();
+
+		GL11.glPushMatrix();
+		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F, (float) d2 + 0.5F);
+		GL11.glScalef(1.0F, -1F, -1F);
+
+		float f2 = 1.5f;
+		GL11.glScalef(f2, f2, f2);
+
+		GL11.glPushMatrix();
+		bindTexture(base);
+		GL11.glColor3f((float) (colorBase.getRed() / 255.0f), (float) (colorBase.getGreen() / 255.0f), (float) (colorBase.getBlue() / 255.0f));
+		padModel.renderArrows(0.0625f);
+		GL11.glPopMatrix();
+
+		GL11.glPushMatrix();
+		bindTexture(pads);
+		GL11.glColor3f((float) (colorFrame.getRed() / 255.0f), (float) (colorFrame.getGreen() / 255.0f), (float) (colorFrame.getBlue() / 255.0f));
+		padModel.renderLegs(0.0625f);
+		GL11.glPopMatrix();
+
+		GL11.glPushMatrix();
+
+		bindTexture(frame);
+
+		GL11.glColor3f(1f,1f,1f);
+		padModel.renderFrame(0.0625f);
+		GL11.glPopMatrix();
+
+		GL11.glPopMatrix();
 	}
 }
