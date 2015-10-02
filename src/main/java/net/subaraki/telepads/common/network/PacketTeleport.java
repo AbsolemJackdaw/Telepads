@@ -11,6 +11,8 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.subaraki.telepads.Telepads;
+import net.subaraki.telepads.util.Constants;
 import net.subaraki.telepads.util.TeleportUtility;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -21,7 +23,12 @@ public class PacketTeleport implements IMessage {
 	/**
 	 * The position to send the player to.
 	 */
-	public Position pos;
+	public Position newPos;
+	
+	/**
+	 * The position the player comes from.
+	 */
+	public Position oldPos;
 
 	/**
 	 * The dimension to send the player to.
@@ -32,26 +39,30 @@ public class PacketTeleport implements IMessage {
 	 * A packet to teleport the player to a given position from the client side. This packet
 	 * must be sent from a client thread.
 	 * 
-	 * @param pos: The position to send the player to.
+	 * @param newPos: The position to send the player to.
 	 * @param dimension: The dimension to send the player to.
+	 * @param oldPos: The position the player comes from.
 	 */
-	public PacketTeleport(Position pos, int dimension) {
+	public PacketTeleport(Position newPos, int dimension, Position oldPos) {
 
-		this.pos = pos;
+		this.oldPos = oldPos;
 		this.dimension = dimension;
+		this.newPos = newPos;
 	}
 
 	@Override
 	public void fromBytes (ByteBuf buf) {
 
-		pos = new Position(buf);
+		newPos = new Position(buf);
+		oldPos = new Position(buf);
 		dimension = buf.readInt();
 	}
 
 	@Override
 	public void toBytes (ByteBuf buf) {
 
-		pos.write(buf);
+		newPos.write(buf);
+		oldPos.write(buf);
 		buf.writeInt(dimension);
 	}
 
@@ -66,24 +77,27 @@ public class PacketTeleport implements IMessage {
 
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
 
-			//			if (packet.dimension != player.dimension)
-			//									player.travelToDimension(packet.dimension);
-			//
-			//					packet.pos.sendEntityToPosition(player);
+			if (packet.dimension == player.dimension){
+				if(player.worldObj.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ()) != null){
+					if(packet.dimension == player.worldObj.provider.dimensionId)
+						packet.newPos.sendEntityToPosition(player);
 
-			if(player.worldObj.getTileEntity(packet.pos.getX(), packet.pos.getY(), packet.pos.getZ()) != null){
-				if(packet.dimension == player.worldObj.provider.dimensionId)
-					packet.pos.sendEntityToPosition(player);
-
+				}else
+					removePad(player, packet.oldPos);
 			}else{
 				WorldServer worldToCheck = DimensionManager.getWorld(packet.dimension);
 				if(worldToCheck!= null)
-					if(worldToCheck.getTileEntity(packet.pos.getX(), packet.pos.getY(), packet.pos.getZ()) != null){
+					if(worldToCheck.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ()) != null){
 						if(player instanceof EntityPlayerMP)
-							TeleportUtility.transferPlayerToDimension((EntityPlayerMP) player, packet.dimension, packet.pos);
-					}
+							TeleportUtility.transferPlayerToDimension((EntityPlayerMP) player, packet.dimension, packet.newPos);
+					}else
+						removePad(player, packet.oldPos);
 			}
 			return null;
 		}
+	}
+	
+	private static void removePad(EntityPlayer player, Position pos){
+		player.openGui(Telepads.instance, Constants.GUI_ID_REMOVEPAD, player.worldObj, pos.getX(), pos.getY(), pos.getY());
 	}
 }
