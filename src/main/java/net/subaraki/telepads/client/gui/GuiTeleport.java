@@ -39,8 +39,6 @@ public class GuiTeleport extends GuiScreen {
 
 	private static final ResourceLocation endPortalTextures = new ResourceLocation("textures/entity/end_portal.png");
 
-//    private static final ResourceLocation fieldTexture = new ResourceLocation("textures/gui/widgets.png");
-
 	/**int : buttonID to keep track of entry to look for in player locations, TelepadEntry*/
 	private HashMap<TelepadEntry, Integer> pageEntries = new HashMap<TelepadEntry, Integer>();
 	
@@ -55,8 +53,6 @@ public class GuiTeleport extends GuiScreen {
 		this.te = te;
 		this.player = player;
 		dimension_ID = player.worldObj.provider.dimensionId;
-		
-		Telepads.printDebugMessage(dimension_ID + "");
 		
 		PlayerLocations pl = PlayerLocations.getProperties(player);
 

@@ -98,6 +98,6 @@ public class PacketTeleport implements IMessage {
 	}
 	
 	private static void removePad(EntityPlayer player, Position pos){
-		player.openGui(Telepads.instance, Constants.GUI_ID_REMOVEPAD, player.worldObj, pos.getX(), pos.getY(), pos.getY());
+		
 	}
 }

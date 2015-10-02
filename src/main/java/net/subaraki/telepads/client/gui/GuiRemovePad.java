@@ -19,15 +19,12 @@ public class GuiRemovePad extends GuiScreen{
 	public TileEntityTelepad te;
 	private EntityPlayer player;
 
-	private Position positionToRemove;
+	private TelepadEntry entryToRemove;
 
 	public GuiRemovePad(EntityPlayer player, TileEntityTelepad telepad) {
 		this.player = player;
-	}
-
-	public GuiScreen setPositionToRemove(Position pos){
-		positionToRemove = pos;
-		return this;
+		this.te = telepad;
+		this.entryToRemove = null;  
 	}
 
 	@Override
@@ -70,7 +67,7 @@ public class GuiRemovePad extends GuiScreen{
 		PlayerLocations pl = PlayerLocations.getProperties(player);
 		
 		for(TelepadEntry tpe : pl.getEntries()){
-			if(tpe.position.equals(positionToRemove)){
+			if(tpe.position.equals(entryToRemove)){
 				this.buttonList.add(new GuiButton(1, 50, 100, 100, 20, tpe.entryName));
 				break;
 			}
