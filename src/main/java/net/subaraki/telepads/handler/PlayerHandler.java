@@ -66,30 +66,31 @@ public class PlayerHandler {
 
 				event.entityPlayer.swingItem();
 			}
+			if(event.entityPlayer.getHeldItem() != null){
+				if(event.entityPlayer.getHeldItem().getItem().equals(Items.water_bucket)){
 
-			if(event.entityPlayer.getHeldItem() != null && event.entityPlayer.getHeldItem().getItem().equals(Items.water_bucket)){
+					if (event.entityPlayer.isSneaking())
+						telepad.setBaseColor(new Color(243, 89, 233).getRGB());
 
-				if (event.entityPlayer.isSneaking())
-					telepad.setBaseColor(new Color(243, 89, 233).getRGB());
+					else
+						telepad.setFrameColor(new Color(26, 246, 172).getRGB());
 
-				else
-					telepad.setFrameColor(new Color(26, 246, 172).getRGB());
+					telepad.markDirty();
 
-				telepad.markDirty();
+					if(!event.entityPlayer.capabilities.isCreativeMode)
+						event.entityPlayer.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, 1));
 
-				if(!event.entityPlayer.capabilities.isCreativeMode)
-					event.entityPlayer.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, 1));
+					event.entityPlayer.swingItem();
 
-				event.entityPlayer.swingItem();
+					event.useItem = Result.DENY;
+					event.setCanceled(true);
+				}
 
-				event.useItem = Result.DENY;
-				event.setCanceled(true);
-			}
-
-			else if(event.entityPlayer.getHeldItem().getItem().equals(Items.diamond) && !telepad.hasDimensionUpgrade()){
-				telepad.addDimensionUpgrade();
-				if(!event.entityPlayer.capabilities.isCreativeMode)
-					event.entityPlayer.getHeldItem().stackSize--;
+				else if( event.entityPlayer.getHeldItem().getItem().equals(Items.diamond) && !telepad.hasDimensionUpgrade()){
+					telepad.addDimensionUpgrade();
+					if(!event.entityPlayer.capabilities.isCreativeMode)
+						event.entityPlayer.getHeldItem().stackSize--;
+				}
 			}
 		}
 	}
