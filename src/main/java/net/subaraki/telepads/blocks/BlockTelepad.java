@@ -54,7 +54,6 @@ public class BlockTelepad extends BlockContainer {
 
 		super.breakBlock(par1World, par2, par3, par4, b, par6);
 		par1World.removeTileEntity(par2, par3, par4);
-		//TODO remove position from other player's files
 	}
 
 	@Override
@@ -91,16 +90,6 @@ public class BlockTelepad extends BlockContainer {
 
 	@Override
 	public void onBlockPlacedBy (World par1World, int x, int y, int z, EntityLivingBase elb, ItemStack is) {
-
-		//		if (par1World.provider.dimensionId == 1) {
-		//			par1World.newExplosion((Entity) null, x + 0.5F, y + 0.5F, z + 0.5F, 5.0F, true, true);
-		//			par1World.setBlockToAir(x, y, z);
-		//			par1World.removeTileEntity(x, y, z);
-		//			if (!par1World.isRemote)
-		//				((EntityPlayer) elb).addChatMessage(new ChatComponentText("The Magic in the End was too strong for the TelePad..."));
-		//
-		//			return;
-		//		}
 
 		TileEntityTelepad te = new TileEntityTelepad();
 
@@ -189,29 +178,32 @@ public class BlockTelepad extends BlockContainer {
 		world.spawnEntityInWorld(ei);
 
 		TelepadEntry tpe = new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(telepad.xCoord,  telepad.yCoord,  telepad.zCoord));
-		
-		PlayerLocations.getProperties(player).removeEntry(tpe);
-		removeLocationFromPossibleOtherPlayers(world, tpe);
+		removeLocationsFromAnyPlayer(world, tpe);
 
 		return world.setBlockToAir(x, y, z);
 	}
 
 	/**Position is original position given to compare with registered locations of all players on the server*/
-	private void removeLocationFromPossibleOtherPlayers(World world, TelepadEntry tpe){
+	private void removeLocationsFromAnyPlayer(World world, TelepadEntry tpe){
 
-		if(!world.isRemote){
-			WorldServer ws = (WorldServer)world;
-			List<EntityPlayer> allPlayers = ws.playerEntities;
+		List<EntityPlayer> allPlayers = world.playerEntities;
+
+		for(EntityPlayer player : allPlayers){
+
+			PlayerLocations playerLocation = PlayerLocations.getProperties(player);
+			List<TelepadEntry> list = playerLocation.getEntries();
+
+			int count = 0;
 			
-			for(EntityPlayer player : allPlayers){
-				
-				PlayerLocations playerLocation = PlayerLocations.getProperties(player);
-				TelepadEntry tpeCompare = (TelepadEntry)playerLocation.getEntries();
-				
-				if(tpeCompare.position.equals(tpe) && tpe.dimensionID == tpeCompare.dimensionID)
-					
-					playerLocation.removeEntry(tpe);
+			for(TelepadEntry tpeCompare : list){
+				if(tpeCompare.position.equals(tpe) && tpeCompare.dimensionID == tpe.dimensionID){
+					TelepadEntry remove = playerLocation.getEntries().get(count);
+					playerLocation.removeEntry(remove);
+				}
+				count++;	
 			}
+
+			playerLocation.sync();
 		}
 
 	}
