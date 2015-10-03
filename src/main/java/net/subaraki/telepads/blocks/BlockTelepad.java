@@ -1,14 +1,10 @@
 package net.subaraki.telepads.blocks;
 
-import java.util.List;
 import java.util.Random;
 
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -21,7 +17,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.handler.PlayerLocations;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
@@ -208,10 +203,13 @@ public class BlockTelepad extends BlockContainer {
 			TileEntityTelepad telepad = (TileEntityTelepad) world.getTileEntity(x, y, z);
 			
 			if(telepad.hasRedstoneUpgrade()){
+				
 				if(world.getBlockPowerInput(x, y, z) > 0){
-					
-					//TODO do redstone stuff here
-				}
+					telepad.setPowered(true);
+
+				}else
+					telepad.setPowered(false);
+				telepad.markDirty();
 			}
 		}
 	}

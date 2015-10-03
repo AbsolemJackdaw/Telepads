@@ -2,17 +2,13 @@ package net.subaraki.telepads.common.network;
 
 import io.netty.buffer.ByteBuf;
 import net.darkhax.bookshelf.util.Position;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.World;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
-import net.subaraki.telepads.Telepads;
-import net.subaraki.telepads.util.Constants;
+import net.subaraki.telepads.tileentity.TileEntityTelepad;
 import net.subaraki.telepads.util.TeleportUtility;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -24,7 +20,7 @@ public class PacketTeleport implements IMessage {
 	 * The position to send the player to.
 	 */
 	public Position newPos;
-	
+
 	/**
 	 * The position the player comes from.
 	 */
@@ -78,26 +74,37 @@ public class PacketTeleport implements IMessage {
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
 
 			if (packet.dimension == player.dimension){
-				if(player.worldObj.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ()) != null){
-					if(packet.dimension == player.worldObj.provider.dimensionId)
-						packet.newPos.sendEntityToPosition(player);
+				TileEntity te = player.worldObj.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ());
+				if( te != null && te instanceof TileEntityTelepad){
+					TileEntityTelepad telepad = (TileEntityTelepad) player.worldObj.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ());
+					if(!telepad.isPowered()){
+						if(packet.dimension == player.worldObj.provider.dimensionId)
+							packet.newPos.sendEntityToPosition(player);
+					}else
+						player.addChatMessage(new ChatComponentText("This pad was powered off"));
 
 				}else
 					removePad(player, packet.oldPos);
 			}else{
 				WorldServer worldToCheck = DimensionManager.getWorld(packet.dimension);
-				if(worldToCheck!= null)
-					if(worldToCheck.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ()) != null){
-						if(player instanceof EntityPlayerMP)
-							TeleportUtility.transferPlayerToDimension((EntityPlayerMP) player, packet.dimension, packet.newPos);
+				if(worldToCheck!= null){
+					TileEntity te = player.worldObj.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ());
+					if(te != null && te instanceof TileEntityTelepad){
+						TileEntityTelepad telepad = (TileEntityTelepad) player.worldObj.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ());
+						if(!telepad.isPowered()){					
+							if(player instanceof EntityPlayerMP)
+								TeleportUtility.transferPlayerToDimension((EntityPlayerMP) player, packet.dimension, packet.newPos);
+						}else
+							player.addChatMessage(new ChatComponentText("This pad was powered off"));
 					}else
 						removePad(player, packet.oldPos);
+				}
 			}
 			return null;
 		}
 	}
-	
+
 	private static void removePad(EntityPlayer player, Position pos){
-		
+
 	}
 }

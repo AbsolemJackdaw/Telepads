@@ -50,6 +50,7 @@ public class Telepads {
         network.registerMessage(PacketAddTelepadEntry.PacketAddTelepadEntryHandler.class, PacketAddTelepadEntry.class, 1, Side.SERVER);
         network.registerMessage(PacketRemoveTelepadEntry.PacketRemoveTelepadEntryHandler.class, PacketRemoveTelepadEntry.class, 2, Side.SERVER);
         network.registerMessage(PacketTeleport.PacketTeleportHandler.class, PacketTeleport.class, 3, Side.SERVER);
+
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         
         new ConfigurationHandler(event.getSuggestedConfigurationFile());

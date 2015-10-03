@@ -31,6 +31,7 @@ public class TileEntityTelepad extends TileEntity {
 
 	private boolean hasDimensionUpgrade = false;
 	private boolean hasRedstoneUpgrade = false;
+	private boolean isPowered = false;
 
 	private static int MAX_TIME = 3 * 20;
 	public int counter = MAX_TIME;
@@ -66,6 +67,7 @@ public class TileEntityTelepad extends TileEntity {
 		dimension = tag.getInteger("dimension");
 		hasDimensionUpgrade = tag.getBoolean("upgrade_dimension");
 		hasRedstoneUpgrade = tag.getBoolean("upgrade_redstone");
+		isPowered = tag.getBoolean("is_powered");
 		this.colorBase = tag.getInteger("colorBase");
 		this.colorFrame = tag.getInteger("colorFrame");
 		this.upgradeRotation = tag.getInteger("upgradeRotation");
@@ -80,6 +82,7 @@ public class TileEntityTelepad extends TileEntity {
 		tag.setInteger("dimension", dimension);
 		tag.setBoolean("upgrade_dimension", hasDimensionUpgrade);
 		tag.setBoolean("upgrade_redstone", hasRedstoneUpgrade);
+		tag.setBoolean("is_powered", isPowered);
 		tag.setInteger("colorBase", this.colorBase);
 		tag.setInteger("colorFrame", this.colorFrame);
 		tag.setInteger("upgradeRotation", upgradeRotation);
@@ -88,6 +91,8 @@ public class TileEntityTelepad extends TileEntity {
 
 	@Override
 	public void updateEntity () {
+
+//		Telepads.printDebugMessage(isPowered()+ " " + hasRedstoneUpgrade());
 
 		Telepads.proxy.createTelepadParticleEffect(xCoord, yCoord, zCoord, isStandingOnPlatform);
 
@@ -221,12 +226,20 @@ public class TileEntityTelepad extends TileEntity {
 	public int getUpgradeRotation(){
 		return upgradeRotation;
 	}
-	
+
 	public boolean hasRedstoneUpgrade(){
 		return hasRedstoneUpgrade;
 	}
 
 	public void addRedstoneUpgrade(){
 		hasRedstoneUpgrade = true;
+	}
+
+	public void setPowered(boolean flag){
+		isPowered = flag;
+	}
+
+	public boolean isPowered(){
+		return isPowered;
 	}
 }

@@ -90,6 +90,13 @@ public class PlayerHandler {
 					telepad.addDimensionUpgrade();
 					if(!event.entityPlayer.capabilities.isCreativeMode)
 						event.entityPlayer.getHeldItem().stackSize--;
+					telepad.markDirty();
+				}
+				else if( event.entityPlayer.getHeldItem().getItem().equals(Items.redstone)){
+					telepad.addRedstoneUpgrade();
+					if(!event.entityPlayer.capabilities.isCreativeMode)
+						event.entityPlayer.getHeldItem().stackSize--;
+					telepad.markDirty();
 				}
 			}
 		}

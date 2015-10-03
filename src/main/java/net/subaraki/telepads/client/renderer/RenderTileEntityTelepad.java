@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.client.model.ModelTelepad;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
@@ -188,9 +189,15 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 		GL11.glPushMatrix();
 
-		bindTexture(frame);
+		if(te.isPowered()){
+			bindTexture(frame_empty);
+			GL11.glColor3f(1f,0f,1f);
+		}
+		else{
+			bindTexture(frame);
+			GL11.glColor3f(1f,1f,1f);
+		}
 
-		GL11.glColor3f(1f,1f,1f);
 		padModel.renderFrame(0.0625f);
 		GL11.glPopMatrix();
 
@@ -246,8 +253,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 		//  System.out.println("The color is: " + colorBase.toString());
 	}
-	
-	
+
+
 	public void renderInventory(TileEntity tileentity, Color colorFrame, Color colorBase, double d, double d1, double d2, float f) {
 
 		animation_counter++;

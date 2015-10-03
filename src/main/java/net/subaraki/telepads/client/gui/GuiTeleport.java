@@ -10,8 +10,11 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldProvider;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Chat;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.common.network.PacketTeleport;
 import net.subaraki.telepads.handler.PlayerLocations;
@@ -20,6 +23,8 @@ import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import com.mojang.realmsclient.gui.ChatFormatting;
 
 public class GuiTeleport extends GuiScreen {
 
@@ -32,7 +37,7 @@ public class GuiTeleport extends GuiScreen {
 
 	private int tuner_counter;
 	private int dimension_ID;
-	
+
 	private TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
 
 	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
@@ -41,9 +46,9 @@ public class GuiTeleport extends GuiScreen {
 
 	/**int : buttonID to keep track of entry to look for in player locations, TelepadEntry*/
 	private HashMap<TelepadEntry, Integer> pageEntries = new HashMap<TelepadEntry, Integer>();
-	
+
 	private List<Integer> dimensionsVisited = new ArrayList<Integer>();
-	
+
 	private float c = 0;
 
 	float sd = 0;
@@ -53,13 +58,13 @@ public class GuiTeleport extends GuiScreen {
 		this.te = te;
 		this.player = player;
 		dimension_ID = player.worldObj.provider.dimensionId;
-		
+
 		PlayerLocations pl = PlayerLocations.getProperties(player);
 
 		//this check is performed so that the id of the current world
 		//is always set first ! this prevents wrong dimensions from displaying the default
 		dimensionsVisited.add(dimension_ID);
-		
+
 		for(TelepadEntry tpe : pl.getEntries()){
 			if(!dimensionsVisited.contains(tpe.dimensionID))
 				dimensionsVisited.add(tpe.dimensionID);
@@ -74,17 +79,17 @@ public class GuiTeleport extends GuiScreen {
 
 			if (id == EXIT_BUTTON)
 				this.mc.thePlayer.closeScreen(); // closes the screen
-			
+
 			else if (id == AREA_LEFT) {
 				tuner_counter--;
 				drawButtonsOnScreen();
 			}
-			
+
 			else if (id == AREA_RIGHT) {
 				tuner_counter++;
 				drawButtonsOnScreen();
 			}
-			
+
 			else {
 				sendPacket(id);
 				this.mc.thePlayer.closeScreen();
@@ -129,10 +134,10 @@ public class GuiTeleport extends GuiScreen {
 
 		List<TelepadEntry> telepads= PlayerLocations.getProperties(player).getEntries();
 
-		 drawRect(46 - 1, 7 - 1, 174 + 1, 23 + 1, -6250336);
-         drawRect(46, 7, 174, 23, -16777216);
-    
-         
+		drawRect(46 - 1, 7 - 1, 174 + 1, 23 + 1, -6250336);
+		drawRect(46, 7, 174, 23, -16777216);
+
+
 		if(!te.hasDimensionUpgrade()){
 			fontRendererObj.drawSplitString(te.getWorldObj().provider.getDimensionName(), 48+1, 11+1, 180, 0x000000);
 			fontRendererObj.drawSplitString(te.getWorldObj().provider.getDimensionName(), 48, 11, 180, 0xffffff);
@@ -155,7 +160,7 @@ public class GuiTeleport extends GuiScreen {
 	}
 
 	public void drawButtonsOnScreen(){
-		
+
 		this.buttonList.clear();
 		pageEntries.clear();
 
@@ -163,25 +168,25 @@ public class GuiTeleport extends GuiScreen {
 			tuner_counter = 0;
 		if(tuner_counter < 0)
 			tuner_counter = dimensionsVisited.size()-1;
-		
+
 		dimension_ID = dimensionsVisited.get(tuner_counter);
-		
+
 		if(te.hasDimensionUpgrade()){
 			this.buttonList.add(new GuiButton(AREA_LEFT, 25, 5, 20, 20, "<"));
 			this.buttonList.add(new GuiButton(AREA_RIGHT, 175, 5, 20, 20, ">"));
 		}
-		
+
 		this.buttonList.add(new GuiButton(EXIT_BUTTON, 5, 5, 20, 20, "X"));
 
 		makePage();
-		
+
 	}
-	
+
 	@Override
 	public void initGui () {
 
 		drawButtonsOnScreen();
-		
+
 		if(te.hasDimensionUpgrade()){
 			this.buttonList.add(new GuiButton(AREA_LEFT, 25, 5, 20, 20, "<"));
 			this.buttonList.add(new GuiButton(AREA_RIGHT, 175, 5, 20, 20, ">"));
@@ -219,26 +224,32 @@ public class GuiTeleport extends GuiScreen {
 
 		Telepads.instance.network.sendToServer(new PacketTeleport(new Position(x, y, z), dim, new Position(te.xCoord, te.yCoord, te.zCoord)));
 	}
-	
+
 	private void makePage(){
-		
+
 		PlayerLocations pl = PlayerLocations.getProperties(player);
-		
+
 		int classificationID = 0;
-		
+
 		for(TelepadEntry tpe : pl.getEntries()){
-			
+
 			if(tpe.dimensionID == dimension_ID)
 				pageEntries.put(tpe, classificationID);
 			classificationID++;
 		}
 
 		int i = 0;
-		
+
 		for(TelepadEntry tpe : pageEntries.keySet()){
-			
+			boolean flag = false;
+			TileEntity te = player.worldObj.getTileEntity(tpe.position.getX(), tpe.position.getY(), tpe.position.getZ());
+			if(te instanceof TileEntityTelepad){
+				TileEntityTelepad destinyPad = (TileEntityTelepad)te;
+				if(destinyPad.isPowered())
+					flag = true;
+			}
 			String name = tpe.entryName;
-			this.buttonList.add(new GuiButton(pageEntries.get(tpe), /* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10) : 0), /* y */(130 + ((i * 25))) - (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100 : 100), /* size */100, 20, name));
+			this.buttonList.add(new GuiButton(pageEntries.get(tpe), /* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10) : 0), /* y */(130 + ((i * 25))) - (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100 : 100), /* size */100, 20, flag ? ChatFormatting.RED+ " "  + name : name));
 			i++;
 		}
 	}
