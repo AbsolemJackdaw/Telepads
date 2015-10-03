@@ -29,9 +29,6 @@ public class ItemTransmitter extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer player) {
 
-		player.openGui(Telepads.instance, Constants.GUI_ID_REMOVEPAD, world, (int)player.posX, (int)player.posY, (int)player.posZ);
-		
-		
 		return super.onItemRightClick(is, world, player);
 	}
 }

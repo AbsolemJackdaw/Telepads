@@ -7,3 +7,4 @@ item.telepad.transmitter.name=Transmizter Upgradazionne
 #gui text
 enter.to.confirm=Drucke Enter um zu bestatigen
 name.your.telepad=Gib deiner Teleplatte einen Namen
+cannot.find.remove?=Konnte dieses Pad nicht finden. Mochtest du dieses Pad entfernen oder trotzdem teleportieren?

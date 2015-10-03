@@ -7,3 +7,4 @@ item.telepad.transmitter.name=Amélioration Transmitionique
 #gui text
 enter.to.confirm=Appuyez sur Entrer pour confirmer
 name.your.telepad=Nommer votre TelePad
+cannot.find.remove?=La destionation semble ne plus exister. Supprimer l'entree ou teleporter quand meme ?

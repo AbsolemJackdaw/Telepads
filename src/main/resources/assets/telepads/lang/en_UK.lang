@@ -7,3 +7,4 @@ item.telepad.transmitter.name=Transmitter Upgrade
 #gui text
 enter.to.confirm=Press Enter to confirm
 name.your.telepad=Name your TelePad
+cannot.find.remove?=Cannot find specific pad. Do you want to remove this pad or teleport anyway?

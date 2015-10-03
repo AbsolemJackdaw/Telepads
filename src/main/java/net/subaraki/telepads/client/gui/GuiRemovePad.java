@@ -6,6 +6,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
+import net.subaraki.telepads.Telepads;
+import net.subaraki.telepads.common.network.PacketRemoveTelepadEntry;
+import net.subaraki.telepads.common.network.PacketTeleport;
 import net.subaraki.telepads.handler.PlayerLocations;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
@@ -22,17 +25,26 @@ public class GuiRemovePad extends GuiScreen{
 	private TelepadEntry entryToRemove;
 
 	public GuiRemovePad(EntityPlayer player, TileEntityTelepad telepad) {
+		super();
 		this.player = player;
 		this.te = telepad;
-		this.entryToRemove = null;  
+	}
+
+	public GuiRemovePad setEntryToRemove(TelepadEntry tpe){
+		entryToRemove = tpe;
+		return this;
 	}
 
 	@Override
 	public void actionPerformed (GuiButton button) {
 		if(button.id == 0){
-			//remove position from player entry
-			//remove position from any other player entry ?
-			//send packet to do so
+			Telepads.instance.network.sendToServer(new PacketRemoveTelepadEntry(player.getPersistentID(), entryToRemove));
+			this.mc.thePlayer.closeScreen();
+		}
+
+		if(button.id == 1){
+			Telepads.instance.network.sendToServer(new PacketTeleport(entryToRemove.position, entryToRemove.dimensionID, new Position(te.xCoord, te.yCoord, te.zCoord), true));
+			this.mc.thePlayer.closeScreen();
 		}
 	}
 
@@ -44,6 +56,8 @@ public class GuiRemovePad extends GuiScreen{
 
 	@Override
 	public void drawScreen (int par1, int par2, float par3) {
+
+		super.drawScreen(par1, par2, par3);
 
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
@@ -58,22 +72,24 @@ public class GuiRemovePad extends GuiScreen{
 	public void initGui () {
 
 		super.initGui();
-		
+
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 
 		this.buttonList.clear();
-		
-		fontRendererObj.drawSplitString("derp", (posX), posY, 180, 0x000000);
 
-		this.buttonList.add(new GuiButton(0, posX, posY, ChatFormatting.RED + "X"));
-		
+		this.buttonList.add(new GuiButton(0, posX -65, posY-25, 20, 20, ChatFormatting.RED + "X"));
+
+		Telepads.printDebugMessage(buttonList + "" );
 		PlayerLocations pl = PlayerLocations.getProperties(player);
 
 		for(TelepadEntry tpe : pl.getEntries()){
-			if(tpe.position.equals(entryToRemove)){
-				this.buttonList.add(new GuiButton(1, 50, 100, 100, 20, tpe.entryName));
-				break;
+			Telepads.printDebugMessage(tpe.entryName);
+			if(tpe.position.equals(entryToRemove.position)){
+				if(tpe.dimensionID == entryToRemove.dimensionID){
+					this.buttonList.add(new GuiButton(1, posX - 35, posY-25, 100, 20, tpe.entryName));
+					break;
+				}
 			}
 		}
 	}

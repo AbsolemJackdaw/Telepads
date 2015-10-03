@@ -1,0 +1,10 @@
+#block
+tile.telepad.name=Teleporttimatto
+
+#item
+item.telepad.transmitter.name=Lahetys-moduuli
+
+#gui
+name.your.telepad=Nimea teleporttimattosi
+enter.to.confirm=Paina Entteria hyvaksyaksesi
+cannot.find.remove?="Pyytamaanne teleporttimattoa ei loytynyt. Haluatteko poistaa taman maton vai teleportata siita huolimatta?"
