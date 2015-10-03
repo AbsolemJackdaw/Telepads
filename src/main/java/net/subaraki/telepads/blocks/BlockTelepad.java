@@ -6,6 +6,9 @@ import java.util.Random;
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -111,7 +114,6 @@ public class BlockTelepad extends BlockContainer {
 		par1World.markBlockForUpdate(te.xCoord, te.yCoord, te.zCoord);
 		par1World.setTileEntity(x, y, z, te);
 
-
 	}
 
 	@Override
@@ -154,39 +156,31 @@ public class BlockTelepad extends BlockContainer {
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
 
-		TileEntity te = world.getTileEntity(x, y, z);
-		TileEntityTelepad telepad = null;
+		if(getTileEntityTelepad(world, x, y, z)){
+			TileEntityTelepad telepad = (TileEntityTelepad) world.getTileEntity(x, y, z);
 
-		if(te == null)
-			return false;
+			PlayerLocations pl = PlayerLocations.getProperties(player);
 
-		if(te instanceof TileEntityTelepad)
-			telepad = (TileEntityTelepad)te;
+			for(TelepadEntry tpe : pl.getEntries()){
+				if(tpe.position.equals(new Position(telepad.xCoord, telepad.yCoord, telepad.zCoord)))
+					if(tpe.dimensionID == telepad.getWorldObj().provider.dimensionId){
+						if(tpe.entryName.equals(telepad.getTelePadName())){
 
-		if(telepad == null)
-			return false;
+							pl.removeEntry(tpe);
+							dropPad(world, telepad, x, y, z);
+							Telepads.printDebugMessage("pad was removed succesfully");
+							if(telepad.hasDimensionUpgrade())
+								world.spawnEntityInWorld(new EntityItem(world, x, y, z, new ItemStack(Telepads.transmitter, 1)));
 
-		PlayerLocations pl = PlayerLocations.getProperties(player);
+							return world.setBlockToAir(x, y, z);
 
-		for(TelepadEntry tpe : pl.getEntries()){
-			if(tpe.position.equals(new Position(telepad.xCoord, telepad.yCoord, telepad.zCoord)))
-				if(tpe.dimensionID == telepad.getWorldObj().provider.dimensionId){
-					if(tpe.entryName.equals(telepad.getTelePadName())){
-
-						pl.removeEntry(tpe);
-						dropPad(world, telepad, x, y, z);
-						Telepads.printDebugMessage("pad was removed succesfully");
-						if(telepad.hasDimensionUpgrade())
-							world.spawnEntityInWorld(new EntityItem(world, x, y, z, new ItemStack(Telepads.transmitter, 1)));
-						
-						return world.setBlockToAir(x, y, z);
-
+						}
 					}
-				}
+			}
 		}
 		return false;
-
 	}
+
 
 	private void dropPad(World world, TileEntityTelepad telepad, int x, int y,int z) {
 
@@ -204,5 +198,38 @@ public class BlockTelepad extends BlockContainer {
 		world.spawnEntityInWorld(ei);
 
 
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x,int y, int z, Block neighborBlock) {
+
+		if(getTileEntityTelepad(world, x, y, z)){
+
+			TileEntityTelepad telepad = (TileEntityTelepad) world.getTileEntity(x, y, z);
+			
+			if(telepad.hasRedstoneUpgrade()){
+				if(world.getBlockPowerInput(x, y, z) > 0){
+					
+					//TODO do redstone stuff here
+				}
+			}
+		}
+	}
+
+	private boolean getTileEntityTelepad(World world, int x, int y , int z){
+
+		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntityTelepad telepad = null;
+
+		if(te == null)
+			return false;
+
+		if(te instanceof TileEntityTelepad)
+			telepad = (TileEntityTelepad)te;
+
+		if(telepad == null)
+			return false;
+
+		return true;
 	}
 }
