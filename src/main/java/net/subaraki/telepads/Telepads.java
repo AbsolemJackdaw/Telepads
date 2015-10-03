@@ -1,6 +1,7 @@
 package net.subaraki.telepads;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.subaraki.telepads.blocks.BlockTelepad;
 import net.subaraki.telepads.common.CommonProxy;
@@ -12,6 +13,7 @@ import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.handler.GuiHandler;
 import net.subaraki.telepads.handler.ItemHandler;
 import net.subaraki.telepads.handler.PlayerHandler;
+import net.subaraki.telepads.items.ItemTransmitter;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
 import net.subaraki.telepads.util.Constants;
 import cpw.mods.fml.common.Mod;
@@ -38,6 +40,7 @@ public class Telepads {
     public SimpleNetworkWrapper network;
     
     public static Block blockPad = new BlockTelepad();
+    public static Item transmitter = new ItemTransmitter();
 
     @EventHandler
     public void preInit (FMLPreInitializationEvent event) {
@@ -55,6 +58,8 @@ public class Telepads {
 
         GameRegistry.registerBlock(blockPad,"telepad");
         GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
+        
+        GameRegistry.registerItem(transmitter, "Transmitter Upgrade");
         
         proxy.preInit();
     }

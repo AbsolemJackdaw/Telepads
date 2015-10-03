@@ -1,6 +1,9 @@
 #block
 tile.telepad.name=Teleplatte
 
+#item
+item.telepad.transmitter.name=Transmizter Upgradazionne
+
 #gui text
 enter.to.confirm=Drucke Enter um zu bestatigen
 name.your.telepad=Gib deiner Teleplatte einen Namen

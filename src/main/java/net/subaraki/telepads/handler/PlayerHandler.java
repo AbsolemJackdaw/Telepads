@@ -86,7 +86,7 @@ public class PlayerHandler {
 					event.setCanceled(true);
 				}
 
-				else if( event.entityPlayer.getHeldItem().getItem().equals(Items.diamond) && !telepad.hasDimensionUpgrade()){
+				else if( event.entityPlayer.getHeldItem().getItem().equals(Telepads.transmitter) && !telepad.hasDimensionUpgrade()){
 					telepad.addDimensionUpgrade();
 					if(!event.entityPlayer.capabilities.isCreativeMode)
 						event.entityPlayer.getHeldItem().stackSize--;

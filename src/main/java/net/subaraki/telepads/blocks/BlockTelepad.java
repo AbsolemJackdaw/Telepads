@@ -176,6 +176,9 @@ public class BlockTelepad extends BlockContainer {
 						pl.removeEntry(tpe);
 						dropPad(world, telepad, x, y, z);
 						Telepads.printDebugMessage("pad was removed succesfully");
+						if(telepad.hasDimensionUpgrade())
+							world.spawnEntityInWorld(new EntityItem(world, x, y, z, new ItemStack(Telepads.transmitter, 1)));
+						
 						return world.setBlockToAir(x, y, z);
 
 					}

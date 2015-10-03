@@ -1,6 +1,9 @@
 #block
 tile.telepad.name=TelePad
 
+#item
+item.telepad.transmitter.name=Amélioration Transmitionique
+
 #gui text
 enter.to.confirm=Appuyez sur Entrer pour confirmer
 name.your.telepad=Nommer votre TelePad

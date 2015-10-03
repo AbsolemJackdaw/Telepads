@@ -1,6 +1,9 @@
 #block
 tile.telepad.name=TelePad
 
+#item
+item.telepad.transmitter.name=Transmitter Upgrade
+
 #gui text
 enter.to.confirm=Press Enter to confirm
 name.your.telepad=Name your TelePad
