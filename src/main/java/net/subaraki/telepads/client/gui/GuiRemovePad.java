@@ -57,15 +57,19 @@ public class GuiRemovePad extends GuiScreen{
 	@Override
 	public void initGui () {
 
+		super.initGui();
+		
 		int posX = (this.width) / 2;
 		int posY = (this.height) / 2;
 
 		this.buttonList.clear();
-
-		this.buttonList.add(new GuiButton(0, 20, 100, 20, 20, ChatFormatting.RED + "X"));
-
-		PlayerLocations pl = PlayerLocations.getProperties(player);
 		
+		fontRendererObj.drawSplitString("derp", (posX), posY, 180, 0x000000);
+
+		this.buttonList.add(new GuiButton(0, posX, posY, ChatFormatting.RED + "X"));
+		
+		PlayerLocations pl = PlayerLocations.getProperties(player);
+
 		for(TelepadEntry tpe : pl.getEntries()){
 			if(tpe.position.equals(entryToRemove)){
 				this.buttonList.add(new GuiButton(1, 50, 100, 100, 20, tpe.entryName));

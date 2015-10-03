@@ -54,4 +54,8 @@ public class ClientProxy extends CommonProxy {
             world.spawnParticle(ConfigurationHandler.particleName, posX, posY, posZ, velocityX, volocityY, velocityZ);
         }
     }
+    
+    public World getClientWorld(){
+    	return Minecraft.getMinecraft().theWorld;
+    }
 }

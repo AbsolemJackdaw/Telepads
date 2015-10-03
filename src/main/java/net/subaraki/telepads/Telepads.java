@@ -7,6 +7,7 @@ import net.subaraki.telepads.blocks.BlockTelepad;
 import net.subaraki.telepads.common.CommonProxy;
 import net.subaraki.telepads.common.network.PacketAddTelepadEntry;
 import net.subaraki.telepads.common.network.PacketRemoveTelepadEntry;
+import net.subaraki.telepads.common.network.PacketSyncPoweredBlock;
 import net.subaraki.telepads.common.network.PacketSyncTelepadEntries;
 import net.subaraki.telepads.common.network.PacketTeleport;
 import net.subaraki.telepads.handler.ConfigurationHandler;
@@ -50,6 +51,7 @@ public class Telepads {
         network.registerMessage(PacketAddTelepadEntry.PacketAddTelepadEntryHandler.class, PacketAddTelepadEntry.class, 1, Side.SERVER);
         network.registerMessage(PacketRemoveTelepadEntry.PacketRemoveTelepadEntryHandler.class, PacketRemoveTelepadEntry.class, 2, Side.SERVER);
         network.registerMessage(PacketTeleport.PacketTeleportHandler.class, PacketTeleport.class, 3, Side.SERVER);
+        network.registerMessage(PacketSyncPoweredBlock.PacketSyncPoweredBlockHandler.class, PacketSyncPoweredBlock.class, 4, Side.CLIENT);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
         

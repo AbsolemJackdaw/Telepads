@@ -18,6 +18,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.subaraki.telepads.Telepads;
+import net.subaraki.telepads.common.network.PacketSyncPoweredBlock;
 import net.subaraki.telepads.handler.PlayerLocations;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
@@ -201,14 +202,16 @@ public class BlockTelepad extends BlockContainer {
 		if(getTileEntityTelepad(world, x, y, z)){
 
 			TileEntityTelepad telepad = (TileEntityTelepad) world.getTileEntity(x, y, z);
-			
+
 			if(telepad.hasRedstoneUpgrade()){
-				
+
 				if(world.getBlockPowerInput(x, y, z) > 0){
 					telepad.setPowered(true);
-
-				}else
+					Telepads.instance.network.sendToAll(new PacketSyncPoweredBlock(true, new Position(x,y,z)));
+				}else{
 					telepad.setPowered(false);
+					Telepads.instance.network.sendToAll(new PacketSyncPoweredBlock(false, new Position(x,y,z)));
+				}
 				telepad.markDirty();
 			}
 		}
