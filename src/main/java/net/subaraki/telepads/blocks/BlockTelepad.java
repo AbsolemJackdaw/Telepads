@@ -146,7 +146,7 @@ public class BlockTelepad extends BlockContainer {
 				pl.sync();
 			}
 		}
-			
+
 
 		return false;
 	}
@@ -221,6 +221,19 @@ public class BlockTelepad extends BlockContainer {
 				Telepads.instance.network.sendToAll(new PacketSyncPoweredBlock(flag, new Position(x,y,z)));
 
 				telepad.markDirty();
+
+				for(Object o : world.playerEntities){
+					if(o instanceof EntityPlayer){
+						EntityPlayer player = (EntityPlayer)o;
+						PlayerLocations pl = PlayerLocations.getProperties(player);
+
+						for(TelepadEntry tpe : pl.getEntries())
+							if(tpe.position.equals(new Position(x, y, z)))
+								if(tpe.dimensionID == world.provider.dimensionId)
+									tpe.setPowered(flag);
+						pl.sync();
+					}
+				}
 			}
 		}
 	}
