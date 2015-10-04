@@ -105,7 +105,6 @@ public class GuiNameTelepad extends GuiScreen {
         Telepads.instance.network.sendToServer(new PacketAddTelepadEntry(mc.thePlayer.getUniqueID(), new TelepadEntry(padNameField.getText(), mc.thePlayer.worldObj.provider.dimensionId, new Position(te.xCoord, te.yCoord, te.zCoord), false, false)));
         
         this.mc.thePlayer.closeScreen();
-        
     }
     
 }

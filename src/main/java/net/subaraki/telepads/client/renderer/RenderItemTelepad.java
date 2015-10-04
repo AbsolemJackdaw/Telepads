@@ -21,7 +21,6 @@ public class RenderItemTelepad implements IItemRenderer {
 
 	@Override
 	public boolean handleRenderType (ItemStack item, ItemRenderType type) {
-
 		return true;
 	}
 
@@ -38,12 +37,6 @@ public class RenderItemTelepad implements IItemRenderer {
 				
 				if(item.getTagCompound().hasKey("colorFrame") && item.getTagCompound().hasKey("colorBase"))
 					rtet.renderInventory(new TileEntityTelepad(), new Color(item.getTagCompound().getInteger("colorFrame")), new Color(item.getTagCompound().getInteger("colorBase")), 0, 0, 0, 0);
-//
-//				else if(item.getTagCompound().hasKey("colorFrame"))
-//					rtet.renderInventory(new TileEntityTelepad(), new Color(item.getTagCompound().getInteger("colorFrame")), new Color(243, 89, 233), 0, 0, 0, 0);
-//
-//				else if(item.getTagCompound().hasKey("colorBase"))
-//					rtet.renderInventory(new TileEntityTelepad(), new Color(26, 246, 172), new Color(item.getTagCompound().getInteger("colorBase")), 0, 0, 0, 0);
 			}
 		}else
 			TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityTelepad(), 0.0D, 0.0D, 0.0D, 0.0F);

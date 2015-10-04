@@ -29,6 +29,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 	private static ResourceLocation frame_upgrade_2 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_2.png");
 	private static ResourceLocation frame_upgrade_3 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_3.png");
 	private static ResourceLocation frame_upgrade_4 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_4.png");
+	private static ResourceLocation frame_powered_off = new ResourceLocation("minecraft:textures/blocks/red_sand.png");
+	private static ResourceLocation frame_powered_on = new ResourceLocation("minecraft:textures/blocks/redstone_block.png");
 
 	private static int animation_counter;
 
@@ -189,14 +191,16 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 		GL11.glPushMatrix();
 
-		if(te.isPowered()){
-			bindTexture(frame_empty);
-			GL11.glColor3f(1f,0f,1f);
-		}
-		else{
+		GL11.glColor3f(1f,1f,1f);
+		//TODO this is to be removed, and just redstone particle effects should be added !
+		//or a redstone lamp to be rendered on the side
+		if(te.hasRedstoneUpgrade()){
+			if(te.isPowered())
+				bindTexture(frame_powered_on);
+			else
+				bindTexture(frame_powered_off);
+		}else
 			bindTexture(frame);
-			GL11.glColor3f(1f,1f,1f);
-		}
 
 		padModel.renderFrame(0.0625f);
 		GL11.glPopMatrix();

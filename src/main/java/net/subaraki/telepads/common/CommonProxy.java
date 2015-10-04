@@ -27,8 +27,4 @@ public class CommonProxy {
     public World getClientWorld(){
     	return null;
     }
-    
-    public EntityPlayer getClientPlayer(){
-    	return null;
-    }
 }

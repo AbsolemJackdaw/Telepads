@@ -92,8 +92,6 @@ public class TileEntityTelepad extends TileEntity {
 	@Override
 	public void updateEntity () {
 
-//		Telepads.printDebugMessage(isPowered()+ " " + hasRedstoneUpgrade());
-
 		Telepads.proxy.createTelepadParticleEffect(xCoord, yCoord, zCoord, isStandingOnPlatform);
 
 		if (!worldObj.isRemote) {

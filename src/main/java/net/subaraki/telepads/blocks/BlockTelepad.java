@@ -123,7 +123,6 @@ public class BlockTelepad extends BlockContainer {
 			if(player.isSneaking() && w.getTileEntity(x, y, z) instanceof TileEntityTelepad){
 
 				TileEntityTelepad telepad = (TileEntityTelepad) w.getTileEntity(x, y, z);
-
 				PlayerLocations pl = PlayerLocations.getProperties(player);
 
 				boolean match = false;
@@ -154,7 +153,7 @@ public class BlockTelepad extends BlockContainer {
 
 	@Override
 	public float getExplosionResistance(Entity ent) {
-		return 0;// Float.MAX_VALUE;
+		return Float.MAX_VALUE;
 	}
 
 	@Override
@@ -200,8 +199,6 @@ public class BlockTelepad extends BlockContainer {
 		ei.setEntityItemStack(stack);
 
 		world.spawnEntityInWorld(ei);
-
-
 	}
 
 	@Override
