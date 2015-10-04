@@ -122,23 +122,3 @@ public class PlayerHandler {
 		}
 	}
 }
-
-
-
-//if(w.getTileEntity(x, y, z) instanceof TileEntityTelepad){
-//	TileEntityTelepad telepad = (TileEntityTelepad) w.getTileEntity(x, y, z);
-//
-//	if(player.getHeldItem().getItem().equals(Items.water_bucket)){
-//		if (player.isSneaking())
-//			telepad.setBaseColor(new Color(243, 89, 233).getRGB());
-//
-//		else
-//			telepad.setFrameColor(new Color(26, 246, 172).getRGB());
-//
-//		telepad.markDirty();
-//
-//		if(!player.capabilities.isCreativeMode)
-//			player.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, 1));
-//		return false;
-//	}
-//}
