@@ -20,6 +20,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.common.network.PacketSyncPoweredBlock;
 import net.subaraki.telepads.handler.PlayerLocations;
@@ -222,16 +223,21 @@ public class BlockTelepad extends BlockContainer {
 
 				telepad.markDirty();
 
-				for(Object o : world.playerEntities){
-					if(o instanceof EntityPlayer){
-						EntityPlayer player = (EntityPlayer)o;
-						PlayerLocations pl = PlayerLocations.getProperties(player);
+				for(Integer i : DimensionManager.getStaticDimensionIDs()){
+					WorldServer ws = DimensionManager.getWorld(i);
 
-						for(TelepadEntry tpe : pl.getEntries())
-							if(tpe.position.equals(new Position(x, y, z)))
-								if(tpe.dimensionID == world.provider.dimensionId)
-									tpe.setPowered(flag);
-						pl.sync();
+					for(Object o : ws.playerEntities){
+						if(o instanceof EntityPlayer){
+							EntityPlayer player = (EntityPlayer)o;
+							PlayerLocations pl = PlayerLocations.getProperties(player);
+
+							for(TelepadEntry tpe : pl.getEntries()){
+								if(tpe.position.equals(new Position(x, y, z)))
+									if(tpe.dimensionID == world.provider.dimensionId)
+										tpe.setPowered(flag);
+							}
+							pl.sync();
+						}
 					}
 				}
 			}
