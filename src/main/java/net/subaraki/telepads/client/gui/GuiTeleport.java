@@ -242,14 +242,16 @@ public class GuiTeleport extends GuiScreen {
 
 		for(TelepadEntry tpe : pageEntries.keySet()){
 			boolean flag = false;
-			TileEntity te = player.worldObj.getTileEntity(tpe.position.getX(), tpe.position.getY(), tpe.position.getZ());
-			if(te instanceof TileEntityTelepad){
-				TileEntityTelepad destinyPad = (TileEntityTelepad)te;
-				if(destinyPad.isPowered())
-					flag = true;
-			}
-			String name = tpe.entryName;
-			this.buttonList.add(new GuiButton(pageEntries.get(tpe), /* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10) : 0), /* y */(130 + ((i * 25))) - (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100 : 100), /* size */100, 20, flag ? ChatFormatting.RED+ " "  + name : name));
+			boolean flag2 = false;
+
+			if(tpe.isPowered)
+				flag = true;
+			if(tpe.hasTransmitter)
+				flag2 = true;
+			
+			String name = flag ? ChatFormatting.RED+ " "  + tpe.entryName : flag2 ?ChatFormatting.GREEN+ " "  + tpe.entryName:  tpe.entryName;
+
+			this.buttonList.add(new GuiButton(pageEntries.get(tpe), /* x */(40) + (((i / 10) > 0) && ((i % 10) >= 0) ? 120 * (i / 10) : 0), /* y */(130 + ((i * 25))) - (((i / 10) > 0) && ((i % 10) >= 0) ? (250 * (i / 10)) + 100 : 100), /* size */100, 20, name));
 			i++;
 		}
 	}

@@ -1,6 +1,6 @@
 package net.subaraki.telepads.common;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 public class CommonProxy {
@@ -25,6 +25,10 @@ public class CommonProxy {
     }
     
     public World getClientWorld(){
+    	return null;
+    }
+    
+    public EntityPlayer getClientPlayer(){
     	return null;
     }
 }

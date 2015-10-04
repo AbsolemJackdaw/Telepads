@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.tileentity.TileEntity;
+import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.handler.PlayerLocations;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
@@ -66,6 +67,8 @@ public class PacketAddTelepadEntry implements IMessage {
 
 			PlayerLocations locations = PlayerLocations.getProperties(Utilities.getPlayerFromUUID(ctx.getServerHandler().playerEntity.worldObj, packet.playerUUID));
 
+			Telepads.printDebugMessage(packet.entry.entryName);
+			
 			if(locations.getEntries().isEmpty())
 				locations.addEntry(packet.entry);
 			else
@@ -79,7 +82,6 @@ public class PacketAddTelepadEntry implements IMessage {
 			TileEntity te = ctx.getServerHandler().playerEntity.worldObj.getTileEntity(packet.entry.position.getX(),packet.entry.position.getY(),packet.entry.position.getZ());
 			
 			if(te instanceof TileEntityTelepad){
-				
 				TileEntityTelepad telepad = (TileEntityTelepad)te;
 				telepad.setTelePadName(packet.entry.entryName);
 			}

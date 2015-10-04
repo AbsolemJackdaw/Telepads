@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.darkhax.bookshelf.util.Constants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -57,5 +58,9 @@ public class ClientProxy extends CommonProxy {
     
     public World getClientWorld(){
     	return Minecraft.getMinecraft().theWorld;
+    }
+    
+    public EntityPlayer getClientPlayer(){
+    	return Minecraft.getMinecraft().thePlayer;
     }
 }

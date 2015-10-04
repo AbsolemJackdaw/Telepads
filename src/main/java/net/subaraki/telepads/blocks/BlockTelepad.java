@@ -1,5 +1,6 @@
 package net.subaraki.telepads.blocks;
 
+import java.awt.Color;
 import java.util.Random;
 
 import net.darkhax.bookshelf.util.Position;
@@ -11,12 +12,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.common.network.PacketSyncPoweredBlock;
 import net.subaraki.telepads.handler.PlayerLocations;
@@ -115,7 +118,7 @@ public class BlockTelepad extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer player, int meta, float f, float f1, float f2) {
 
-		if(player.getHeldItem() == null)
+		if(player.getHeldItem() == null){
 			if(player.isSneaking() && w.getTileEntity(x, y, z) instanceof TileEntityTelepad){
 
 				TileEntityTelepad telepad = (TileEntityTelepad) w.getTileEntity(x, y, z);
@@ -133,13 +136,17 @@ public class BlockTelepad extends BlockContainer {
 				}
 
 				if(!match){
-					pl.addEntry(new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(x, y, z)));
+					pl.addEntry(new TelepadEntry(telepad.getTelePadName(), telepad.getDimension(), new Position(x, y, z), false, false));
 					if(!w.isRemote)
 						player.addChatMessage(new ChatComponentText("Succesfully added " + telepad.getTelePadName()));
 				}else
 					if(!w.isRemote)
 						player.addChatMessage(new ChatComponentText(telepad.getTelePadName() + " has already been registered"));
+
+				pl.sync();
 			}
+		}
+			
 
 		return false;
 	}
@@ -203,15 +210,16 @@ public class BlockTelepad extends BlockContainer {
 
 			TileEntityTelepad telepad = (TileEntityTelepad) world.getTileEntity(x, y, z);
 
-			if(telepad.hasRedstoneUpgrade()){
+			if(telepad.hasRedstoneUpgrade() && !world.isRemote){
+				boolean flag;
+				if(world.getBlockPowerInput(x, y, z) > 0)
+					flag = true;
+				else
+					flag = false;
 
-				if(world.getBlockPowerInput(x, y, z) > 0){
-					telepad.setPowered(true);
-					Telepads.instance.network.sendToAll(new PacketSyncPoweredBlock(true, new Position(x,y,z)));
-				}else{
-					telepad.setPowered(false);
-					Telepads.instance.network.sendToAll(new PacketSyncPoweredBlock(false, new Position(x,y,z)));
-				}
+				telepad.setPowered(flag);
+				Telepads.instance.network.sendToAll(new PacketSyncPoweredBlock(flag, new Position(x,y,z)));
+
 				telepad.markDirty();
 			}
 		}

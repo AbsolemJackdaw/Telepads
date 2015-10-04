@@ -229,6 +229,10 @@ public class PlayerLocations implements IExtendedEntityProperties {
 		 */
 		public Position position;
 
+		/***/
+		public boolean isPowered;
+		public boolean hasTransmitter;
+		
 		/**
 		 * Creates a TelepadEntry from a ByteBuf. This is useful for reading from networking.
 		 * 
@@ -236,7 +240,7 @@ public class PlayerLocations implements IExtendedEntityProperties {
 		 */
 		public TelepadEntry(ByteBuf buf) {
 
-			this(ByteBufUtils.readUTF8String(buf), buf.readInt(), new Position(buf));
+			this(ByteBufUtils.readUTF8String(buf), buf.readInt(), new Position(buf), buf.readBoolean(), buf.readBoolean());
 		}
 
 		/**
@@ -247,7 +251,7 @@ public class PlayerLocations implements IExtendedEntityProperties {
 		 */
 		public TelepadEntry(NBTTagCompound tag) {
 
-			this(tag.getString("entryName"), tag.getInteger("dimensionID"), new Position(tag));
+			this(tag.getString("entryName"), tag.getInteger("dimensionID"), new Position(tag), tag.getBoolean("power"), tag.getBoolean("transmitter"));
 		}
 
 		/**
@@ -257,12 +261,16 @@ public class PlayerLocations implements IExtendedEntityProperties {
 		 * @param name: A display name to use for the entry.
 		 * @param dimension: The id of the dimension that this entry is within.
 		 * @param pos: The Position of this TelepadEntry.
+		 * @param isPowered defaults to false. wether this entry's tile entity is redstone powered or not
+		 * @param hasTransmitter defaults to false. wether this entry's tile entity has a transmitter upgrade
 		 */
-		public TelepadEntry(String name, int dimension, Position pos) {
+		public TelepadEntry(String name, int dimension, Position pos, boolean isPowered, boolean hasTransmitter) {
 
 			this.entryName = name;
 			this.dimensionID = dimension;
 			this.position = pos;
+			this.isPowered = isPowered;
+			this.hasTransmitter = hasTransmitter;
 		}
 
 		/**
@@ -276,6 +284,8 @@ public class PlayerLocations implements IExtendedEntityProperties {
 			tag.setString("entryName", this.entryName);
 			tag.setInteger("dimensionID", this.dimensionID);
 			this.position.write(tag);
+			tag.setBoolean("power",	isPowered);
+			tag.setBoolean("transmitter", hasTransmitter);
 			return tag;
 		}
 
@@ -289,6 +299,8 @@ public class PlayerLocations implements IExtendedEntityProperties {
 			ByteBufUtils.writeUTF8String(buf, this.entryName);
 			buf.writeInt(this.dimensionID);
 			this.position.write(buf);
+			buf.writeBoolean(isPowered);
+			buf.writeBoolean(hasTransmitter);
 		}
 
 		@Override
@@ -300,7 +312,7 @@ public class PlayerLocations implements IExtendedEntityProperties {
 		@Override
 		public Object clone () {
 
-			return new TelepadEntry(this.entryName, this.dimensionID, this.position);
+			return new TelepadEntry(this.entryName, this.dimensionID, this.position, this.isPowered, this.hasTransmitter);
 		}
 
 		@Override
@@ -311,6 +323,14 @@ public class PlayerLocations implements IExtendedEntityProperties {
 
 			TelepadEntry entry = (TelepadEntry) compared;
 			return this.entryName.equals(entry.entryName) && this.dimensionID == entry.dimensionID && this.position.equals(entry.position);
+		}
+		
+		public void setPowered(boolean flag){
+			isPowered = flag;
+		}
+		
+		public void setTransmitter(boolean flag){
+			hasTransmitter = flag;
 		}
 	}
 }

@@ -132,7 +132,7 @@ public class PacketTeleport implements IMessage {
 	private static void removePad(EntityPlayer player, Position removedDestinyPos, Position oldExisitingPostion, int dimension){
 
 		//TODO fix direct cast
-		Minecraft.getMinecraft().displayGuiScreen(new GuiRemovePad(player, (TileEntityTelepad) player.worldObj.getTileEntity(oldExisitingPostion.getX(), oldExisitingPostion.getY(), oldExisitingPostion.getZ())).setEntryToRemove(new TelepadEntry("stubName", dimension, removedDestinyPos)));
+		Minecraft.getMinecraft().displayGuiScreen(new GuiRemovePad(player, (TileEntityTelepad) player.worldObj.getTileEntity(oldExisitingPostion.getX(), oldExisitingPostion.getY(), oldExisitingPostion.getZ())).setEntryToRemove(new TelepadEntry("stubName", dimension, removedDestinyPos, false, false)));
 
 	}
 }
