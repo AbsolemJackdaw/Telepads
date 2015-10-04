@@ -28,54 +28,65 @@ import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = Constants.MODID, name = Constants.MOD_NAME, version = Constants.VERSION, guiFactory = Constants.FACTORY, dependencies = Constants.DEPENDENCY)
 public class Telepads {
-    
-    @SidedProxy(serverSide = Constants.SERVER, clientSide = Constants.CLIENT)
-    public static CommonProxy proxy;
-    
-    @Mod.Instance(Constants.MODID)
-    public static Telepads instance;
-    
-    /**
-     * A network channel to be used to handle packets specific to the Telepads mod.
-     */
-    public SimpleNetworkWrapper network;
-    
-    public static Block blockPad = new BlockTelepad();
-    public static Item transmitter = new ItemTransmitter();
 
-    @EventHandler
-    public void preInit (FMLPreInitializationEvent event) {
-        
-        network = NetworkRegistry.INSTANCE.newSimpleChannel("Telepads");
-        network.registerMessage(PacketSyncTelepadEntries.PacketSyncTelepadEntriesHandler.class, PacketSyncTelepadEntries.class, 0, Side.CLIENT);
-        network.registerMessage(PacketAddTelepadEntry.PacketAddTelepadEntryHandler.class, PacketAddTelepadEntry.class, 1, Side.SERVER);
-        network.registerMessage(PacketRemoveTelepadEntry.PacketRemoveTelepadEntryHandler.class, PacketRemoveTelepadEntry.class, 2, Side.SERVER);
-        network.registerMessage(PacketTeleport.PacketTeleportHandler.class, PacketTeleport.class, 3, Side.SERVER);
-        network.registerMessage(PacketSyncPoweredBlock.PacketSyncPoweredBlockHandler.class, PacketSyncPoweredBlock.class, 4, Side.CLIENT);
+	@SidedProxy(serverSide = Constants.SERVER, clientSide = Constants.CLIENT)
+	public static CommonProxy proxy;
 
-        NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-        
-        new ConfigurationHandler(event.getSuggestedConfigurationFile());
-        MinecraftForge.EVENT_BUS.register(new PlayerHandler());
-        MinecraftForge.EVENT_BUS.register(new ItemHandler());
+	@Mod.Instance(Constants.MODID)
+	public static Telepads instance;
 
-        GameRegistry.registerBlock(blockPad,"telepad");
-        GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
-        
-        GameRegistry.registerItem(transmitter, "Transmitter Upgrade");
-        
-        proxy.preInit();
-    }
-    
-    /**
-     * Prints a specified message to the console. If the user has disabled debug messages,
-     * messages sent through this method will not be logged.
-     * 
-     * @param message: The message to send to the console.
-     */
-    public static void printDebugMessage (String message) {
-        
-        if (ConfigurationHandler.allowDebugMessages)
-            Constants.LOG.info(message);
-    }
+	/**
+	 * A network channel to be used to handle packets specific to the Telepads
+	 * mod.
+	 */
+	public SimpleNetworkWrapper network;
+
+	public static Block blockPad = new BlockTelepad();
+	public static Item transmitter = new ItemTransmitter();
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+
+		network = NetworkRegistry.INSTANCE.newSimpleChannel("Telepads");
+		network.registerMessage(
+				PacketSyncTelepadEntries.PacketSyncTelepadEntriesHandler.class,
+				PacketSyncTelepadEntries.class, 0, Side.CLIENT);
+		network.registerMessage(
+				PacketAddTelepadEntry.PacketAddTelepadEntryHandler.class,
+				PacketAddTelepadEntry.class, 1, Side.SERVER);
+		network.registerMessage(
+				PacketRemoveTelepadEntry.PacketRemoveTelepadEntryHandler.class,
+				PacketRemoveTelepadEntry.class, 2, Side.SERVER);
+		network.registerMessage(PacketTeleport.PacketTeleportHandler.class,
+				PacketTeleport.class, 3, Side.SERVER);
+		network.registerMessage(
+				PacketSyncPoweredBlock.PacketSyncPoweredBlockHandler.class,
+				PacketSyncPoweredBlock.class, 4, Side.CLIENT);
+
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+
+		new ConfigurationHandler(event.getSuggestedConfigurationFile());
+		MinecraftForge.EVENT_BUS.register(new PlayerHandler());
+		MinecraftForge.EVENT_BUS.register(new ItemHandler());
+
+		GameRegistry.registerBlock(blockPad, "telepad");
+		GameRegistry.registerTileEntity(TileEntityTelepad.class, "TETelepad");
+
+		GameRegistry.registerItem(transmitter, "Transmitter Upgrade");
+
+		proxy.preInit();
+	}
+
+	/**
+	 * Prints a specified message to the console. If the user has disabled debug
+	 * messages, messages sent through this method will not be logged.
+	 * 
+	 * @param message
+	 *            : The message to send to the console.
+	 */
+	public static void printDebugMessage(String message) {
+
+		if (ConfigurationHandler.allowDebugMessages)
+			Constants.LOG.info(message);
+	}
 }

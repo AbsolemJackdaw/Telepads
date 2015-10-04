@@ -13,38 +13,48 @@ import net.subaraki.telepads.tileentity.TileEntityTelepad;
 public class RenderItemTelepad implements IItemRenderer {
 	private ModelTelepad pad;
 
-	private static ResourceLocation loc = new ResourceLocation("telepads:textures/telepad.png");
+	private static ResourceLocation loc = new ResourceLocation(
+			"telepads:textures/telepad.png");
 
 	public RenderItemTelepad() {
 		pad = new ModelTelepad();
 	}
 
 	@Override
-	public boolean handleRenderType (ItemStack item, ItemRenderType type) {
+	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 		return true;
 	}
 
 	@Override
-	public void renderItem (ItemRenderType type, ItemStack item, Object... data) {
+	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-		if(item.hasTagCompound()){
+		if (item.hasTagCompound()) {
 
-			TileEntitySpecialRenderer tesr = TileEntityRendererDispatcher.instance.getSpecialRenderer(new TileEntityTelepad());
+			TileEntitySpecialRenderer tesr = TileEntityRendererDispatcher.instance
+					.getSpecialRenderer(new TileEntityTelepad());
 
-			if(tesr instanceof RenderTileEntityTelepad){
-				
-				RenderTileEntityTelepad rtet = (RenderTileEntityTelepad)tesr;	
-				
-				if(item.getTagCompound().hasKey("colorFrame") && item.getTagCompound().hasKey("colorBase"))
-					rtet.renderInventory(new TileEntityTelepad(), new Color(item.getTagCompound().getInteger("colorFrame")), new Color(item.getTagCompound().getInteger("colorBase")), 0, 0, 0, 0);
+			if (tesr instanceof RenderTileEntityTelepad) {
+
+				RenderTileEntityTelepad rtet = (RenderTileEntityTelepad) tesr;
+
+				if (item.getTagCompound().hasKey("colorFrame")
+						&& item.getTagCompound().hasKey("colorBase"))
+					rtet.renderInventory(
+							new TileEntityTelepad(),
+							new Color(item.getTagCompound().getInteger(
+									"colorFrame")),
+							new Color(item.getTagCompound().getInteger(
+									"colorBase")), 0, 0, 0, 0);
 			}
-		}else
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityTelepad(), 0.0D, 0.0D, 0.0D, 0.0F);
+		} else
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(
+					new TileEntityTelepad(), 0.0D, 0.0D, 0.0D, 0.0F);
 
 	}
 
 	@Override
-	public boolean shouldUseRenderHelper (ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
+			ItemRendererHelper helper) {
 
 		return true;
 	}

@@ -22,13 +22,13 @@ public class PacketSyncPoweredBlock implements IMessage {
 	}
 
 	@Override
-	public void fromBytes (ByteBuf buf) {
+	public void fromBytes(ByteBuf buf) {
 		flag = buf.readBoolean();
 		pos = new Position(buf);
 	}
 
 	@Override
-	public void toBytes (ByteBuf buf) {
+	public void toBytes(ByteBuf buf) {
 		buf.writeBoolean(flag);
 		pos.write(buf);
 	}
@@ -37,19 +37,20 @@ public class PacketSyncPoweredBlock implements IMessage {
 
 	}
 
-	public static class PacketSyncPoweredBlockHandler implements IMessageHandler<PacketSyncPoweredBlock, IMessage> {
+	public static class PacketSyncPoweredBlockHandler implements
+			IMessageHandler<PacketSyncPoweredBlock, IMessage> {
 
 		@Override
-		public IMessage onMessage (PacketSyncPoweredBlock packet, MessageContext ctx) {
+		public IMessage onMessage(PacketSyncPoweredBlock packet,
+				MessageContext ctx) {
 
 			World world = Telepads.proxy.getClientWorld();
-			TileEntity te = world.getTileEntity(packet.pos.getX(), packet.pos.getY(), packet.pos.getZ());
+			TileEntity te = world.getTileEntity(packet.pos.getX(),
+					packet.pos.getY(), packet.pos.getZ());
 
-			if(te instanceof TileEntityTelepad){
-				((TileEntityTelepad)te).setPowered(packet.flag);
+			if (te instanceof TileEntityTelepad) {
+				((TileEntityTelepad) te).setPowered(packet.flag);
 			}
-			
-			
 
 			return null;
 		}

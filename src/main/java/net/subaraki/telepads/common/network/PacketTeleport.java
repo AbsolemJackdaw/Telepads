@@ -35,19 +35,27 @@ public class PacketTeleport implements IMessage {
 	public int dimension;
 
 	/**
-	 * flag to force teleport and bypass checking if a tile entity exists to teleport too
+	 * flag to force teleport and bypass checking if a tile entity exists to
+	 * teleport too
 	 * */
 	public boolean force;
+
 	/**
-	 * A packet to teleport the player to a given position from the client side. This packet
-	 * must be sent from a client thread.
+	 * A packet to teleport the player to a given position from the client side.
+	 * This packet must be sent from a client thread.
 	 * 
-	 * @param newPos: The position to send the player to.
-	 * @param dimension: The dimension to send the player to.
-	 * @param oldPos: The position the player comes from.
-	 * @param forceTeleport : Flag to force teleport and bypass checking if a tile entity exists to teleport too
+	 * @param newPos
+	 *            : The position to send the player to.
+	 * @param dimension
+	 *            : The dimension to send the player to.
+	 * @param oldPos
+	 *            : The position the player comes from.
+	 * @param forceTeleport
+	 *            : Flag to force teleport and bypass checking if a tile entity
+	 *            exists to teleport too
 	 */
-	public PacketTeleport(Position newPos, int dimension, Position oldPos, boolean forceTeleport) {
+	public PacketTeleport(Position newPos, int dimension, Position oldPos,
+			boolean forceTeleport) {
 
 		this.oldPos = oldPos;
 		this.dimension = dimension;
@@ -56,7 +64,7 @@ public class PacketTeleport implements IMessage {
 	}
 
 	@Override
-	public void fromBytes (ByteBuf buf) {
+	public void fromBytes(ByteBuf buf) {
 
 		newPos = new Position(buf);
 		oldPos = new Position(buf);
@@ -65,7 +73,7 @@ public class PacketTeleport implements IMessage {
 	}
 
 	@Override
-	public void toBytes (ByteBuf buf) {
+	public void toBytes(ByteBuf buf) {
 
 		newPos.write(buf);
 		oldPos.write(buf);
@@ -77,59 +85,86 @@ public class PacketTeleport implements IMessage {
 
 	}
 
-	public static class PacketTeleportHandler implements IMessageHandler<PacketTeleport, IMessage> {
+	public static class PacketTeleportHandler implements
+			IMessageHandler<PacketTeleport, IMessage> {
 
 		@Override
-		public IMessage onMessage (PacketTeleport packet, MessageContext ctx) {
+		public IMessage onMessage(PacketTeleport packet, MessageContext ctx) {
 
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
 
-			if (packet.dimension == player.dimension){
-				if(packet.force){
+			if (packet.dimension == player.dimension) {
+				if (packet.force) {
 					packet.newPos.sendEntityToPosition(player);
 					return null;
 				}
-				TileEntity te = player.worldObj.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ());
-				if( te != null && te instanceof TileEntityTelepad){
-					TileEntityTelepad telepad = (TileEntityTelepad) player.worldObj.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ());
-					if(!telepad.isPowered()){
-						if(packet.dimension == player.worldObj.provider.dimensionId)
+				TileEntity te = player.worldObj.getTileEntity(
+						packet.newPos.getX(), packet.newPos.getY(),
+						packet.newPos.getZ());
+				if (te != null && te instanceof TileEntityTelepad) {
+					TileEntityTelepad telepad = (TileEntityTelepad) player.worldObj
+							.getTileEntity(packet.newPos.getX(),
+									packet.newPos.getY(), packet.newPos.getZ());
+					if (!telepad.isPowered()) {
+						if (packet.dimension == player.worldObj.provider.dimensionId)
 							packet.newPos.sendEntityToPosition(player);
-					}else
-						player.addChatMessage(new ChatComponentText("This pad was powered off"));
+					} else
+						player.addChatMessage(new ChatComponentText(
+								"This pad was powered off"));
 
-				}else
-					removePad(player, packet.newPos, packet.oldPos, packet.dimension);
-			}else{
-				WorldServer worldToCheck = DimensionManager.getWorld(packet.dimension);
-				if(worldToCheck!= null){
-					TileEntity te = worldToCheck.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ());
-					if(te != null && te instanceof TileEntityTelepad){
-						TileEntityTelepad telepad = (TileEntityTelepad) worldToCheck.getTileEntity(packet.newPos.getX(), packet.newPos.getY(), packet.newPos.getZ());
+				} else
+					removePad(player, packet.newPos, packet.oldPos,
+							packet.dimension);
+			} else {
+				WorldServer worldToCheck = DimensionManager
+						.getWorld(packet.dimension);
+				if (worldToCheck != null) {
+					TileEntity te = worldToCheck.getTileEntity(
+							packet.newPos.getX(), packet.newPos.getY(),
+							packet.newPos.getZ());
+					if (te != null && te instanceof TileEntityTelepad) {
+						TileEntityTelepad telepad = (TileEntityTelepad) worldToCheck
+								.getTileEntity(packet.newPos.getX(),
+										packet.newPos.getY(),
+										packet.newPos.getZ());
 
-						if(packet.force){
-							if(!telepad.isPowered())
-								TeleportUtility.transferPlayerToDimension((EntityPlayerMP) player, packet.dimension, packet.newPos);
+						if (packet.force) {
+							if (!telepad.isPowered())
+								TeleportUtility.transferPlayerToDimension(
+										(EntityPlayerMP) player,
+										packet.dimension, packet.newPos);
 							return null;
 						}
 
-						if(!telepad.isPowered()){					
-							if(player instanceof EntityPlayerMP)
-								TeleportUtility.transferPlayerToDimension((EntityPlayerMP) player, packet.dimension, packet.newPos);
-						}else
-							player.addChatMessage(new ChatComponentText("This pad was powered off"));
-					}else
-						removePad(player, packet.newPos, packet.oldPos, packet.dimension);
+						if (!telepad.isPowered()) {
+							if (player instanceof EntityPlayerMP)
+								TeleportUtility.transferPlayerToDimension(
+										(EntityPlayerMP) player,
+										packet.dimension, packet.newPos);
+						} else
+							player.addChatMessage(new ChatComponentText(
+									"This pad was powered off"));
+					} else
+						removePad(player, packet.newPos, packet.oldPos,
+								packet.dimension);
 				}
 			}
 			return null;
 		}
 	}
 
-	private static void removePad(EntityPlayer player, Position removedDestinyPos, Position oldExisitingPostion, int dimension){
+	private static void removePad(EntityPlayer player,
+			Position removedDestinyPos, Position oldExisitingPostion,
+			int dimension) {
 
-		//TODO fix direct cast
-		Minecraft.getMinecraft().displayGuiScreen(new GuiRemovePad(player, (TileEntityTelepad) player.worldObj.getTileEntity(oldExisitingPostion.getX(), oldExisitingPostion.getY(), oldExisitingPostion.getZ())).setEntryToRemove(new TelepadEntry("stubName", dimension, removedDestinyPos, false, false)));
+		// TODO fix direct cast
+		Minecraft.getMinecraft().displayGuiScreen(
+				new GuiRemovePad(player, (TileEntityTelepad) player.worldObj
+						.getTileEntity(oldExisitingPostion.getX(),
+								oldExisitingPostion.getY(),
+								oldExisitingPostion.getZ()))
+						.setEntryToRemove(new TelepadEntry("stubName",
+								dimension, removedDestinyPos, false, false)));
 
 	}
 }

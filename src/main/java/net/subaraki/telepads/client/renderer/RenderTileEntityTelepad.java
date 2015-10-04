@@ -20,28 +20,41 @@ import org.lwjgl.opengl.GL11;
 public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 	private static String resourcePath = "telepads:textures/entity/tile/";
-	private static ResourceLocation base = new ResourceLocation(resourcePath + "telepad_base.png");
-	private static ResourceLocation pads = new ResourceLocation(resourcePath + "telepad_pads.png");
-	private static ResourceLocation frame = new ResourceLocation(resourcePath + "telepad_frame.png");
-	private static ResourceLocation frame_empty = new ResourceLocation(resourcePath + "telepad_frame_interDimension.png");
-	private static ResourceLocation frame_upgrade = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade.png");
-	private static ResourceLocation frame_upgrade_2 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_2.png");
-	private static ResourceLocation frame_upgrade_3 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_3.png");
-	private static ResourceLocation frame_upgrade_4 = new ResourceLocation(resourcePath + "telepad_dimensionUpgrade_4.png");
-	private static ResourceLocation frame_powered_off = new ResourceLocation("minecraft:textures/blocks/red_sand.png");
-	private static ResourceLocation frame_powered_on = new ResourceLocation("minecraft:textures/blocks/redstone_block.png");
+	private static ResourceLocation base = new ResourceLocation(resourcePath
+			+ "telepad_base.png");
+	private static ResourceLocation pads = new ResourceLocation(resourcePath
+			+ "telepad_pads.png");
+	private static ResourceLocation frame = new ResourceLocation(resourcePath
+			+ "telepad_frame.png");
+	private static ResourceLocation frame_empty = new ResourceLocation(
+			resourcePath + "telepad_frame_interDimension.png");
+	private static ResourceLocation frame_upgrade = new ResourceLocation(
+			resourcePath + "telepad_dimensionUpgrade.png");
+	private static ResourceLocation frame_upgrade_2 = new ResourceLocation(
+			resourcePath + "telepad_dimensionUpgrade_2.png");
+	private static ResourceLocation frame_upgrade_3 = new ResourceLocation(
+			resourcePath + "telepad_dimensionUpgrade_3.png");
+	private static ResourceLocation frame_upgrade_4 = new ResourceLocation(
+			resourcePath + "telepad_dimensionUpgrade_4.png");
+	private static ResourceLocation frame_powered_off = new ResourceLocation(
+			"minecraft:textures/blocks/red_sand.png");
+	private static ResourceLocation frame_powered_on = new ResourceLocation(
+			"minecraft:textures/blocks/redstone_block.png");
 
 	private static int animation_counter;
 
 	// copied from RenderEndPortal.java
-	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation("textures/environment/end_sky.png");
-	private static final ResourceLocation endPortalTextures = new ResourceLocation("textures/entity/end_portal.png");
+	private static final ResourceLocation enderPortalEndSkyTextures = new ResourceLocation(
+			"textures/environment/end_sky.png");
+	private static final ResourceLocation endPortalTextures = new ResourceLocation(
+			"textures/entity/end_portal.png");
 	private static final Random teleporterRandom = new Random(31100L);
 
 	FloatBuffer field_76908_a = GLAllocation.createDirectFloatBuffer(16);
 	ModelTelepad padModel = new ModelTelepad();
 
-	private FloatBuffer func_76907_a (float par1, float par2, float par3, float par4) {
+	private FloatBuffer func_76907_a(float par1, float par2, float par3,
+			float par4) {
 
 		this.field_76908_a.clear();
 		this.field_76908_a.put(par1).put(par2).put(par3).put(par4);
@@ -49,7 +62,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		return this.field_76908_a;
 	}
 
-	public void renderEndPortalSurface (double par2, double par4, double par6, float par8) {
+	public void renderEndPortalSurface(double par2, double par4, double par6,
+			float par8) {
 
 		float f1 = (float) TileEntityRendererDispatcher.staticPlayerX;
 		float f2 = (float) TileEntityRendererDispatcher.staticPlayerY;
@@ -92,14 +106,22 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			float f11 = f9 / f10;
 			f11 += (float) (par4 + f4);
 			GL11.glTranslatef(f1, f11, f3);
-			GL11.glTexGeni(GL11.GL_S, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-			GL11.glTexGeni(GL11.GL_T, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-			GL11.glTexGeni(GL11.GL_R, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_OBJECT_LINEAR);
-			GL11.glTexGeni(GL11.GL_Q, GL11.GL_TEXTURE_GEN_MODE, GL11.GL_EYE_LINEAR);
-			GL11.glTexGen(GL11.GL_S, GL11.GL_OBJECT_PLANE, this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));
-			GL11.glTexGen(GL11.GL_T, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
-			GL11.glTexGen(GL11.GL_R, GL11.GL_OBJECT_PLANE, this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
-			GL11.glTexGen(GL11.GL_Q, GL11.GL_EYE_PLANE, this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
+			GL11.glTexGeni(GL11.GL_S, GL11.GL_TEXTURE_GEN_MODE,
+					GL11.GL_OBJECT_LINEAR);
+			GL11.glTexGeni(GL11.GL_T, GL11.GL_TEXTURE_GEN_MODE,
+					GL11.GL_OBJECT_LINEAR);
+			GL11.glTexGeni(GL11.GL_R, GL11.GL_TEXTURE_GEN_MODE,
+					GL11.GL_OBJECT_LINEAR);
+			GL11.glTexGeni(GL11.GL_Q, GL11.GL_TEXTURE_GEN_MODE,
+					GL11.GL_EYE_LINEAR);
+			GL11.glTexGen(GL11.GL_S, GL11.GL_OBJECT_PLANE,
+					this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));
+			GL11.glTexGen(GL11.GL_T, GL11.GL_OBJECT_PLANE,
+					this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
+			GL11.glTexGen(GL11.GL_R, GL11.GL_OBJECT_PLANE,
+					this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
+			GL11.glTexGen(GL11.GL_Q, GL11.GL_EYE_PLANE,
+					this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
 			GL11.glEnable(GL11.GL_TEXTURE_GEN_S);
 			GL11.glEnable(GL11.GL_TEXTURE_GEN_T);
 			GL11.glEnable(GL11.GL_TEXTURE_GEN_R);
@@ -110,14 +132,16 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			GL11.glLoadIdentity();
 			// GL11.glTranslatef(0.0F, (float)(Minecraft.getSystemTime() %
 			// 700000L) / 700000.0F, 0.0F);
-			GL11.glRotatef((Minecraft.getSystemTime() % 7000L) / 7000.0F, 1, 1, 0);
+			GL11.glRotatef((Minecraft.getSystemTime() % 7000L) / 7000.0F, 1, 1,
+					0);
 			GL11.glScalef(f6, f6, f6);// scales stars
 			GL11.glTranslatef(0.5F, 0.5f, 0.0F);
 			GL11.glRotatef(((i * i * 4321) + (i * 9)) * 2.0F, 0.0F, 0.0F, 1.0F);
 			GL11.glTranslatef(-0.5F, -0.5F, 0.0F);
 			GL11.glTranslatef(-f1, -f3, -f2);
 			f9 = f8 + ActiveRenderInfo.objectY;
-			GL11.glTranslatef((ActiveRenderInfo.objectX * f5) / f9, (ActiveRenderInfo.objectZ * f5) / f9, -f2);
+			GL11.glTranslatef((ActiveRenderInfo.objectX * f5) / f9,
+					(ActiveRenderInfo.objectZ * f5) / f9, -f2);
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
 			f11 = (teleporterRandom.nextFloat() * 0.5F) + 0.1F;
@@ -152,7 +176,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 	}
 
 	@Override
-	public void renderTileEntityAt (TileEntity tileentity, double d, double d1, double d2, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double d, double d1,
+			double d2, float f) {
 
 		animation_counter++;
 
@@ -170,7 +195,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F, (float) d2 + 0.5F);
+		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F,
+				(float) d2 + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
 
 		float f2 = 1.5f;
@@ -178,43 +204,48 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 		GL11.glPushMatrix();
 		bindTexture(base);
-		GL11.glColor3f((float) (colorBase.getRed() / 255.0f), (float) (colorBase.getGreen() / 255.0f), (float) (colorBase.getBlue() / 255.0f));
+		GL11.glColor3f((float) (colorBase.getRed() / 255.0f),
+				(float) (colorBase.getGreen() / 255.0f),
+				(float) (colorBase.getBlue() / 255.0f));
 		padModel.renderArrows(0.0625f);
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
 		bindTexture(pads);
-		GL11.glColor3f((float) (colorFrame.getRed() / 255.0f), (float) (colorFrame.getGreen() / 255.0f), (float) (colorFrame.getBlue() / 255.0f));
+		GL11.glColor3f((float) (colorFrame.getRed() / 255.0f),
+				(float) (colorFrame.getGreen() / 255.0f),
+				(float) (colorFrame.getBlue() / 255.0f));
 		padModel.renderLegs(0.0625f);
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
 
-		GL11.glColor3f(1f,1f,1f);
-		//TODO this is to be removed, and just redstone particle effects should be added !
-		//or a redstone lamp to be rendered on the side
-		if(te.hasRedstoneUpgrade()){
-			if(te.isPowered())
+		GL11.glColor3f(1f, 1f, 1f);
+		// TODO this is to be removed, and just redstone particle effects should
+		// be added !
+		// or a redstone lamp to be rendered on the side
+		if (te.hasRedstoneUpgrade()) {
+			if (te.isPowered())
 				bindTexture(frame_powered_on);
 			else
 				bindTexture(frame_powered_off);
-		}else
+		} else
 			bindTexture(frame);
 
 		padModel.renderFrame(0.0625f);
 		GL11.glPopMatrix();
 
-		if(te.hasDimensionUpgrade()){
+		if (te.hasDimensionUpgrade()) {
 
 			GL11.glPushMatrix();
 
-			if(animation_counter < 100)
+			if (animation_counter < 100)
 				bindTexture(frame_upgrade);
-			else if(animation_counter < 300)
+			else if (animation_counter < 300)
 				bindTexture(frame_upgrade_2);
-			else if(animation_counter < 500)
+			else if (animation_counter < 500)
 				bindTexture(frame_upgrade_3);
-			else if(animation_counter < 700 )
+			else if (animation_counter < 700)
 				bindTexture(frame_upgrade_4);
 			else
 				bindTexture(frame_upgrade_4);
@@ -222,7 +253,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			if (animation_counter == 900)
 				animation_counter = 0;
 
-			GL11.glColor3f(1,1,1);
+			GL11.glColor3f(1, 1, 1);
 			GL11.glScalef(0.75f, 0.75f, 0.75f);
 			GL11.glTranslatef(-0.1f, 0.45f, 0.1f);
 
@@ -251,14 +282,13 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			GL11.glPopMatrix();
 		}
 
-
 		GL11.glPopMatrix();
 
-		//  System.out.println("The color is: " + colorBase.toString());
+		// System.out.println("The color is: " + colorBase.toString());
 	}
 
-
-	public void renderInventory(TileEntity tileentity, Color colorFrame, Color colorBase, double d, double d1, double d2, float f) {
+	public void renderInventory(TileEntity tileentity, Color colorFrame,
+			Color colorBase, double d, double d1, double d2, float f) {
 
 		animation_counter++;
 
@@ -272,7 +302,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F, (float) d2 + 0.5F);
+		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F,
+				(float) d2 + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
 
 		float f2 = 1.5f;
@@ -280,13 +311,17 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 		GL11.glPushMatrix();
 		bindTexture(base);
-		GL11.glColor3f((float) (colorBase.getRed() / 255.0f), (float) (colorBase.getGreen() / 255.0f), (float) (colorBase.getBlue() / 255.0f));
+		GL11.glColor3f((float) (colorBase.getRed() / 255.0f),
+				(float) (colorBase.getGreen() / 255.0f),
+				(float) (colorBase.getBlue() / 255.0f));
 		padModel.renderArrows(0.0625f);
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
 		bindTexture(pads);
-		GL11.glColor3f((float) (colorFrame.getRed() / 255.0f), (float) (colorFrame.getGreen() / 255.0f), (float) (colorFrame.getBlue() / 255.0f));
+		GL11.glColor3f((float) (colorFrame.getRed() / 255.0f),
+				(float) (colorFrame.getGreen() / 255.0f),
+				(float) (colorFrame.getBlue() / 255.0f));
 		padModel.renderLegs(0.0625f);
 		GL11.glPopMatrix();
 
@@ -294,7 +329,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 		bindTexture(frame);
 
-		GL11.glColor3f(1f,1f,1f);
+		GL11.glColor3f(1f, 1f, 1f);
 		padModel.renderFrame(0.0625f);
 		GL11.glPopMatrix();
 

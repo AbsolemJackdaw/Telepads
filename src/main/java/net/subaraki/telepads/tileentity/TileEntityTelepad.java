@@ -24,7 +24,10 @@ public class TileEntityTelepad extends TileEntity {
 	private int colorFrame = new Color(26, 246, 172).getRGB();
 	private int colorBase = new Color(243, 89, 233).getRGB();
 
-	/**rotation set when inter-dimension upgrade is applied. nr from 0 to 3 to determin the position of the transmitter*/
+	/**
+	 * rotation set when inter-dimension upgrade is applied. nr from 0 to 3 to
+	 * determin the position of the transmitter
+	 */
 	private int upgradeRotation = 0;
 
 	private boolean hasDimensionUpgrade = false;
@@ -36,15 +39,14 @@ public class TileEntityTelepad extends TileEntity {
 	private boolean guiOpen;
 	public boolean isStandingOnPlatform = false;
 
-
 	@Override
-	public boolean canUpdate () {
+	public boolean canUpdate() {
 
 		return true;
 	}
 
 	@Override
-	public Packet getDescriptionPacket () {
+	public Packet getDescriptionPacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -53,13 +55,13 @@ public class TileEntityTelepad extends TileEntity {
 	}
 
 	@Override
-	public void onDataPacket (NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 
 		this.readFromNBT(pkt.func_148857_g());
 	}
 
 	@Override
-	public void readFromNBT (NBTTagCompound tag) {
+	public void readFromNBT(NBTTagCompound tag) {
 
 		telepadname = (tag.getString("name"));
 		dimension = tag.getInteger("dimension");
@@ -74,7 +76,7 @@ public class TileEntityTelepad extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT (NBTTagCompound tag) {
+	public void writeToNBT(NBTTagCompound tag) {
 
 		tag.setString("name", telepadname);
 		tag.setInteger("dimension", dimension);
@@ -88,14 +90,17 @@ public class TileEntityTelepad extends TileEntity {
 	}
 
 	@Override
-	public void updateEntity () {
+	public void updateEntity() {
 
-		Telepads.proxy.createTelepadParticleEffect(xCoord, yCoord, zCoord, isStandingOnPlatform);
+		Telepads.proxy.createTelepadParticleEffect(xCoord, yCoord, zCoord,
+				isStandingOnPlatform);
 
 		if (!worldObj.isRemote) {
 
-			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-			List<EntityPlayer> playersInRange = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord, yCoord,
+					zCoord, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+			List<EntityPlayer> playersInRange = worldObj.getEntitiesWithinAABB(
+					EntityPlayer.class, aabb);
 
 			if (isStandingOnPlatform) {
 
@@ -108,17 +113,17 @@ public class TileEntityTelepad extends TileEntity {
 				if (counter >= 0)
 					counter--;
 
-				if(worldObj.provider.dimensionId == 1 && counter < 0){
-					for(Object o : worldObj.loadedEntityList)
-						if(o instanceof EntityDragon){
-							for (EntityPlayer player : playersInRange){
-								player.addChatMessage(new ChatComponentText("The Ender Dragon obstructs you from going back !"));
+				if (worldObj.provider.dimensionId == 1 && counter < 0) {
+					for (Object o : worldObj.loadedEntityList)
+						if (o instanceof EntityDragon) {
+							for (EntityPlayer player : playersInRange) {
+								player.addChatMessage(new ChatComponentText(
+										"The Ender Dragon obstructs you from going back !"));
 								counter = MAX_TIME;
 							}
-						}else
+						} else
 							activateTelepadGui(playersInRange);
-				}
-				else
+				} else
 					activateTelepadGui(playersInRange);
 
 			}
@@ -129,10 +134,10 @@ public class TileEntityTelepad extends TileEntity {
 	}
 
 	/**
-	 * Resets the count down of the pad, sets that there is no player on the pad, and no player
-	 * using the gui. And causes a block update.
+	 * Resets the count down of the pad, sets that there is no player on the
+	 * pad, and no player using the gui. And causes a block update.
 	 */
-	public void resetTE () {
+	public void resetTE() {
 
 		counter = MAX_TIME;
 		isStandingOnPlatform = false;
@@ -142,19 +147,24 @@ public class TileEntityTelepad extends TileEntity {
 	}
 
 	/**
-	 * Activates the Telepad GUI. This will trigger the gui for the first player detected on
-	 * the pad, other players will be locked out, until that player leaves the pad.
+	 * Activates the Telepad GUI. This will trigger the gui for the first player
+	 * detected on the pad, other players will be locked out, until that player
+	 * leaves the pad.
 	 * 
-	 * @param playerInRange: A list of all players atempting to travel through the telepad.
+	 * @param playerInRange
+	 *            : A list of all players atempting to travel through the
+	 *            telepad.
 	 */
-	private void activateTelepadGui (List<EntityPlayer> playerInRange) {
+	private void activateTelepadGui(List<EntityPlayer> playerInRange) {
 
 		for (EntityPlayer player : playerInRange) {
 
-			if ((counter < 0) && !guiOpen && !(player.openContainer instanceof ContainerTelePad)) {
+			if ((counter < 0) && !guiOpen
+					&& !(player.openContainer instanceof ContainerTelePad)) {
 
 				guiOpen = true;
-				player.openGui(Telepads.instance, Constants.GUI_ID_TELEPORT, worldObj, xCoord, yCoord, zCoord);
+				player.openGui(Telepads.instance, Constants.GUI_ID_TELEPORT,
+						worldObj, xCoord, yCoord, zCoord);
 				markDirty();
 				break;
 			}
@@ -162,14 +172,15 @@ public class TileEntityTelepad extends TileEntity {
 	}
 
 	/**
-	 * Updates the standing state of the platform. This is used to set whether or not a player
-	 * is currently standing on the pad. If the state is set to false, this will reset the
-	 * Telepad timer and cause a block update.
+	 * Updates the standing state of the platform. This is used to set whether
+	 * or not a player is currently standing on the pad. If the state is set to
+	 * false, this will reset the Telepad timer and cause a block update.
 	 * 
-	 * @param state: The new state for the pad. false means nobody is standing on it, true
-	 *            means that there is.
+	 * @param state
+	 *            : The new state for the pad. false means nobody is standing on
+	 *            it, true means that there is.
 	 */
-	public void changePlatformState (boolean state) {
+	public void changePlatformState(boolean state) {
 
 		isStandingOnPlatform = state;
 
@@ -177,65 +188,64 @@ public class TileEntityTelepad extends TileEntity {
 			resetTE();
 	}
 
-
-	public String getTelePadName(){
+	public String getTelePadName() {
 		return telepadname;
 	}
 
-	public void setTelePadName(String name){
+	public void setTelePadName(String name) {
 		telepadname = name;
 	}
 
-	public int getDimension(){
+	public int getDimension() {
 		return dimension;
 	}
 
-	public void setDimension(int dimensionID){
+	public void setDimension(int dimensionID) {
 		dimension = dimensionID;
 	}
 
-	public void setFrameColor(int rgb){
+	public void setFrameColor(int rgb) {
 		colorFrame = rgb;
 	}
 
-	public void setBaseColor(int rgb){
+	public void setBaseColor(int rgb) {
 		colorBase = rgb;
 	}
 
-	public int getColorFrame(){
+	public int getColorFrame() {
 		return colorFrame;
 	}
 
-	public int getColorBase(){
+	public int getColorBase() {
 		return colorBase;
 	}
 
-	public boolean hasDimensionUpgrade(){
+	public boolean hasDimensionUpgrade() {
 		return hasDimensionUpgrade;
 	}
 
-	public void addDimensionUpgrade(){
+	public void addDimensionUpgrade() {
 		this.upgradeRotation = new Random().nextInt(4);
 		hasDimensionUpgrade = true;
 	}
 
-	public int getUpgradeRotation(){
+	public int getUpgradeRotation() {
 		return upgradeRotation;
 	}
 
-	public boolean hasRedstoneUpgrade(){
+	public boolean hasRedstoneUpgrade() {
 		return hasRedstoneUpgrade;
 	}
 
-	public void addRedstoneUpgrade(){
+	public void addRedstoneUpgrade() {
 		hasRedstoneUpgrade = true;
 	}
 
-	public void setPowered(boolean flag){
+	public void setPowered(boolean flag) {
 		isPowered = flag;
 	}
 
-	public boolean isPowered(){
+	public boolean isPowered() {
 		return isPowered;
 	}
 }

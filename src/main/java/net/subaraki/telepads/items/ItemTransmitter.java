@@ -18,12 +18,13 @@ public class ItemTransmitter extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons (IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		this.itemIcon = iconRegister.registerIcon("telepads:transmitter");
 	}
-	
+
 	@Override
-	public ItemStack onItemRightClick(ItemStack is, World world, EntityPlayer player) {
+	public ItemStack onItemRightClick(ItemStack is, World world,
+			EntityPlayer player) {
 
 		return super.onItemRightClick(is, world, player);
 	}
