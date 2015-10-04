@@ -1,6 +1,5 @@
 package net.subaraki.telepads.blocks;
 
-import java.awt.Color;
 import java.util.Random;
 
 import net.darkhax.bookshelf.util.Position;
@@ -12,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;

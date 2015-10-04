@@ -4,7 +4,6 @@ import net.darkhax.bookshelf.util.EnumVanillaColors;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.oredict.OreDictionary;
 import net.subaraki.telepads.Telepads;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 

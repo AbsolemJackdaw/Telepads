@@ -18,7 +18,6 @@ import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.blocks.BlockTelepad;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
-import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerHandler {

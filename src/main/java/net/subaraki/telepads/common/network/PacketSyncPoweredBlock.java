@@ -5,8 +5,6 @@ import net.darkhax.bookshelf.util.Position;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.subaraki.telepads.Telepads;
-import net.subaraki.telepads.handler.PlayerLocations;
-import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;

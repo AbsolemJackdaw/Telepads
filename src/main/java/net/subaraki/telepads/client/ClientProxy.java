@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.darkhax.bookshelf.util.Constants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
