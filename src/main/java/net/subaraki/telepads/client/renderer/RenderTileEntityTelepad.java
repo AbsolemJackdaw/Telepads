@@ -18,6 +18,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.client.model.ModelTelepad;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
@@ -284,19 +285,22 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		}
 
 		if (te.hasRedstoneUpgrade()) {
+			renderBlocks.blockAccess = Minecraft.getMinecraft().theWorld;
 
-//			GL11.glPushMatrix();
+			GL11.glPushMatrix();
+			GL11.glScaled(2f, 2f, 2f);
 
 			if (te.isPowered()){
-//				renderStacks(torch_on, 1f);
-				renderTorch(Blocks.redstone_torch, te.xCoord, te.yCoord, te.zCoord);
+				//				Telepads.printDebugMessage(renderBlocks.blockAccess + " ");
+				if(renderBlocks.blockAccess != null)
+					renderBlocks.renderBlockTorch(Blocks.redstone_torch, te.xCoord, te.yCoord, te.zCoord);
 			}
 			else{
-//				renderStacks(torch_off, 1f);
-				renderTorch(Blocks.unlit_redstone_torch, te.xCoord, te.yCoord, te.zCoord);
+				if(renderBlocks.blockAccess != null)
+					renderBlocks.renderBlockTorch(Blocks.unlit_redstone_torch, te.xCoord, te.yCoord, te.zCoord);
 			}
 
-//			GL11.glPopMatrix();
+			GL11.glPopMatrix();
 		}
 
 		GL11.glPopMatrix();
@@ -407,15 +411,15 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(RenderManager.instance.renderEngine.getResourceLocation(item.getItemSpriteNumber()));
 	}
-	
+
 	private void renderTorch(Block block, int x, int y, int z){
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.setBrightness(15); //Minecraft.getMinecraft().theWorld.getMixedBrightnessForBlock(Minecraft.getMinecraft(), x, y, z));
-        tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-        double d0 = 0.4000000059604645D;
-        double d1 = 0.5D - d0;
-        double d2 = 0.20000000298023224D;
-        
-        renderBlocks.renderTorchAtAngle(block, (double)x, (double)y, (double)z, 0.0D, 0.0D, 0);
+		Tessellator tessellator = Tessellator.instance;
+		tessellator.setBrightness(15); //Minecraft.getMinecraft().theWorld.getMixedBrightnessForBlock(Minecraft.getMinecraft(), x, y, z));
+		tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+		double d0 = 0.4000000059604645D;
+		double d1 = 0.5D - d0;
+		double d2 = 0.20000000298023224D;
+
+		renderBlocks.renderTorchAtAngle(block, (double)x, (double)y, (double)z, 0.0D, 0.0D, 0);
 	}
 }
