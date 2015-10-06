@@ -10,15 +10,13 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.client.model.ModelTelepad;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
 
@@ -48,9 +46,6 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 	private static ResourceLocation frame_powered_on = new ResourceLocation(
 			"minecraft:textures/blocks/redstone_block.png");
 
-	private static ItemStack torch_on;
-	private static ItemStack torch_off;
-
 	private static int animation_counter;
 
 	// copied from RenderEndPortal.java
@@ -67,8 +62,6 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 	public RenderTileEntityTelepad() {
 		renderBlocks = new RenderBlocks();
-		torch_on = new ItemStack(Blocks.redstone_torch, 1);
-		torch_off = new ItemStack(Blocks.unlit_redstone_torch, 1);
 	}
 
 	private FloatBuffer func_76907_a(float par1, float par2, float par3,
@@ -194,8 +187,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1,
-			double d2, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
 		animation_counter++;
 
@@ -205,15 +197,18 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			te = (TileEntityTelepad) tileentity;
 		}
 
+		if(te == null)
+			return;
+
 		Color colorBase = new Color(te.getColorBase());
 		Color colorFrame = new Color(te.getColorFrame());
 
 		GL11.glPushMatrix();
-		renderEndPortalSurface(d, d1, d2, f);
+		renderEndPortalSurface(x, y, z, f);
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F, (float) d2 + 0.5F);
+		GL11.glTranslatef((float) x + 0.5F, (float) y + 2.25F, (float) z + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
 
 		float f2 = 1.5f;
@@ -284,26 +279,29 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			GL11.glPopMatrix();
 		}
 
+		GL11.glPopMatrix();
+
+
+
 		if (te.hasRedstoneUpgrade()) {
-			renderBlocks.blockAccess = Minecraft.getMinecraft().theWorld;
+			Tessellator tessellator = Tessellator.instance;
 
-			GL11.glPushMatrix();
-			GL11.glScaled(2f, 2f, 2f);
+			tessellator.startDrawingQuads();
+			tessellator.setTranslation(x - te.xCoord - 0.5, y - te.yCoord, z - te.zCoord -0.5);
+			tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+			renderBlocks.blockAccess = te.getWorldObj();
+			this.bindTexture(TextureMap.locationBlocksTexture);
 
-			if (te.isPowered()){
-				//				Telepads.printDebugMessage(renderBlocks.blockAccess + " ");
-				if(renderBlocks.blockAccess != null)
-					renderBlocks.renderBlockTorch(Blocks.redstone_torch, te.xCoord, te.yCoord, te.zCoord);
-			}
-			else{
-				if(renderBlocks.blockAccess != null)
-					renderBlocks.renderBlockTorch(Blocks.unlit_redstone_torch, te.xCoord, te.yCoord, te.zCoord);
-			}
+			if (te.isPowered())
+				renderBlocks.renderBlockByRenderType(Blocks.redstone_torch, te.xCoord, te.yCoord, te.zCoord);
+			else
+				renderBlocks.renderBlockByRenderType(Blocks.unlit_redstone_torch, te.xCoord, te.yCoord, te.zCoord);
 
-			GL11.glPopMatrix();
+			tessellator.setTranslation(0.0D, 0.0D, 0.0D);
+			tessellator.draw();
+
 		}
 
-		GL11.glPopMatrix();
 	}
 
 	public void renderInventory(TileEntity tileentity, Color colorFrame,Color colorBase, double d, double d1, double d2, float f) {
@@ -345,81 +343,5 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		GL11.glPopMatrix();
-	}
-
-	private void renderStacks(ItemStack itemstack, float scale) {
-
-		GL11.glPushMatrix();
-		if ((itemstack != null) && (itemstack.getItem() != null)) {
-			bindTextureMap(itemstack);
-
-			/* =======BLOCKS======= */
-			if (itemstack.getItemSpriteNumber() == 0 && itemstack.getItem() instanceof ItemBlock &&	RenderBlocks.renderItemIn3d(Block.getBlockFromItem(itemstack.getItem()).getRenderType())){
-				GL11.glTranslatef(0.25f, 0.44f, -0.25f);
-
-				float f2 = 0.25F;
-				int i1 = Block.getBlockFromItem(itemstack.getItem()).getRenderType();
-
-				if ((i1 == 1) || (i1 == 19) || (i1 == 12) || (i1 == 2))
-					f2 = 0.5F;
-
-				if (scale > 0f) 
-					f2 = 0.2f;
-
-				int b0 = 1;
-				if (itemstack.stackSize > 1) 
-					b0 = 2;
-
-				if (itemstack.stackSize > 20) 
-					b0 = 3;
-
-				if (itemstack.stackSize > 40) 
-					b0 = 4;
-
-				GL11.glScalef(f2, f2, f2);
-
-				//translate
-
-				for (int i = 0; i < b0; i++) {
-					GL11.glTranslatef(0.05f * i, 0.05f * i, 0.05f * i);
-					renderBlocks.renderBlockAsItem(Block.getBlockFromItem(itemstack.getItem()), itemstack.getItemDamage(), 1.0f);
-				}
-			}
-			/* =====ITEMS===== */
-			else {
-				//Currently no need for item rendering. i'll leave this in in case of
-				//				//translate here
-				//				try {
-				//					if (itemstack.getItem().requiresMultipleRenderPasses()) {
-				//						for (int k = 0; k <= 1; k++)
-				//							drawItem(itemstack, k);
-				//					}
-				//					else {
-				//						drawItem(itemstack, 0);
-				//					}
-				//				}
-				//
-				//				catch (Throwable throwable) {
-				//					throw new RuntimeException(throwable);
-				//				}
-			}
-		}
-		GL11.glPopMatrix();
-	}
-
-	private void bindTextureMap(ItemStack item) {
-
-		Minecraft.getMinecraft().renderEngine.bindTexture(RenderManager.instance.renderEngine.getResourceLocation(item.getItemSpriteNumber()));
-	}
-
-	private void renderTorch(Block block, int x, int y, int z){
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.setBrightness(15); //Minecraft.getMinecraft().theWorld.getMixedBrightnessForBlock(Minecraft.getMinecraft(), x, y, z));
-		tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-		double d0 = 0.4000000059604645D;
-		double d1 = 0.5D - d0;
-		double d2 = 0.20000000298023224D;
-
-		renderBlocks.renderTorchAtAngle(block, (double)x, (double)y, (double)z, 0.0D, 0.0D, 0);
 	}
 }

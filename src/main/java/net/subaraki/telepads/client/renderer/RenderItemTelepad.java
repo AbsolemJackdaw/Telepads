@@ -28,14 +28,14 @@ public class RenderItemTelepad implements IItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
-		if (item.hasTagCompound()) {
+		TileEntitySpecialRenderer tesr = TileEntityRendererDispatcher.instance
+				.getSpecialRenderer(new TileEntityTelepad());
 
-			TileEntitySpecialRenderer tesr = TileEntityRendererDispatcher.instance
-					.getSpecialRenderer(new TileEntityTelepad());
+		if (tesr instanceof RenderTileEntityTelepad) {
 
-			if (tesr instanceof RenderTileEntityTelepad) {
+			RenderTileEntityTelepad rtet = (RenderTileEntityTelepad) tesr;
 
-				RenderTileEntityTelepad rtet = (RenderTileEntityTelepad) tesr;
+			if (item.hasTagCompound()) {
 
 				if (item.getTagCompound().hasKey("colorFrame")
 						&& item.getTagCompound().hasKey("colorBase"))
@@ -43,13 +43,16 @@ public class RenderItemTelepad implements IItemRenderer {
 							new TileEntityTelepad(),
 							new Color(item.getTagCompound().getInteger(
 									"colorFrame")),
-							new Color(item.getTagCompound().getInteger(
-									"colorBase")), 0, 0, 0, 0);
-			}
-		} else
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(
-					new TileEntityTelepad(), 0.0D, 0.0D, 0.0D, 0.0F);
-
+									new Color(item.getTagCompound().getInteger(
+											"colorBase")), 0, 0, 0, 0);
+			} else
+				rtet.renderInventory(
+						new TileEntityTelepad(),
+						new Color(26, 246, 172),
+						new Color(243, 89, 233),
+						0, 0, 0, 0);
+			//			TileEntityRendererDispatcher.instance.renderTileEntityAt(new TileEntityTelepad(), 0.0D, 0.0D, 0.0D, 0.0F);
+		}
 	}
 
 	@Override
