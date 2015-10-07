@@ -111,7 +111,7 @@ public class PlayerHandler {
                     
                     telepad.markDirty();
                 }
-                else if (event.entityPlayer.getHeldItem().getItem().equals(Items.redstone)) {
+                else if (event.entityPlayer.getHeldItem().getItem().equals(Telepads.toggler)) {
                     
                     PlayerLocations playerLocations = PlayerLocations.getProperties(event.entityPlayer);
                     

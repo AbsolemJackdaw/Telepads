@@ -3,6 +3,7 @@ tile.telepad.name=TelePad
 
 #item
 item.telepad.transmitter.name=Transmitter Upgrade
+item.telepad.toggler.name=Toggler Upgrade
 
 #gui text
 enter.to.confirm=Press Enter to confirm

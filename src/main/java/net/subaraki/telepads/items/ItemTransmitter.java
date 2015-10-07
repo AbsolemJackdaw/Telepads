@@ -22,10 +22,4 @@ public class ItemTransmitter extends Item {
         
         this.itemIcon = iconRegister.registerIcon("telepads:transmitter");
     }
-    
-    @Override
-    public ItemStack onItemRightClick (ItemStack is, World world, EntityPlayer player) {
-        
-        return super.onItemRightClick(is, world, player);
-    }
 }

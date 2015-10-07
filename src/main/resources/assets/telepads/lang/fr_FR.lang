@@ -3,6 +3,7 @@ tile.telepad.name=TelePad
 
 #item
 item.telepad.transmitter.name=Amélioration Transmitionique
+item.telepad.toggler.name=Amélioration Interrupteur
 
 #gui text
 enter.to.confirm=Appuyez sur Entrer pour confirmer

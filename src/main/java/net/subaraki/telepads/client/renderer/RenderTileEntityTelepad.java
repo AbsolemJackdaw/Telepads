@@ -172,7 +172,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		if (te == null)
 			return;
 
-		if(te.hasRedstoneUpgrade() && !te.isPowered()){
+		if(!te.hasRedstoneUpgrade() || te.hasRedstoneUpgrade() && !te.isPowered()){
 			GL11.glPushMatrix();
 			renderEndPortalSurface(x, y, z, f);
 			GL11.glPopMatrix();
@@ -235,6 +235,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			padModel.renderUpgrade(0.0625f);
 			GL11.glPopMatrix();
 		}
+		GL11.glPopMatrix();
 
 		if (te.hasRedstoneUpgrade()) {
 			renderTorch(te, -0.5, 0.4, -0.5, x,y,z);
@@ -243,7 +244,6 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			renderTorch(te, 0.5, 0.4, 0.5, x,y,z);
 
 		}
-		GL11.glPopMatrix();
 	}
 
 	/**

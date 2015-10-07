@@ -3,6 +3,7 @@ tile.telepad.name=Teleplatte
 
 #item
 item.telepad.transmitter.name=Transmizter Upgradazionne
+item.telepad.toggler.name=Toggler Upgrade
 
 #gui text
 enter.to.confirm=Drucke Enter um zu bestatigen
