@@ -2,8 +2,6 @@ package net.subaraki.telepads.util;
 
 import java.util.Iterator;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -22,6 +20,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.subaraki.telepads.Telepads;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 
 //credit goes to 
 //https://github.com/maruohon/enderutilities/blob/master/src/main/java/fi/dy/masa/enderutilities/util/teleport/TeleportEntity.java

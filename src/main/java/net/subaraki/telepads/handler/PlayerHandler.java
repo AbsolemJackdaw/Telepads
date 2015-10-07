@@ -2,7 +2,6 @@ package net.subaraki.telepads.handler;
 
 import java.awt.Color;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.darkhax.bookshelf.util.Position;
 import net.darkhax.bookshelf.util.Utilities;
 import net.minecraft.block.Block;
@@ -19,6 +18,7 @@ import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.blocks.BlockTelepad;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerHandler {
     
@@ -62,6 +62,7 @@ public class PlayerHandler {
                         
                         if (!event.entityPlayer.capabilities.isCreativeMode)
                             event.entityPlayer.setCurrentItemOrArmor(0, new ItemStack(Items.bucket, 1));
+                        
                         event.setCanceled(true);
                     }
                 }
@@ -107,6 +108,7 @@ public class PlayerHandler {
                     telepad.addDimensionUpgrade();
                     if (!event.entityPlayer.capabilities.isCreativeMode)
                         event.entityPlayer.getHeldItem().stackSize--;
+                    
                     telepad.markDirty();
                 }
                 else if (event.entityPlayer.getHeldItem().getItem().equals(Items.redstone)) {
@@ -116,6 +118,7 @@ public class PlayerHandler {
                     telepad.addRedstoneUpgrade();
                     if (!event.entityPlayer.capabilities.isCreativeMode)
                         event.entityPlayer.getHeldItem().stackSize--;
+                    
                     telepad.markDirty();
                 }
             }

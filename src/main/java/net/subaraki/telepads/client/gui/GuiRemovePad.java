@@ -1,7 +1,5 @@
 package net.subaraki.telepads.client.gui;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,6 +12,8 @@ import net.subaraki.telepads.common.network.PacketTeleport;
 import net.subaraki.telepads.handler.PlayerLocations;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
+
+import com.mojang.realmsclient.gui.ChatFormatting;
 
 public class GuiRemovePad extends GuiScreen {
     
