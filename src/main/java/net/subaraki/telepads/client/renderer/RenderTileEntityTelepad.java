@@ -193,11 +193,11 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 			if (animation_counter < 100)
 				bindTexture(frame_upgrade);
-			else if (animation_counter < 300)
+			else if (animation_counter < 200)
 				bindTexture(frame_upgrade_2);
-			else if (animation_counter < 500)
+			else if (animation_counter < 300)
 				bindTexture(frame_upgrade_3);
-			else if (animation_counter < 700)
+			else if (animation_counter < 400)
 				bindTexture(frame_upgrade_4);
 			else
 				bindTexture(frame_upgrade_4);
