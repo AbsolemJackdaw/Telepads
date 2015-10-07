@@ -113,16 +113,21 @@ public class TileEntityTelepad extends TileEntity {
 				if (counter >= 0)
 					counter--;
 
+				boolean hasDragon = false;
+				
 				if (worldObj.provider.dimensionId == 1 && counter < 0) {
 					for (Object o : worldObj.loadedEntityList)
 						if (o instanceof EntityDragon) {
-							for (EntityPlayer player : playersInRange) {
-								player.addChatMessage(new ChatComponentText("The Ender Dragon obstructs you from going back !"));
-								counter = MAX_TIME;
-							}
+							hasDragon = true;
 						}
-						else
-							activateTelepadGui(playersInRange);
+
+					if(hasDragon)
+						for (EntityPlayer player : playersInRange) {
+							player.addChatMessage(new ChatComponentText("The Ender Dragon obstructs you from going back !"));
+							counter = MAX_TIME;
+						}
+					else
+						activateTelepadGui(playersInRange);
 				}
 				else
 					activateTelepadGui(playersInRange);
