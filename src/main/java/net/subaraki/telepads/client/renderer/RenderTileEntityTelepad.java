@@ -55,7 +55,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			"textures/entity/end_portal.png");
 	private static final Random teleporterRandom = new Random(31100L);
 
-	FloatBuffer field_76908_a = GLAllocation.createDirectFloatBuffer(16);
+	FloatBuffer floatBuffer = GLAllocation.createDirectFloatBuffer(16);
 	ModelTelepad padModel = new ModelTelepad();
 
 	RenderBlocks renderBlocks;
@@ -64,13 +64,13 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		renderBlocks = new RenderBlocks();
 	}
 
-	private FloatBuffer func_76907_a(float par1, float par2, float par3,
+	private FloatBuffer createBuffer(float par1, float par2, float par3,
 			float par4) {
 
-		this.field_76908_a.clear();
-		this.field_76908_a.put(par1).put(par2).put(par3).put(par4);
-		this.field_76908_a.flip();
-		return this.field_76908_a;
+		this.floatBuffer.clear();
+		this.floatBuffer.put(par1).put(par2).put(par3).put(par4);
+		this.floatBuffer.flip();
+		return this.floatBuffer;
 	}
 
 	public void renderEndPortalSurface(double par2, double par4, double par6,
@@ -91,8 +91,8 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			GL11.glPushMatrix();
 			float f5 = 16 - i;
 			float f6 = 0.0625F * 5f; // looking inside makes the stars go
-			// smaller, and more numberous
-			float f7 = 1.0F / ((f5 / 10) + 1.0F);// Colors the stars less or
+			// smaller, and more numerous
+			float f7 = 1.0F / ((f5 / 10) + 1.0F);// Colours the stars less or
 			// more bright
 
 			if (i == 0) {
@@ -126,13 +126,13 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			GL11.glTexGeni(GL11.GL_Q, GL11.GL_TEXTURE_GEN_MODE,
 					GL11.GL_EYE_LINEAR);
 			GL11.glTexGen(GL11.GL_S, GL11.GL_OBJECT_PLANE,
-					this.func_76907_a(1.0F, 0.0F, 0.0F, 0.0F));
+					this.createBuffer(1.0F, 0.0F, 0.0F, 0.0F));
 			GL11.glTexGen(GL11.GL_T, GL11.GL_OBJECT_PLANE,
-					this.func_76907_a(0.0F, 0.0F, 1.0F, 0.0F));
+					this.createBuffer(0.0F, 0.0F, 1.0F, 0.0F));
 			GL11.glTexGen(GL11.GL_R, GL11.GL_OBJECT_PLANE,
-					this.func_76907_a(0.0F, 0.0F, 0.0F, 1.0F));
+					this.createBuffer(0.0F, 0.0F, 0.0F, 1.0F));
 			GL11.glTexGen(GL11.GL_Q, GL11.GL_EYE_PLANE,
-					this.func_76907_a(0.0F, 1.0F, 0.0F, 0.0F));
+					this.createBuffer(0.0F, 1.0F, 0.0F, 0.0F));
 			GL11.glEnable(GL11.GL_TEXTURE_GEN_S);
 			GL11.glEnable(GL11.GL_TEXTURE_GEN_T);
 			GL11.glEnable(GL11.GL_TEXTURE_GEN_R);
@@ -253,26 +253,32 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		}
 
 		if (te.hasRedstoneUpgrade()) {
-			Tessellator tessellator = Tessellator.instance;
-
-			tessellator.startDrawingQuads();
-			tessellator.setTranslation(x - te.xCoord - 0.5, y - te.yCoord, z - te.zCoord -0.5);
-			tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-			renderBlocks.blockAccess = te.getWorldObj();
-			this.bindTexture(TextureMap.locationBlocksTexture);
-
-			if (te.isPowered())
-				renderBlocks.renderBlockByRenderType(Blocks.redstone_torch, te.xCoord, te.yCoord, te.zCoord);
-			else
-				renderBlocks.renderBlockByRenderType(Blocks.unlit_redstone_torch, te.xCoord, te.yCoord, te.zCoord);
-
-			tessellator.setTranslation(0.0D, 0.0D, 0.0D);
-			tessellator.draw();
+			renderTorch(te, -0.5, 0, -0.5);
+			renderTorch(te, 0.5, 0, -0.5);
+			renderTorch(te, -0.5, 0, 0.5);
+			renderTorch(te, 0.5, 0, 0.5);
 
 		}
 
 	}
 
+	private void renderTorch(TileEntityTelepad te, double offsetX, double offsetY, double offsetZ){
+		Tessellator tessellator = Tessellator.instance;
+
+		tessellator.startDrawingQuads();
+		tessellator.setTranslation(offsetX - te.xCoord - 0.5, offsetY - te.yCoord, offsetZ - te.zCoord -0.5);
+		tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
+		renderBlocks.blockAccess = te.getWorldObj();
+		this.bindTexture(TextureMap.locationBlocksTexture);
+
+		if (te.isPowered())
+			renderBlocks.renderBlockByRenderType(Blocks.redstone_torch, te.xCoord, te.yCoord, te.zCoord);
+		else
+			renderBlocks.renderBlockByRenderType(Blocks.unlit_redstone_torch, te.xCoord, te.yCoord, te.zCoord);
+
+		tessellator.setTranslation(0.0D, 0.0D, 0.0D);
+		tessellator.draw();
+	}
 	public void renderPad(TileEntity tileentity, Color colorFrame,Color colorBase, double x, double y, double z, float f) {
 
 		TileEntityTelepad te = null;
