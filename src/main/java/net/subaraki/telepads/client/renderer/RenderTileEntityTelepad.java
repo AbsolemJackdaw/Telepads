@@ -203,34 +203,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 		Color colorBase = new Color(te.getColorBase());
 		Color colorFrame = new Color(te.getColorFrame());
 
-		GL11.glPushMatrix();
-		renderEndPortalSurface(x, y, z, f);
-		GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 2.25F, (float) z + 0.5F);
-		GL11.glScalef(1.0F, -1F, -1F);
-
-		float f2 = 1.5f;
-		GL11.glScalef(f2, f2, f2);
-
-		GL11.glPushMatrix();
-		bindTexture(base);
-		GL11.glColor3f((float) (colorBase.getRed() / 255.0f),(float) (colorBase.getGreen() / 255.0f),(float) (colorBase.getBlue() / 255.0f));
-		padModel.renderArrows(0.0625f);
-		GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
-		bindTexture(pads);
-		GL11.glColor3f((float) (colorFrame.getRed() / 255.0f),(float) (colorFrame.getGreen() / 255.0f),(float) (colorFrame.getBlue() / 255.0f));
-		padModel.renderLegs(0.0625f);
-		GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
-		GL11.glColor3f(1f, 1f, 1f);
-		bindTexture(frame);
-		padModel.renderFrame(0.0625f);
-		GL11.glPopMatrix();
+		renderPad(te, colorFrame, colorBase, x, y, z, f);
 
 		if (te.hasDimensionUpgrade()){
 
@@ -279,10 +252,6 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			GL11.glPopMatrix();
 		}
 
-		GL11.glPopMatrix();
-
-
-
 		if (te.hasRedstoneUpgrade()) {
 			Tessellator tessellator = Tessellator.instance;
 
@@ -304,9 +273,7 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 
 	}
 
-	public void renderInventory(TileEntity tileentity, Color colorFrame,Color colorBase, double d, double d1, double d2, float f) {
-
-		animation_counter++;
+	public void renderPad(TileEntity tileentity, Color colorFrame,Color colorBase, double x, double y, double z, float f) {
 
 		TileEntityTelepad te = null;
 
@@ -314,11 +281,11 @@ public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 			te = (TileEntityTelepad) tileentity;
 
 		GL11.glPushMatrix();
-		renderEndPortalSurface(d, d1, d2, f);
+		renderEndPortalSurface(x, y, z, f);
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 2.25F,(float) d2 + 0.5F);
+		GL11.glTranslatef((float) x + 0.5F, (float) y + 2.25F,(float) z + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
 
 		float f2 = 1.5f;

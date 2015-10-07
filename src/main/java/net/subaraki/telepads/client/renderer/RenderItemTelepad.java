@@ -39,14 +39,14 @@ public class RenderItemTelepad implements IItemRenderer {
 
 				if (item.getTagCompound().hasKey("colorFrame")
 						&& item.getTagCompound().hasKey("colorBase"))
-					rtet.renderInventory(
+					rtet.renderPad(
 							new TileEntityTelepad(),
 							new Color(item.getTagCompound().getInteger(
 									"colorFrame")),
 									new Color(item.getTagCompound().getInteger(
 											"colorBase")), 0, 0, 0, 0);
 			} else
-				rtet.renderInventory(
+				rtet.renderPad(
 						new TileEntityTelepad(),
 						new Color(26, 246, 172),
 						new Color(243, 89, 233),
