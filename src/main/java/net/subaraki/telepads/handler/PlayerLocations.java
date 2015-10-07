@@ -1,10 +1,10 @@
 package net.subaraki.telepads.handler;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
+import io.netty.buffer.ByteBuf;
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +17,6 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.common.network.PacketSyncTelepadEntries;
-import cpw.mods.fml.common.network.ByteBufUtils;
 
 public class PlayerLocations implements IExtendedEntityProperties {
 

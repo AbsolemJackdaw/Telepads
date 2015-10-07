@@ -1,9 +1,9 @@
 package net.subaraki.telepads.handler;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.subaraki.telepads.Telepads;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeHandler {
 

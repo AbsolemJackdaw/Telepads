@@ -2,6 +2,7 @@ package net.subaraki.telepads.client;
 
 import java.util.Random;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import net.darkhax.bookshelf.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
@@ -13,7 +14,6 @@ import net.subaraki.telepads.client.renderer.RenderTileEntityTelepad;
 import net.subaraki.telepads.common.CommonProxy;
 import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
-import cpw.mods.fml.client.registry.ClientRegistry;
 
 public class ClientProxy extends CommonProxy {
 

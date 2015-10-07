@@ -4,7 +4,8 @@ import java.awt.Color;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
@@ -14,13 +15,10 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.subaraki.telepads.client.model.ModelTelepad;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
-
-import org.lwjgl.opengl.GL11;
 
 public class RenderTileEntityTelepad extends TileEntitySpecialRenderer {
 

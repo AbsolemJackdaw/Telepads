@@ -1,5 +1,7 @@
 package net.subaraki.telepads.client.gui;
 
+import org.lwjgl.input.Keyboard;
+
 import net.darkhax.bookshelf.util.Position;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -10,8 +12,6 @@ import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.common.network.PacketAddTelepadEntry;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
-
-import org.lwjgl.input.Keyboard;
 
 public class GuiNameTelepad extends GuiScreen {
 

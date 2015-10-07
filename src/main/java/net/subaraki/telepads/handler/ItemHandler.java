@@ -1,11 +1,11 @@
 package net.subaraki.telepads.handler;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.darkhax.bookshelf.util.EnumVanillaColors;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.subaraki.telepads.Telepads;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ItemHandler {
 
