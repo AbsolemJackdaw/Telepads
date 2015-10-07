@@ -88,8 +88,7 @@ public class PlayerHandler {
 
 			TileEntityTelepad telepad = (TileEntityTelepad) event.world
 					.getTileEntity(event.x, event.y, event.z);
-			int itemColor = Utilities.getItemColor(event.entityPlayer
-					.getHeldItem());
+			int itemColor = Utilities.getDyeColor(event.entityPlayer.getHeldItem());
 
 			if (itemColor != -1337) {
 
