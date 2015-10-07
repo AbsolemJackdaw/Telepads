@@ -12,31 +12,30 @@ import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.util.Constants;
 
 public class TelepadsConfigGui extends GuiConfig {
-
-	/**
-	 * Local instance of the configuration for the mod.
-	 */
-	static Configuration cfg = ConfigurationHandler.config;
-
-	public TelepadsConfigGui(GuiScreen parent) {
-
-		super(parent, getCategories(), Constants.MODID, false, false, GuiConfig
-				.getAbridgedConfigPath(ConfigurationHandler.config.toString()));
-	}
-
-	/**
-	 * Provies a list of all configuration categories as configuration elements.
-	 * 
-	 * @return List<IConfigElement>: A list of configuration elements containing
-	 *         every catagory.
-	 */
-	public static List<IConfigElement> getCategories() {
-
-		ArrayList<IConfigElement> elements = new ArrayList<IConfigElement>();
-
-		for (String name : cfg.getCategoryNames())
-			elements.add(new ConfigElement(cfg.getCategory(name)));
-
-		return elements;
-	}
+    
+    /**
+     * Local instance of the configuration for the mod.
+     */
+    static Configuration cfg = ConfigurationHandler.config;
+    
+    public TelepadsConfigGui(GuiScreen parent) {
+        
+        super(parent, getCategories(), Constants.MODID, false, false, GuiConfig.getAbridgedConfigPath(ConfigurationHandler.config.toString()));
+    }
+    
+    /**
+     * Provies a list of all configuration categories as configuration elements.
+     * 
+     * @return List<IConfigElement>: A list of configuration elements containing every
+     *         catagory.
+     */
+    public static List<IConfigElement> getCategories () {
+        
+        ArrayList<IConfigElement> elements = new ArrayList<IConfigElement>();
+        
+        for (String name : cfg.getCategoryNames())
+            elements.add(new ConfigElement(cfg.getCategory(name)));
+            
+        return elements;
+    }
 }
