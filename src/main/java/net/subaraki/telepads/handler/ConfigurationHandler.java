@@ -34,6 +34,12 @@ public class ConfigurationHandler {
     public static String particleName = "portal";
     
     /**
+     * A configurable flag that determines wether the ender dragon prevents the player 
+     * from leaving the end on a telepad.
+     */
+    public static boolean allowDragonBlockingEndExit = true;
+    
+    /**
      * Constructs the ConfigurationHandler. Only one ConfigurationHandler instance should ever
      * be created.
      * 
@@ -62,6 +68,7 @@ public class ConfigurationHandler {
         allowDebugMessages = config.getBoolean("allowDebug", "settings", allowDebugMessages, "Determines whether or not dubug messages from the Telepads mod should be printed to the console.");
         allowParticleEffects = config.getBoolean("allowParticles", "settings", allowParticleEffects, "Should particle effects be spawned from the Telepad?");
         particleName = config.getString("particleType", "settings", particleName, "The type of particle that should spawn from the Telepad?");
+        allowDragonBlockingEndExit  = config.getBoolean("allowEndExit", "settings", allowDragonBlockingEndExit, "Determines wether or not the prescence of the Dnderdragon prevents a player from leaving the End trough a Telepad");
         
         if (config.hasChanged())
             config.save();

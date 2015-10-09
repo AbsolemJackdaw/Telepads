@@ -14,6 +14,7 @@ import net.subaraki.telepads.handler.ConfigurationHandler;
 import net.subaraki.telepads.handler.GuiHandler;
 import net.subaraki.telepads.handler.ItemHandler;
 import net.subaraki.telepads.handler.PlayerHandler;
+import net.subaraki.telepads.handler.RecipeHandler;
 import net.subaraki.telepads.items.ItemRedstoneUpgrade;
 import net.subaraki.telepads.items.ItemTransmitter;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
@@ -67,6 +68,9 @@ public class Telepads {
         GameRegistry.registerItem(transmitter, "Transmitter Upgrade");
         GameRegistry.registerItem(toggler, "Toggler Upgrade");
 
+        RecipeHandler.initBlockRecipes();
+        RecipeHandler.initItemRecipes();
+        
         proxy.preInit();
     }
     

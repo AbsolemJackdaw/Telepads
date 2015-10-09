@@ -10,21 +10,19 @@ public class RecipeHandler {
 
 	public static void initBlockRecipes () {
 
-		GameRegistry.addRecipe(new ItemStack(Telepads.blockPad, 1), new Object[] {});
+		GameRegistry.addRecipe(new ItemStack(Telepads.blockPad, 1), new Object[] { "BBB", "EEE", "IGI", 
+			'B', Blocks.glass, 'E', Items.ender_eye, 'G', Items.gold_ingot, 'I', Blocks.iron_block
+			});
 	}
 
 	public static void initItemRecipes () {
 
-		GameRegistry.addRecipe(new ItemStack(Telepads.transmitter, 1), new Object[] { "I", "I", "I", "R", "D", "R", "I", "I", "I", 
-			Character.valueOf('I'), Items.iron_ingot, Character.valueOf('R'), Items.redstone, Character.valueOf('D'), Items.diamond,});
+		GameRegistry.addRecipe(new ItemStack(Telepads.transmitter, 1), new Object[] { "III", "RDR", "III", 
+			'I', Items.iron_ingot, 'R', Items.redstone, 'D', Items.diamond
+			});
 
-		GameRegistry.addRecipe(new ItemStack(Telepads.toggler, 1), new Object[] { "T", "R", "T", "R", "G", "R", "T", "R", "T", 
-			Character.valueOf('R'), Items.redstone, Character.valueOf('T'), Blocks.redstone_torch, Character.valueOf('G'), Items.gold_ingot});
-
-		GameRegistry.addRecipe(new ItemStack(Telepads.toggler, 1), new Object[] { "G", "G", "G", "E", "E", "E", "I", "G", "I", 
-			Character.valueOf('G'), Blocks.glass, Character.valueOf('E'), Items.ender_eye, Character.valueOf('G'), Blocks.gold_block,
-			Character.valueOf('I'), Blocks.iron_block});
-
+		GameRegistry.addRecipe(new ItemStack(Telepads.toggler, 1), new Object[] { "TRT", "RGR", "TRT", 
+			'R', Items.redstone, 'T', Blocks.redstone_torch, 'G', Items.gold_ingot});
 	}
 
 }
