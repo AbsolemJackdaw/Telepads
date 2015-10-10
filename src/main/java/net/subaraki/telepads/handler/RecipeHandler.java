@@ -10,19 +10,36 @@ public class RecipeHandler {
 
 	public static void initBlockRecipes () {
 
-		GameRegistry.addRecipe(new ItemStack(Telepads.blockPad, 1), new Object[] { "BBB", "EEE", "IGI", 
-			'B', Blocks.glass, 'E', Items.ender_eye, 'G', Items.gold_ingot, 'I', Blocks.iron_block
-			});
+		GameRegistry.addRecipe(new ItemStack(Telepads.blockPad, 1), new Object[] { 
+			"@@@", 
+			"###", 
+			"$£$", 
+			'@', Blocks.glass, 
+			'#', Items.ender_pearl, 
+			'£', Items.gold_ingot, 
+			'$', Blocks.iron_block
+		});
 	}
 
 	public static void initItemRecipes () {
 
-		GameRegistry.addRecipe(new ItemStack(Telepads.transmitter, 1), new Object[] { "III", "RDR", "III", 
-			'I', Items.iron_ingot, 'R', Items.redstone, 'D', Items.diamond
-			});
+		GameRegistry.addRecipe(new ItemStack(Telepads.transmitter, 1), new Object[] { 
+			"III", 
+			"RDR", 
+			"III", 
+			'I', Items.iron_ingot, 
+			'R', Items.redstone,
+			'D', Items.diamond
+		});
 
-		GameRegistry.addRecipe(new ItemStack(Telepads.toggler, 1), new Object[] { "TRT", "RGR", "TRT", 
-			'R', Items.redstone, 'T', Blocks.redstone_torch, 'G', Items.gold_ingot});
+		GameRegistry.addRecipe(new ItemStack(Telepads.toggler, 1), new Object[] { 
+			"TRT", 
+			"RGR", 
+			"TRT", 
+			'R', Items.redstone, 
+			'T', Blocks.redstone_torch, 
+			'G', Items.gold_ingot
+		});
 	}
 
 }

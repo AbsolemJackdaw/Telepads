@@ -22,6 +22,7 @@ import net.subaraki.telepads.util.Constants;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -68,10 +69,13 @@ public class Telepads {
         GameRegistry.registerItem(transmitter, "Transmitter Upgrade");
         GameRegistry.registerItem(toggler, "Toggler Upgrade");
 
-        RecipeHandler.initBlockRecipes();
-        RecipeHandler.initItemRecipes();
-        
         proxy.preInit();
+    }
+    
+    @EventHandler
+    public void init (FMLInitializationEvent event) {
+    	RecipeHandler.initBlockRecipes();
+        RecipeHandler.initItemRecipes();
     }
     
     /**

@@ -9,7 +9,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
-import net.subaraki.telepads.Telepads;
 import net.subaraki.telepads.client.gui.GuiRemovePad;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
 import net.subaraki.telepads.tileentity.TileEntityTelepad;
