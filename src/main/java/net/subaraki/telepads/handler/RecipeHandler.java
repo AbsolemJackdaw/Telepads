@@ -11,13 +11,13 @@ public class RecipeHandler {
 	public static void initBlockRecipes () {
 
 		GameRegistry.addRecipe(new ItemStack(Telepads.blockPad, 1), new Object[] { 
-			"@@@", 
-			"###", 
-			"$£$", 
-			'@', Blocks.glass, 
-			'#', Items.ender_pearl, 
-			'£', Items.gold_ingot, 
-			'$', Blocks.iron_block
+			"BBB", 
+			"EEE", 
+			"IGI", 
+			'B', Blocks.glass, 
+			'E', Items.ender_pearl, 
+			'G', Items.gold_ingot, 
+			'I', Blocks.iron_block
 		});
 	}
 
