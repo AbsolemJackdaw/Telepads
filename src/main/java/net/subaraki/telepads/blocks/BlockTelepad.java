@@ -13,6 +13,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
@@ -230,20 +231,22 @@ public class BlockTelepad extends BlockContainer {
 
 				telepad.markDirty();
 
-				for (Integer i : DimensionManager.getStaticDimensionIDs()) {
-					WorldServer ws = DimensionManager.getWorld(i);
+				if(!world.isRemote){
+					for (Integer i : DimensionManager.getStaticDimensionIDs()) {
+						WorldServer ws = MinecraftServer.getServer().worldServerForDimension(i);
 
-					for (Object o : ws.playerEntities) {
-						if (o instanceof EntityPlayer) {
-							EntityPlayer player = (EntityPlayer) o;
-							PlayerLocations pl = PlayerLocations.getProperties(player);
+						for (Object o : ws.playerEntities) {
+							if (o instanceof EntityPlayer) {
+								EntityPlayer player = (EntityPlayer) o;
+								PlayerLocations pl = PlayerLocations.getProperties(player);
 
-							for (TelepadEntry tpe : pl.getEntries()) {
-								if (tpe.position.equals(new Position(x, y, z)))
-									if (tpe.dimensionID == world.provider.dimensionId)
-										tpe.setPowered(flag);
+								for (TelepadEntry tpe : pl.getEntries()) {
+									if (tpe.position.equals(new Position(x, y, z)))
+										if (tpe.dimensionID == world.provider.dimensionId)
+											tpe.setPowered(flag);
+								}
+								pl.sync();
 							}
-							pl.sync();
 						}
 					}
 				}
