@@ -2,11 +2,11 @@ package net.subaraki.telepads.handler;
 
 import java.io.File;
 
-import net.minecraftforge.common.config.Configuration;
-import net.subaraki.telepads.util.Constants;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.common.config.Configuration;
+import net.subaraki.telepads.util.Constants;
 
 public class ConfigurationHandler {
     
@@ -34,8 +34,8 @@ public class ConfigurationHandler {
     public static String particleName = "portal";
     
     /**
-     * A configurable flag that determines wether the ender dragon prevents the player 
-     * from leaving the end on a telepad.
+     * A configurable flag that determines wether the ender dragon prevents the player from
+     * leaving the end on a telepad.
      */
     public static boolean allowDragonBlockingEndExit = true;
     
@@ -68,7 +68,7 @@ public class ConfigurationHandler {
         allowDebugMessages = config.getBoolean("allowDebug", "settings", allowDebugMessages, "Determines whether or not dubug messages from the Telepads mod should be printed to the console.");
         allowParticleEffects = config.getBoolean("allowParticles", "settings", allowParticleEffects, "Should particle effects be spawned from the Telepad?");
         particleName = config.getString("particleType", "settings", particleName, "The type of particle that should spawn from the Telepad?");
-        allowDragonBlockingEndExit  = config.getBoolean("allowDragonBlockingEndExit", "settings", allowDragonBlockingEndExit, "Determines wether or not the prescence of the Enderdragon prevents a player from leaving the End trough a Telepad");
+        allowDragonBlockingEndExit = config.getBoolean("allowDragonBlockingEndExit", "settings", allowDragonBlockingEndExit, "Determines wether or not the prescence of the Enderdragon prevents a player from leaving the End trough a Telepad");
         
         if (config.hasChanged())
             config.save();
