@@ -1,7 +1,7 @@
 package net.subaraki.telepads.handler;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.darkhax.bookshelf.util.EnumVanillaColors;
+import net.darkhax.bookshelf.util.VanillaColors;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -21,7 +21,7 @@ public class ItemHandler {
                     
                     int i = 0;
                     if (is.getTagCompound().hasKey("colorFrame")) {
-                        for (EnumVanillaColors color : EnumVanillaColors.values()) {
+                        for (VanillaColors color : VanillaColors.values()) {
                             if (color.colorObj.getRGB() == is.getTagCompound().getInteger("colorFrame")) {
                                 event.toolTip.add("frame color : " + color.colorName);
                                 break;
@@ -30,13 +30,13 @@ public class ItemHandler {
                         }
                     }
                     
-                    if (i == EnumVanillaColors.values().length)
+                    if (i == VanillaColors.values().length)
                         event.toolTip.add("frame color : " + "none");
                         
                     i = 0;
                     
                     if (is.getTagCompound().hasKey("colorBase")) {
-                        for (EnumVanillaColors color : EnumVanillaColors.values()) {
+                        for (VanillaColors color : VanillaColors.values()) {
                             if (color.colorObj.getRGB() == is.getTagCompound().getInteger("colorBase")) {
                                 event.toolTip.add("base color : " + color.colorName);
                                 break;
@@ -45,7 +45,7 @@ public class ItemHandler {
                         }
                     }
                     
-                    if (i == EnumVanillaColors.values().length)
+                    if (i == VanillaColors.values().length)
                         event.toolTip.add("frame base : " + "none");
                 }
             }
