@@ -25,7 +25,7 @@ public class TileEntityTelepad extends TileEntity {
     private int colorBase = new Color(243, 89, 233).getRGB();
     
     /**
-     * rotation set when inter-dimension upgrade is applied. nr from 0 to 3 to determin the
+     * rotation set when inter-dimension upgrade is applied. NR from 0 to 3 to determines the
      * position of the transmitter
      */
     private int upgradeRotation = 0;
@@ -233,9 +233,8 @@ public class TileEntityTelepad extends TileEntity {
         return hasDimensionUpgrade;
     }
     
-    public void addDimensionUpgrade () {
-        
-        this.upgradeRotation = new Random().nextInt(4);
+    public void addDimensionUpgrade (boolean allowed) {
+        this.upgradeRotation = allowed ? new Random().nextInt(4) : 0;
         hasDimensionUpgrade = true;
     }
     
