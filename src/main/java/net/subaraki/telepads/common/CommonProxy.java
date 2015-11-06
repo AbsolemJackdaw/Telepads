@@ -32,9 +32,11 @@ public class CommonProxy {
     }
     
     public Minecraft getMinecraft () {
-    	return null;
+        
+        return null;
     }
     
-	public void openRemovalGui(EntityPlayer player, Position removedDestinyPos, Position oldExisitingPostion, int dimension){
-	}
+    public void openRemovalGui (EntityPlayer player, Position removedDestinyPos, Position oldExisitingPostion, int dimension) {
+    
+    }
 }

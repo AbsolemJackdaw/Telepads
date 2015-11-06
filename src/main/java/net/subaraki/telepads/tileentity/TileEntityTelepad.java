@@ -234,6 +234,7 @@ public class TileEntityTelepad extends TileEntity {
     }
     
     public void addDimensionUpgrade (boolean allowed) {
+        
         this.upgradeRotation = allowed ? new Random().nextInt(4) : 0;
         hasDimensionUpgrade = true;
     }
