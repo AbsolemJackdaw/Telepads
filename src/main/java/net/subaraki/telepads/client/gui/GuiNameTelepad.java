@@ -2,7 +2,7 @@ package net.subaraki.telepads.client.gui;
 
 import org.lwjgl.input.Keyboard;
 
-import net.darkhax.bookshelf.util.Position;
+import net.darkhax.bookshelf.lib.Position;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;

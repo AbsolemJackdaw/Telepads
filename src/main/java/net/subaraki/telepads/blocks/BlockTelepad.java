@@ -2,7 +2,7 @@ package net.subaraki.telepads.blocks;
 
 import java.util.Random;
 
-import net.darkhax.bookshelf.util.Position;
+import net.darkhax.bookshelf.lib.Position;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

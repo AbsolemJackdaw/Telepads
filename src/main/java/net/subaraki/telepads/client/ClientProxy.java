@@ -3,8 +3,8 @@ package net.subaraki.telepads.client;
 import java.util.Random;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
-import net.darkhax.bookshelf.util.Constants;
-import net.darkhax.bookshelf.util.Position;
+import net.darkhax.bookshelf.lib.Constants;
+import net.darkhax.bookshelf.lib.Position;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

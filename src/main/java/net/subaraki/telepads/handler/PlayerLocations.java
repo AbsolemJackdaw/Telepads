@@ -5,7 +5,7 @@ import java.util.List;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
-import net.darkhax.bookshelf.util.Position;
+import net.darkhax.bookshelf.lib.Position;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

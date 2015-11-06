@@ -3,8 +3,8 @@ package net.subaraki.telepads.handler;
 import java.awt.Color;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.darkhax.bookshelf.util.Position;
-import net.darkhax.bookshelf.util.Utilities;
+import net.darkhax.bookshelf.lib.Position;
+import net.darkhax.bookshelf.lib.util.ItemStackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -81,7 +81,7 @@ public class PlayerHandler {
 			TileEntityTelepad telepad = (TileEntityTelepad) event.world.getTileEntity(event.x, event.y, event.z);
 
 			if(event.world.isRemote){
-				int itemColor = Utilities.getDyeColor(event.entityPlayer.getHeldItem());
+				int itemColor = ItemStackUtils.getDyeColor(event.entityPlayer.getHeldItem());
 
 				if (itemColor != -1337) {
 

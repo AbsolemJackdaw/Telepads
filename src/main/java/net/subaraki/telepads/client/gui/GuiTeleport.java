@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 
-import net.darkhax.bookshelf.util.Position;
+import net.darkhax.bookshelf.lib.Position;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

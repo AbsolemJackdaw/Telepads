@@ -9,7 +9,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import net.darkhax.bookshelf.util.Utilities;
+import net.darkhax.bookshelf.lib.util.PlayerUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.subaraki.telepads.handler.PlayerLocations;
 import net.subaraki.telepads.handler.PlayerLocations.TelepadEntry;
@@ -75,7 +75,7 @@ public class PacketSyncTelepadEntries implements IMessage {
         @Override
         public IMessage onMessage (PacketSyncTelepadEntries packet, MessageContext ctx) {
             
-            EntityPlayer player = Utilities.getPlayerFromUUID(Utilities.thePlayer().worldObj, packet.playerUUID);
+            EntityPlayer player = PlayerUtils.getPlayerFromUUID(PlayerUtils.getClientPlayer().worldObj, packet.playerUUID);
             PlayerLocations.getProperties(player).overrideEntries(packet.entries);
             return null;
         }

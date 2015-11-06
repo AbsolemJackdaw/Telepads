@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import net.darkhax.bookshelf.util.Position;
+import net.darkhax.bookshelf.lib.Position;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
