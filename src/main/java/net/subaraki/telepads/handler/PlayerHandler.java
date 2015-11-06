@@ -91,14 +91,12 @@ public class PlayerHandler {
 					else
 						telepad.setFrameColor(itemColor);
 				}
-
-				telepad.markDirty();
-
-				if (!event.entityPlayer.capabilities.isCreativeMode)
-					event.entityPlayer.getHeldItem().stackSize--;
-
-				event.entityPlayer.swingItem();
 			}
+			
+			if (!event.entityPlayer.capabilities.isCreativeMode)
+				event.entityPlayer.getHeldItem().stackSize--;
+
+			event.entityPlayer.swingItem();
 
 			if (event.entityPlayer.getHeldItem().getItem().equals(Telepads.transmitter) && !telepad.hasDimensionUpgrade()) {
 
@@ -114,8 +112,8 @@ public class PlayerHandler {
 				if (!event.entityPlayer.capabilities.isCreativeMode)
 					event.entityPlayer.getHeldItem().stackSize--;
 
-				telepad.markDirty();
 			}
+			
 			else if (event.entityPlayer.getHeldItem().getItem().equals(Telepads.toggler)) {
 
 				PlayerLocations playerLocations = PlayerLocations.getProperties(event.entityPlayer);
@@ -124,8 +122,10 @@ public class PlayerHandler {
 				if (!event.entityPlayer.capabilities.isCreativeMode)
 					event.entityPlayer.getHeldItem().stackSize--;
 
-				telepad.markDirty();
 			}
+			
+			telepad.markDirty();
+			event.world.markBlockForUpdate(event.x, event.y, event.z);
 		}
 	}
 }

@@ -1,5 +1,8 @@
 package net.subaraki.telepads.common;
 
+import net.darkhax.bookshelf.util.Position;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 public class CommonProxy {
@@ -27,4 +30,11 @@ public class CommonProxy {
         
         return null;
     }
+    
+    public Minecraft getMinecraft () {
+    	return null;
+    }
+    
+	public void openRemovalGui(EntityPlayer player, Position removedDestinyPos, Position oldExisitingPostion, int dimension){
+	}
 }
